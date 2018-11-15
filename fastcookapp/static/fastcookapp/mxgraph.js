@@ -90,7 +90,7 @@ function main()
                 container.style.top = '26px';
                 container.style.right = '0px';
                 container.style.bottom = '0px';
-                container.style.background = 'url("editors/images/grid.gif")';
+                container.style.background = 'url("/images/grid.gif")';
 
                 document.body.appendChild(container);
                 
@@ -124,6 +124,8 @@ function main()
                 // Enables new connections in the graph
                 graph.setConnectable(true);
                 graph.setMultigraph(false);
+                mxVertexHandler.prototype.rotationEnabled = true;
+
 
                 // Stops editing on enter or escape keypress
                 var keyHandler = new mxKeyHandler(graph);
@@ -137,17 +139,17 @@ function main()
                     addToolbarItem(graph, toolbar, vertex, icon);
                 };
                 
-                addVertex('editors/images/swimlane.gif', 120, 160, 'shape=swimlane;startSize=20;');
-                addVertex('editors/images/rectangle.gif', 100, 40, '');
-                addVertex('editors/images/rounded.gif', 100, 40, 'shape=rounded');
-                addVertex('editors/images/ellipse.gif', 40, 40, 'shape=ellipse');
-                addVertex('editors/images/rhombus.gif', 40, 40, 'shape=rhombus');
-                addVertex('editors/images/triangle.gif', 40, 40, 'shape=triangle');
-                addVertex('editors/images/cylinder.gif', 40, 40, 'shape=cylinder');
-                addVertex('editors/images/actor.gif', 30, 40, 'shape=actor');
+                addVertex('/images/swimlane.gif', 120, 160, 'shape=swimlane;startSize=20;');
+                addVertex('/images/rectangle.gif', 100, 40, '');
+                addVertex('/images/rounded.gif', 100, 40, 'shape=rounded');
+                addVertex('/images/ellipse.gif', 40, 40, 'shape=ellipse');
+                addVertex('/images/rhombus.gif', 40, 40, 'shape=rhombus');
+                addVertex('/images/triangle.gif', 40, 40, 'shape=triangle');
+                addVertex('/images/cylinder.gif', 40, 40, 'shape=cylinder');
+                addVertex('/images/actor.gif', 30, 40, 'shape=actor');
                 toolbar.addLine();
                 
-                var button = mxUtils.button('Create toolbar entry from selection', function(evt)
+                /*var button = mxUtils.button('Create toolbar entry from selection', function(evt)
                 {
                     if (!graph.isSelectionEmpty())
                     {
@@ -170,7 +172,7 @@ function main()
                         }
             
                         // Creates the image which is used as the drag icon (preview)
-                        var img = toolbar.addMode(null, 'editors/images/outline.gif', funct);
+                        var img = toolbar.addMode(null, '/images/outline.gif', funct);
                         mxUtils.makeDraggable(img, graph, funct);
                     }
                 });
@@ -179,7 +181,7 @@ function main()
                 button.style.left = '2px';
                 button.style.top = '2px';
                 
-                document.body.appendChild(button);
+                document.body.appendChild(button);*/
             }
         }
 
@@ -198,6 +200,7 @@ function main()
                 vertex.geometry.y = pt.y;
                 
                 graph.setSelectionCells(graph.importCells([vertex], 0, 0, cell));
+
             }
 
             // Creates the image which is used as the drag icon (preview)

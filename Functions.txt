@@ -1,0 +1,6 @@
+- Graph
+- Rotate
+- Resize
+- Drag
+- Drop 
+- Connect shapes by arrows
