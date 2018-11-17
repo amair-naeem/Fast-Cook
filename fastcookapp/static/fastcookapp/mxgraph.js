@@ -3,6 +3,13 @@ function main()
             // Defines an icon for creating new connections in the connection handler.
             // This will automatically disable the highlighting of the source vertex.
             mxConnectionHandler.prototype.connectImage = new mxImage("/images/connector.gif", 16, 16);
+            var mxPopupMenuShowMenu = mxPopupMenu.prototype.showMenu;
+            //mxDefaultPopupMenu.prototype.addItems = function(editor){editor = editor};
+
+            //mxPopupMenu.prototype.addItem = function(</td><td class=PParameter nowrap>title,</td></tr><tr><td></td><td class=PParameter nowrap>image,</td></tr><tr><td></td><td class=PParameter nowrap>funct,</td></tr><tr><td></td><td class=PParameter nowrap>parent,</td></tr><tr><td></td><td class=PParameter nowrap>iconCls,</td></tr><tr><td></td><td class=PParameter nowrap>enabled</td><td class=PAfterParameters nowrap>)
+            console.log(mxPopupMenu.prototype.itemCount)
+
+
 
             // Checks if browser is supported
             if (!mxClient.isBrowserSupported())
@@ -54,6 +61,43 @@ function main()
                 var model = new mxGraphModel();
                 var graph = new mxGraph(container, model);
                 graph.dropEnabled = true;
+
+
+                graph.popupMenuHandler.factoryMethod = function(menu, cell, evt)
+				{
+					 window.oncontextmenu = function(event) {
+				    event.preventDefault();
+				    event.stopPropagation();
+				    return false;
+				};
+
+
+
+					menu.addItem('Item 1', null, function()
+				    {
+						alert('Item 1');
+				    });
+					
+					menu.addItem('Item 2', null, function()
+				    {
+						alert('Item 2');
+				    });
+					menu.addSeparator();
+					
+					var submenu1 = menu.addItem('Submenu 1', null, null);
+					
+					menu.addItem('Subitem 1', null, function()
+				    {
+						alert('Subitem 1');
+				    }, submenu1);
+					menu.addItem('Subitem 1', null, function()
+				    {
+						alert('Subitem 2');
+				    }, submenu1);
+				};
+
+
+
 
 
                 //remove vertex when delete key is pressed
