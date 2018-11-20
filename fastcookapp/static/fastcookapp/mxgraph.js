@@ -3,11 +3,11 @@ function main()
             // Defines an icon for creating new connections in the connection handler.
             // This will automatically disable the highlighting of the source vertex.
             mxConnectionHandler.prototype.connectImage = new mxImage("/images/connector.gif", 16, 16);
-            var mxPopupMenuShowMenu = mxPopupMenu.prototype.showMenu;
+            //var mxPopupMenuShowMenu = mxPopupMenu.prototype.showMenu;
             //mxDefaultPopupMenu.prototype.addItems = function(editor){editor = editor};
 
             //mxPopupMenu.prototype.addItem = function(</td><td class=PParameter nowrap>title,</td></tr><tr><td></td><td class=PParameter nowrap>image,</td></tr><tr><td></td><td class=PParameter nowrap>funct,</td></tr><tr><td></td><td class=PParameter nowrap>parent,</td></tr><tr><td></td><td class=PParameter nowrap>iconCls,</td></tr><tr><td></td><td class=PParameter nowrap>enabled</td><td class=PAfterParameters nowrap>)
-            console.log(mxPopupMenu.prototype.itemCount)
+            //console.log(mxPopupMenu.prototype.itemCount)
 
 
 
@@ -63,37 +63,53 @@ function main()
                 graph.dropEnabled = true;
 
 
-                graph.popupMenuHandler.factoryMethod = function(menu, cell, evt)
+                //creates an undoManager object that allows users to be able to undo and redo
+
+                var undoManager = new mxUndoManager();
+				
+				var listener = function(sender, evt)
 				{
-					 window.oncontextmenu = function(event) {
-				    event.preventDefault();
-				    event.stopPropagation();
-				    return false;
+					undoManager.undoableEditHappened(evt.getProperty('edit'));
 				};
 
+				graph.getModel().addListener(mxEvent.UNDO, listener);
+				
+				graph.getView().addListener(mxEvent.UNDO, listener);
 
 
-					menu.addItem('Item 1', null, function()
+                graph.popupMenuHandler.factoryMethod = function(menu, cell, evt)
+				{
+					window.oncontextmenu = function(event) {
+					    event.preventDefault();
+					    //event.stopPropagation();
+					    //return false;
+					};
+
+
+					menu.addItem('Undo', null, function()
 				    {
-						alert('Item 1');
+						undoManager.undo();
+				
 				    });
 					
-					menu.addItem('Item 2', null, function()
+					menu.addItem('Redo', null, function()
 				    {
-						alert('Item 2');
+						undoManager.redo();
 				    });
+
+
 					menu.addSeparator();
-					
-					var submenu1 = menu.addItem('Submenu 1', null, null);
-					
-					menu.addItem('Subitem 1', null, function()
+										
+					menu.addItem('Select vertices', null, function()
 				    {
-						alert('Subitem 1');
-				    }, submenu1);
-					menu.addItem('Subitem 1', null, function()
+				    	graph.selectVertices();
+				    });
+
+					menu.addItem('Select all', null, function()
 				    {
-						alert('Subitem 2');
-				    }, submenu1);
+						graph.selectAll();
+				    });
+				
 				};
 
 
