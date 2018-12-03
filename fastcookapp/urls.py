@@ -5,5 +5,8 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    # register
+    path('register/', views.register, name='register'),
+    #logout
 
 ]
