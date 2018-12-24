@@ -1,3 +1,20 @@
+//cookie
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 function main()
         {
             // Defines an icon for creating new connections in the connection handler.
@@ -20,16 +37,8 @@ function main()
             }
             else
             {
-                // Creates the div for the toolbar
-                var tbContainer = document.createElement('div');
-                tbContainer.style.position = 'absolute';
-                tbContainer.style.overflow = 'hidden';
-                tbContainer.style.padding = '2px';
-                tbContainer.style.left = '0px';
-                tbContainer.style.top = '26px';
-                tbContainer.style.width = '24px';
-                tbContainer.style.bottom = '0px';
-                
+                //Creates the div for the toolbar
+                var tbContainer = document.getElementById('toolbar');
                 document.body.appendChild(tbContainer);
             
                 // Creates new toolbar without event processing
@@ -37,15 +46,16 @@ function main()
                 toolbar.enabled = false
                 
                 // Creates the div for the graph
-                container = document.createElement('div');
+                /*container = document.createElement('div');
                 container.style.position = 'absolute';
                 container.style.overflow = 'hidden';
                 container.style.left = '24px';
                 container.style.top = '26px';
                 container.style.right = '0px';
                 container.style.bottom = '0px';
-                container.style.background = 'url("/images/grid.gif")';
+                container.style.background = 'url("/images/grid.gif")';*/
 
+                container = document.getElementById('container');
                 document.body.appendChild(container);
                 
                 // Workaround for Internet Explorer ignoring certain styles
@@ -62,6 +72,34 @@ function main()
                 var graph = new mxGraph(container, model);
                 graph.dropEnabled = true;
 
+                //save xml upon click
+                var model = new mxGraphModel();
+                
+                var button = mxUtils.button('Save', function()
+                {
+                    //var url = "{%url'login'%}"
+                    //var url = "{% url 'myapp:productdetail' %}";
+                    //location.href = '/saveData/'
+                    var encoder = new mxCodec();
+                    var node = encoder.encode(graph.getModel());
+                    var xml = mxUtils.getPrettyXml(node); 
+                    var csrftoken = getCookie('csrftoken');
+
+                    $.ajax({
+        
+                        type: "POST",
+                        url: "/saveData/",
+                        data: { "xml" : xml},
+                        headers:{
+                            "X-CSRFToken": csrftoken
+                        },
+                    });
+
+                    console.log(xml);
+                    //mxUtils.popup(mxUtils.getPrettyXml(node), true);
+                });
+
+                document.body.appendChild(button);
 
                 //creates an undoManager object that allows users to be able to undo and redo
 
@@ -176,41 +214,8 @@ function main()
                 addVertex('/images/cylinder.gif', 40, 40, 'shape=cylinder');
                 addVertex('/images/actor.gif', 30, 40, 'shape=actor');
                 toolbar.addLine();
-
-                /*var button = mxUtils.button('Create toolbar entry from selection', function(evt)
-                {
-                    if (!graph.isSelectionEmpty())
-                    {
-                        // Creates a copy of the selection array to preserve its state
-                        var cells = graph.getSelectionCells();
-                        var bounds = graph.getView().getBounds(cells);
-                        
-                        // Function that is executed when the image is dropped on
-                        // the graph. The cell argument points to the cell under
-                        // the mousepointer if there is one.
-                        var funct = function(graph, evt, cell)
-                        {
-                            graph.stopEditing(false);
-            
-                            var pt = graph.getPointForEvent(evt);
-                            var dx = pt.x - bounds.x;
-                            var dy = pt.y - bounds.y;
-                            
-                            graph.setSelectionCells(graph.importCells(cells, dx, dy, cell));
-                        }
-            
-                        // Creates the image which is used as the drag icon (preview)
-                        var img = toolbar.addMode(null, '/images/outline.gif', funct);
-                        mxUtils.makeDraggable(img, graph, funct);
-                    }
-                });
-
-                button.style.position = 'absolute';
-                button.style.left = '2px';
-                button.style.top = '2px';
-                
-                document.body.appendChild(button);*/
             }
+
         }
 
         function addToolbarItem(graph, toolbar, prototype, image)
@@ -234,5 +239,7 @@ function main()
             // Creates the image which is used as the drag icon (preview)
             var img = toolbar.addMode(null, image, funct);
             mxUtils.makeDraggable(img, graph, funct);
+
         }
+
 

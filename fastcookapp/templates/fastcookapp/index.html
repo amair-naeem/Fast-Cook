@@ -1,38 +1,37 @@
+{% extends 'fastcookapp/base.html' %}
 {% load staticfiles %}
+{% block content %}
+
 <!doctype html>
 
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>{% block title %}Fast Cook{% endblock %}</title>
-        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
-        <link rel = "stylesheet" type = "text/css" href= "{% static 'fastcookapp/style.css' %}">
-        <script src="{% static 'fastcookapp/mxgraph.js' %}"></script>
-        <script type="text/javascript">
-            mxBasePath = "{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/src' %}";
-        </script>
-       <script src="{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/mxClient.js' %}"></script>
-    </head>
-    <script type="text/javascript">
 
-        window.onload = function(){
-            main(document.getElementById("graphContainer"));
-        }
+<head>
+<meta charset="utf-8">        
+<script src="{% static 'fastcookapp/mxgraph.js' %}"></script> 
+<script type="text/javascript">
+    mxBasePath = "{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/src' %}";
+</script>
+<script src="{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/mxClient.js' %}"></script>
+<script type="text/javascript">
+window.onload = function(){
+    main(document.getElementById("graphContainer"));
+}
 
-    </script>
-    <body>
+</script> 
 
-    <!-- div on the left for the elements -->
-    <div id = "sidebar">
-    </div>
+</head>
 
-    <!-- Creates a container for the graph with a grid wallpaper -->
-    <!--<div id="graphContainer"
-        style="position:relative;overflow:hidden;width:800px;height:600px;background:url('../static/fastcookapp/mxgraph-master/mxgraph-master/javascript/examples/editors/images/grid.gif');cursor:default;">
-    </div>-->
-        
+<div id = "toolbar">
 
-    </body>
+</div>
+
+<div id = "container">
+</div> 
+
+
+<p id="demo"></p>           
+
+
 </html>
+{% endblock %}
