@@ -89,7 +89,7 @@ function main()
         
                         type: "POST",
                         url: "/saveData/",
-                        data: { "xml" : xml},
+                        data: { "xml": xml},
                         headers:{
                             "X-CSRFToken": csrftoken
                         },

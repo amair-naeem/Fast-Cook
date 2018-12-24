@@ -103,6 +103,5 @@ def logout(request, user):
 	return redirect("/")
 		
 def saveData(request):
+    #return render(request, 'myapp/index.html', {"foo": "bar"} content_type="application/xhtml+xml")
     return HttpResponse('user')
-
-
