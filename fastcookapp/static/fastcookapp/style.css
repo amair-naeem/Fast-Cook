@@ -2,7 +2,10 @@
 	width:100px;
     height:600px;
     background:white;
-    float:left;
+    left: 0px; 
+    top: 95px; 
+    width: 195.5px; 
+    bottom: 36px;
 }
 
 #toolbar{
@@ -17,6 +20,7 @@
 }
 
 #container{
+	width: 70%;
 	position: absolute;
 	overflow: hidden;
 	float: right;

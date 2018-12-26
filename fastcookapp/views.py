@@ -101,7 +101,22 @@ def login(request):
 def logout(request, user):
 	request.session.flush()
 	return redirect("/")
-		
-def saveData(request):
-    #return render(request, 'myapp/index.html', {"foo": "bar"} content_type="application/xhtml+xml")
-    return HttpResponse('user')
+
+@loggedin	
+def saveData(request, user):
+    if request.method == "POST":
+    #Get user profile
+        member = Member.objects.get(username=user)
+    #Get XML data once user presses save
+    #xmlData = request.POST['xml']
+        member.data = request.POST['xml']
+        member.save()
+        print(member.data)
+        response = JsonResponse([
+            member.data
+        ], safe = False);
+        #return render(request, 'fastcookapp/index.html', {"xmlData": member.data})
+        return HttpResponse(response, content_type="application/json")
+
+
+    return HttpResponse('POST is not used')

@@ -90,16 +90,35 @@ function main()
                         type: "POST",
                         url: "/saveData/",
                         data: { "xml": xml},
+                        dataType: 'json',
                         headers:{
                             "X-CSRFToken": csrftoken
                         },
+                        success: function(data){
+                            console.log("data" + data[0])
+                            //alert("hi")
+                            //console.log(graph)
+                            //var xmlDoc = data[0]
+
+                            var xmlDoc = mxUtils.parseXml(data[0]);
+                            //var xmlDoc = mxUtils.load("/saveData/").getXml();
+                            //console.log("xmlDoc " + xmlDoc)
+                            var node = xmlDoc.documentElement;
+                            //console.log("node " + node)
+                            var dec = new mxCodec(node.ownerDocument);
+                            //console.log("dec " + dec)
+                            //console.log("graph model " + graph.getModel())
+                            dec.decode(node, graph.getModel());
+
+                        }
                     });
 
-                    console.log(xml);
+                    //console.log(xml);
                     //mxUtils.popup(mxUtils.getPrettyXml(node), true);
                 });
 
                 document.body.appendChild(button);
+                //toolbar.addMode(button)
 
                 //creates an undoManager object that allows users to be able to undo and redo
 
