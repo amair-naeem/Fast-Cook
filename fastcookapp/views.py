@@ -115,8 +115,8 @@ def saveData(request, user):
         response = JsonResponse([
             member.data
         ], safe = False);
-        #return render(request, 'fastcookapp/index.html', {"xmlData": member.data})
-        return HttpResponse(response, content_type="application/json")
+        return render_to_response("fastcookapp/index.html",{"xmlData": member.data}, content_type="text/xml;")
+        #return HttpResponse(response, content_type="application/json")
 
 
     return HttpResponse('POST is not used')

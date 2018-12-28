@@ -1,12 +1,4 @@
-#sidebar{
-	width:100px;
-    height:600px;
-    background:white;
-    left: 0px; 
-    top: 95px; 
-    width: 195.5px; 
-    bottom: 36px;
-}
+
 
 #toolbar{
 	position: absolute;
@@ -20,14 +12,26 @@
 }
 
 #container{
-	width: 70%;
+	
+	
+}
+
+.diagramBackdrop{
+	/*background-color: #ebebeb;*/
+	overflow: auto;
+
+}
+
+.diagramContainer{
+	/*border: 1px solid #e5e5e5;*/
+	font-size: 0px;
+	outline: none
+}
+
+.diagramContainer, #container{
 	position: absolute;
 	overflow: hidden;
-	float: right;
-	left: 24px;
-	top: 26px;
-	right: 0px;
-	bottom: 0px;
-	background: url("/images/grid.gif");
+
 }
+
 

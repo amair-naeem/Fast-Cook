@@ -54,9 +54,15 @@ function main()
                 container.style.right = '0px';
                 container.style.bottom = '0px';
                 container.style.background = 'url("/images/grid.gif")';*/
+                
+                var diagramContainerClass = document.getElementsByClassName("diagramContainer")
+                var diagramContainer = diagramContainerClass[0]
+
 
                 container = document.getElementById('container');
-                document.body.appendChild(container);
+                document.body.appendChild(diagramContainer);
+                diagramContainer.appendChild(container)
+
                 
                 // Workaround for Internet Explorer ignoring certain styles
                 if (mxClient.IS_QUIRKS)
@@ -82,7 +88,8 @@ function main()
                     //location.href = '/saveData/'
                     var encoder = new mxCodec();
                     var node = encoder.encode(graph.getModel());
-                    var xml = mxUtils.getPrettyXml(node); 
+                    //var xml = mxUtils.getPrettyXml(node); 
+                    var xml = mxUtils.getXml(node);
                     var csrftoken = getCookie('csrftoken');
 
                     $.ajax({
@@ -90,17 +97,18 @@ function main()
                         type: "POST",
                         url: "/saveData/",
                         data: { "xml": xml},
-                        dataType: 'json',
+                        dataType: 'text',
                         headers:{
                             "X-CSRFToken": csrftoken
                         },
                         success: function(data){
-                            console.log("data" + data[0])
+                            console.log("data" + xml)
                             //alert("hi")
                             //console.log(graph)
                             //var xmlDoc = data[0]
 
-                            var xmlDoc = mxUtils.parseXml(data[0]);
+                            graph.getModel().beginUpdate();
+                            var xmlDoc = mxUtils.parseXml(xml);
                             //var xmlDoc = mxUtils.load("/saveData/").getXml();
                             //console.log("xmlDoc " + xmlDoc)
                             var node = xmlDoc.documentElement;
@@ -109,6 +117,26 @@ function main()
                             //console.log("dec " + dec)
                             //console.log("graph model " + graph.getModel())
                             dec.decode(node, graph.getModel());
+                            graph.fit()
+                            graph.getModel().endUpdate();
+
+
+                            /*var doc = mxUtils.parseXml(xml);
+                            var codec = new mxCodec(doc);
+                            var elt = doc.documentElement.firstChild;
+                            var cells = [];
+
+                            while (elt != null)
+                            {
+                              cells.push(codec.decode(elt));
+                              elt = elt.nextSibling;
+                            }
+                            var cells = graph.getSelectionCells();
+                            //console.log(cells)
+                            graph.addCells(cells);*/
+
+
+
 
                         }
                     });
@@ -117,7 +145,8 @@ function main()
                     //mxUtils.popup(mxUtils.getPrettyXml(node), true);
                 });
 
-                document.body.appendChild(button);
+                tbContainer.appendChild(button);
+                //document.body.appendChild(button);
                 //toolbar.addMode(button)
 
                 //creates an undoManager object that allows users to be able to undo and redo
