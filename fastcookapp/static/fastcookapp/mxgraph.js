@@ -63,6 +63,8 @@ function main()
                 document.body.appendChild(diagramContainer);
                 diagramContainer.appendChild(container)
 
+                var xml;
+
                 
                 // Workaround for Internet Explorer ignoring certain styles
                 if (mxClient.IS_QUIRKS)
@@ -89,7 +91,7 @@ function main()
                     var encoder = new mxCodec();
                     var node = encoder.encode(graph.getModel());
                     //var xml = mxUtils.getPrettyXml(node); 
-                    var xml = mxUtils.getXml(node);
+                    xml = mxUtils.getXml(node);
                     var csrftoken = getCookie('csrftoken');
 
                     $.ajax({
@@ -102,12 +104,11 @@ function main()
                             "X-CSRFToken": csrftoken
                         },
                         success: function(data){
-                            console.log("data" + xml)
                             //alert("hi")
                             //console.log(graph)
                             //var xmlDoc = data[0]
 
-                            graph.getModel().beginUpdate();
+                            //graph.getModel().beginUpdate();
                             var xmlDoc = mxUtils.parseXml(xml);
                             //var xmlDoc = mxUtils.load("/saveData/").getXml();
                             //console.log("xmlDoc " + xmlDoc)
@@ -118,7 +119,9 @@ function main()
                             //console.log("graph model " + graph.getModel())
                             dec.decode(node, graph.getModel());
                             graph.fit()
-                            graph.getModel().endUpdate();
+                            //graph.getModel().endUpdate();
+                            //localStorage.setItem("mxGraph", "" + xml + "");
+
 
 
                             /*var doc = mxUtils.parseXml(xml);
@@ -263,6 +266,39 @@ function main()
                 addVertex('/images/actor.gif', 30, 40, 'shape=actor');
                 toolbar.addLine();
             }
+
+            //localGraph = localStorage.getItem("mxGraph");
+            //if(localGraph) { 
+                console.log("xml from db " + xml)
+                var doc = mxUtils.parseXml(xml);
+                var codec = new mxCodec(doc);
+                codec.decode(doc.documentElement, graph.getModel());
+            //}
+
+            $.ajax({
+        
+                        type: "GET",
+                        url: "/home/",
+                        dataType: 'text',
+                        success: function(data){
+                            console.log("data" + xml22)
+                            //alert("hi")
+                            //console.log(graph)
+                            //var xmlDoc = data[0]
+
+                            //graph.getModel().beginUpdate();
+                            var xmlDoc = mxUtils.parseXml(xml22);
+                            //var xmlDoc = mxUtils.load("/saveData/").getXml();
+                            //console.log("xmlDoc " + xmlDoc)
+                            var node = xmlDoc.documentElement;
+                            //console.log("node " + node)
+                            var dec = new mxCodec(node.ownerDocument);
+                            //console.log("dec " + dec)
+                            //console.log("graph model " + graph.getModel())
+                            dec.decode(node, graph.getModel());
+                            graph.fit()
+                        }
+                    });
 
         }
 

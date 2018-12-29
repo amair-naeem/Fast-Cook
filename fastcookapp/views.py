@@ -18,7 +18,6 @@ from django.shortcuts import render_to_response
 def index(request):
     return render(request, 'fastcookapp/login.html')
 
-
 # when user logged in
 def loggedin(view):
     def mod_view(request):
@@ -31,6 +30,13 @@ def loggedin(view):
         else:
             return render(request, 'fastcookapp/index.html', {'form': form})
     return mod_view
+
+
+@loggedin
+def home(request,user):
+    member = Member.objects.get(username=user)
+    return render(request, 'fastcookapp/index.html', {'xml': json.dumps(member.data)})
+
 		 
 # Register view displays login when successful details have been passed
 def register(request):
@@ -81,20 +87,20 @@ def register(request):
 
 
 def login(request):
-	if request.method == "POST":
-		if 'uname' in request.POST and 'psw' in request.POST:
-			username = request.POST["uname"]
-			password = request.POST["psw"]
-			user = authenticate(username=username, password=password)
-			if user is not None:
-				if user.is_active:
-					request.session['username'] = username
-					request.session['password'] = password
-					return render(request, 'fastcookapp/index.html')
-				else:
-					return render(request, 'fastcookapp/login.html')    
-			else:
-				return render(request, 'fastcookapp/login.html')
+    if request.method == "POST":
+        if 'uname' in request.POST and 'psw' in request.POST:
+            username = request.POST["uname"]
+            password = request.POST["psw"]
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                if user.is_active:
+                    request.session['username'] = username
+                    request.session['password'] = password
+                    return render(request, 'fastcookapp/index.html')
+                else:
+                    return render(request, 'fastcookapp/login.html')    
+            else:
+                return render(request, 'fastcookapp/login.html')
 
 # render logout page 
 @loggedin
@@ -117,6 +123,8 @@ def saveData(request, user):
         ], safe = False);
         return render_to_response("fastcookapp/index.html",{"xmlData": member.data}, content_type="text/xml;")
         #return HttpResponse(response, content_type="application/json")
+
+    
 
 
     return HttpResponse('POST is not used')
