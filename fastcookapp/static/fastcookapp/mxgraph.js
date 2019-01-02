@@ -15,6 +15,7 @@ function getCookie(name) {
     return cookieValue;
 }
 
+
 function main()
         {
             // Defines an icon for creating new connections in the connection handler.
@@ -63,6 +64,10 @@ function main()
                 document.body.appendChild(diagramContainer);
                 diagramContainer.appendChild(container)
 
+                menuBar = document.getElementById('menuBar')
+                document.body.appendChild(menuBar)
+
+
                 var xml;
 
                 
@@ -82,8 +87,40 @@ function main()
 
                 //save xml upon click
                 var model = new mxGraphModel();
-                
-                var button = mxUtils.button('Save', function()
+
+                $(document).ready(function(){
+                    $('.openGraph').on('click',function(event){
+
+                        //var openUrl = $(this).attr('href');
+                        $('#openModal').modal('hide');
+                        var openUrl = $(this).attr('id');
+                        var csrftoken = getCookie('csrftoken');
+
+
+
+                        $.ajax({
+                    
+                        //type: "GET",
+                        url: openUrl,
+                        dataType: 'text',
+                        headers:{
+                            "X-CSRFToken": csrftoken
+                        },
+                        success: function(){
+                            alert(openXML)
+                            var xmlDoc = mxUtils.parseXml(openXML);
+                            var node = xmlDoc.documentElement;
+                            var dec = new mxCodec(node.ownerDocument);
+                            dec.decode(node, graph.getModel());
+                        }
+                    });
+      
+                    })
+                });
+
+               
+                //var button = mxUtils.button('Save', function()
+                $("#saveButton").click(function (event) 
                 {
                     //var url = "{%url'login'%}"
                     //var url = "{% url 'myapp:productdetail' %}";
@@ -109,7 +146,8 @@ function main()
                             //var xmlDoc = data[0]
 
                             //graph.getModel().beginUpdate();
-                            var xmlDoc = mxUtils.parseXml(xml);
+                            console.log("success" + xmlTest)
+                            var xmlDoc = mxUtils.parseXml(xmlTest);
                             //var xmlDoc = mxUtils.load("/saveData/").getXml();
                             //console.log("xmlDoc " + xmlDoc)
                             var node = xmlDoc.documentElement;
@@ -118,7 +156,7 @@ function main()
                             //console.log("dec " + dec)
                             //console.log("graph model " + graph.getModel())
                             dec.decode(node, graph.getModel());
-                            graph.fit()
+                            //graph.fit()
                             //graph.getModel().endUpdate();
                             //localStorage.setItem("mxGraph", "" + xml + "");
 
@@ -148,7 +186,34 @@ function main()
                     //mxUtils.popup(mxUtils.getPrettyXml(node), true);
                 });
 
-                tbContainer.appendChild(button);
+                $("#saveName").click(function (event) 
+                {
+                    var csrftoken = getCookie('csrftoken');
+                    var encoder = new mxCodec();
+                    var node = encoder.encode(graph.getModel());
+                    //var xml = mxUtils.getPrettyXml(node); 
+                    xml = mxUtils.getXml(node);
+                    var csrftoken = getCookie('csrftoken');
+                    var title = $('#title').val()
+                    $.ajax({
+                        type: "POST",
+                        url: "/saveTitle/",
+                        data: {
+                            'title': title,
+                            'xml': xml
+                        },
+                        dataType: 'text',
+                        headers:{
+                            "X-CSRFToken": csrftoken
+                        },
+                        success: function(data){
+
+                        }
+                    });
+
+                });
+
+                //tbContainer.appendChild(button);
                 //document.body.appendChild(button);
                 //toolbar.addMode(button)
 
@@ -269,19 +334,19 @@ function main()
 
             //localGraph = localStorage.getItem("mxGraph");
             //if(localGraph) { 
-                console.log("xml from db " + xml)
+                /*console.log("xml from db " + xml)
                 var doc = mxUtils.parseXml(xml);
                 var codec = new mxCodec(doc);
                 codec.decode(doc.documentElement, graph.getModel());
-            //}
+            //}*/
 
             $.ajax({
-        
+                    
                         type: "GET",
                         url: "/home/",
                         dataType: 'text',
                         success: function(data){
-                            console.log("data" + xml22)
+                            alert(xml22)
                             //alert("hi")
                             //console.log(graph)
                             //var xmlDoc = data[0]
@@ -296,7 +361,7 @@ function main()
                             //console.log("dec " + dec)
                             //console.log("graph model " + graph.getModel())
                             dec.decode(node, graph.getModel());
-                            graph.fit()
+                            //graph.fit()
                         }
                     });
 

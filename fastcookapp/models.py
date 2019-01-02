@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db import models
+#from django.db.models import models, ManyToManyField
 from django.core.validators import RegexValidator
 #from django.contrib.postgres.fields import JSONField
 
@@ -9,22 +9,40 @@ from django.core.validators import RegexValidator
 #class Item(models.Model):
 	#image = models.ImageField(upload_to='images')
 
+class Title(models.Model):
+    title = models.TextField(null=True)
+    def __str__(self):
+        return self.title
+
+class XMLGraph(models.Model):
+    #only one title per graph
+    title = models.OneToOneField(
+        to=Title,
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE)
+    
+    XMLGraph = models.TextField(null=True)
+
+    def __str__(self):
+        return str(self.XMLGraph)
+
 class Member(User):
-    data = models.TextField(null=True)
+
+    XMLGraph = models.ManyToManyField(blank=True,
+        to=XMLGraph,
+        symmetrical=False,
+        related_name='related_to')
+
+    title = models.ManyToManyField(blank=True,
+        to=Title,
+        symmetrical=False,
+        related_name='related_to')
 
     def __str__(self):
         return self.username
 
 class Profile(models.Model):
-    """image = models.ImageField(upload_to='profile_images',
-                              default='default.jpg')
-    email = models.EmailField()
-    GENDER_CHOICES = (
-        ('M', 'Male'),
-        ('F', 'Female'),
-    )
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
-    dob = models.DateField(max_length=8, null=True)"""
     user = models.OneToOneField(
         to=Member,
         blank=True,

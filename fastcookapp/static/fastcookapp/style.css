@@ -1,5 +1,6 @@
 
 
+
 #toolbar{
 	position: absolute;
 	overflow: hidden;
@@ -11,10 +12,6 @@
 	bottom: 0px;
 }
 
-#container{
-	
-	
-}
 
 .diagramBackdrop{
 	/*background-color: #ebebeb;*/
