@@ -24,6 +24,8 @@ urlpatterns = [
     # openGraph
     url(r'^openGraph/(?P<title>\d+)/$', views.openGraph, name='openGraph'),
     # API
-    path('api/', include(router.urls))
+    path('api/', include(router.urls)),
+    #search
+    path('search/', views.search, name='search')
 
 ]

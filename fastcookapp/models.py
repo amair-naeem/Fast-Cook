@@ -29,15 +29,9 @@ class XMLGraph(models.Model):
 
 class Member(User):
 
-    XMLGraph = models.ManyToManyField(blank=True,
-        to=XMLGraph,
-        symmetrical=False,
-        related_name='related_to')
-
-    title = models.ManyToManyField(blank=True,
-        to=Title,
-        symmetrical=False,
-        related_name='related_to')
+    XMLGraph = models.ForeignKey('XMLGraph',
+        null=True,
+        on_delete=models.CASCADE)
 
     def __str__(self):
         return self.username

@@ -100,7 +100,7 @@ function main()
 
                         $.ajax({
                     
-                        //type: "GET",
+                        type: "GET",
                         url: openUrl,
                         dataType: 'text',
                         headers:{
@@ -114,6 +114,34 @@ function main()
                             dec.decode(node, graph.getModel());
                         }
                     });
+      
+                    })
+                });
+
+
+                $(document).ready(function(){
+                    $('.openFile').on('click',function(event){
+
+                        var csrftoken = getCookie('csrftoken');
+                        var encoder = new mxCodec();
+                        var node = encoder.encode(graph.getModel());
+                        //var xml = mxUtils.getPrettyXml(node); 
+                        xml = "";
+                        var csrftoken = getCookie('csrftoken');
+                        var title = $('#title').val()
+                        $.ajax({
+                            type: "POST",
+                            url: "/saveTitle/",
+                            data: {
+                                'title': title,
+                                'xml': xml
+                            },
+                            dataType: 'text',
+                            headers:{
+                                "X-CSRFToken": csrftoken
+                            },
+                            success: graph.removeCells(graph.getChildVertices(graph.getDefaultParent()))
+                        });
       
                     })
                 });
@@ -210,6 +238,27 @@ function main()
 
                         }
                     });
+
+                });
+
+                //search 
+                $("#q").keypress(function (event) 
+                {
+                    if(event.which == 13) {
+                        event.preventDefault()
+                        var search = $('#q').val()
+                        var query = {
+                                    'q': $('#q').val()
+                                    };
+                        $.ajax({
+                            type: "GET",
+                            //data: query,
+                            url: "/search/?q="+search+"/",
+                            dataType: 'json',
+                            data: JSON.stringify(query),
+                            success: console.log(query)//$('#square').append($('#square').text())
+                        });
+                    }
 
                 });
 
@@ -346,7 +395,7 @@ function main()
                         url: "/home/",
                         dataType: 'text',
                         success: function(data){
-                            alert(xml22)
+                            //alert(xml22)
                             //alert("hi")
                             //console.log(graph)
                             //var xmlDoc = data[0]

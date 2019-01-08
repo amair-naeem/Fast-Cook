@@ -17,7 +17,18 @@ from rest_framework import status
 from .serializers import MemberSerializer
 
 from rest_framework import viewsets
+from fastcookapp.documents import MemberDocument
 
+def search(request):
+
+    q = request.GET.get('q')
+
+    if q:
+        members = MemberDocument.search().query("match", username = q)
+    else:
+        members = ''
+
+    return render(request, 'fastcookapp/index.html', {'members': members})
 
 #JSON response for M2M table
 class MemberViewSet(viewsets.ModelViewSet):
@@ -47,11 +58,12 @@ def loggedin(view):
 @loggedin
 def home(request,user):
     member = Member.objects.get(username=user)
+    title = Title.objects.all()
     #return render(request, 'fastcookapp/index.html', {'xml': json.dumps(member.XMLGraph)})
-    for xmlData in member.XMLGraph.all():
-        return render(request, 'fastcookapp/index.html', {'xml': json.dumps(xmlData.XMLGraph),'title': member.title.all()})
+    #for xmlData in member.XMLGraph.all():
+        #return render(request, 'fastcookapp/index.html', {'xml': json.dumps(xmlData.XMLGraph),'title': member.title.all()})
 
-    return render(request, 'fastcookapp/index.html')
+    return render(request, 'fastcookapp/index.html', {'xml': json.dumps(str(member.XMLGraph)), 'title':title })
 
  
 # Register view displays login when successful details have been passed
@@ -118,6 +130,8 @@ def login(request):
             else:
                 return render(request, 'fastcookapp/login.html')
 
+    return render(request, 'fastcookapp/login.html')
+
 # render logout page 
 @loggedin
 def logout(request, user):
@@ -137,10 +151,13 @@ def saveData(request, user):
         xmlData = request.POST['xml']
         member = Member.objects.get(username=user)
         #xml, _ = XMLGraph.objects.get_or_create()
-        XMLGraph.objects.all().delete()
+        #XMLGraph.objects.all().delete()
         xml, _ = XMLGraph.objects.get_or_create(XMLGraph = xmlData)
         
-        member.XMLGraph.add(xml)
+        #member.XMLGraph.add(xml)
+        member.XMLGraph = xml
+
+        member.save(force_update=True)
 
         """response = JsonResponse([
             member.XMLGraph
@@ -155,24 +172,21 @@ def saveTitle(request, user):
         member = Member.objects.get(username=user)
         graphTitle = request.POST['title']
         title = Title.objects.create(title=graphTitle)
-        member.title.add(title)
+        member.title = title
         xmlData = request.POST['xml']
         xml = XMLGraph.objects.create(XMLGraph = xmlData, title=title)
-        member.XMLGraph.add(xml)
+        member.XMLGraph = (xml)
+        member.save()
         return render_to_response("fastcookapp/index.html", content_type="text/xml;")
     return HttpResponse('POST is not used')
 
 #Open Graph by title
 def openGraph(request, title):
     if 'username' in request.session:
-        print("view")
         username = request.session['username']
         titleName = Title.objects.get(id = title)
         xml = XMLGraph.objects.get(title = titleName)
-        member = Member.objects.get(username = username, title = titleName, XMLGraph = xml)
-        for xmlData in member.XMLGraph.all():
+        #member = Member.objects.get(username = username, XMLGraph = xml)
+        #for xmlData in member.XMLGraph.all():
             #return render_to_response("fastcookapp/index.html",{'openXML': json.dumps(xmlData.XMLGraph)})
-            return render(request, 'fastcookapp/index.html', {'openXML': json.dumps(xmlData.XMLGraph)})
-
-
-    
+        return render(request, 'fastcookapp/index.html', {'openXML': json.dumps(str(xml))})

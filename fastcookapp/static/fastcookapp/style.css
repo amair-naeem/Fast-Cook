@@ -1,15 +1,28 @@
+#square{
+	width: 156px;
+    height: 25vw;
+    border: 1px solid #e5e5e5;
+}
 
-
+input[type="text"] {
+             display: block;
+             margin : 0 auto;
+        }
 
 #toolbar{
-	position: absolute;
+	/*position: absolute;
 	overflow: hidden;
 	float: left;
 	padding: 2px;
 	left: 0px;
 	top: 26px;
 	width: 24px;
-	bottom: 0px;
+	bottom: 0px;*/
+	background:#ffffff;
+	overflow:hidden;
+	position:absolute;
+	border-top:1px solid #e5e5e5;
+	overflow:auto;
 }
 
 
@@ -25,7 +38,7 @@
 	outline: none
 }
 
-.diagramContainer, #container{
+.diagramContainer, #container, #toolbar{
 	position: absolute;
 	overflow: hidden;
 

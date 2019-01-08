@@ -19,11 +19,12 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
-from fastcookapp import views
+from fastcookapp import views as fastcookapp_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('fastcookapp.urls'))
+    path('', include('fastcookapp.urls')),
+    #path('search/', fastcookapp_views.search, name='search'),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 
 

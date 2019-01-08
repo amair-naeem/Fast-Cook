@@ -28,7 +28,18 @@ window.onload = function(){
 
 </head>
 
-<div id = "toolbar">
+<div id = "toolbar" style="left: 0px; top: 95px; width: 156px; bottom: 36px;">
+
+  <div id = "square">
+    <form method = "get">
+      <input id = "q" name = "q" type="text"> 
+    </form>
+
+    {% for item in members %}
+      {{item.username}}
+    {% endfor %}
+  </div>
+</br>
 
 </div>
 
@@ -51,7 +62,7 @@ window.onload = function(){
   </button>
   <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
 
-    <button class="dropdown-item" type="button">New</button>
+    <button class="dropdown-item" type="button" data-toggle="modal" data-target="#newModal">New</button>
     <button class="dropdown-item" type="button" data-toggle="modal" data-target="#saveAsModal">Save as</button>
     <button class="dropdown-item" type="button" data-toggle="modal" data-target="#openModal">Open</button>
     <button class="dropdown-item" type="button" id = "saveButton">Save</button>
@@ -113,6 +124,35 @@ window.onload = function(){
         <!-- Modal footer -->
         <div class="modal-footer">
                  
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- The Modal -->
+  <div class="modal" id="newModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Modal Heading</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <input id = "title" type="text" placeholder="Name" name="title">
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+        
+        <button class = "openFile" type="button" class="btn btn-primary" data-dismiss="modal" id = saveName>Create</button>
+         
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 
 
