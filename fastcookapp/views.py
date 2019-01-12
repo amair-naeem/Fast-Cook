@@ -19,16 +19,6 @@ from .serializers import MemberSerializer
 from rest_framework import viewsets
 from fastcookapp.documents import MemberDocument
 
-def search(request):
-
-    q = request.GET.get('q')
-
-    if q:
-        members = MemberDocument.search().query("match", username = q)
-    else:
-        members = ''
-
-    return render(request, 'fastcookapp/index.html', {'members': members})
 
 #JSON response for M2M table
 class MemberViewSet(viewsets.ModelViewSet):
@@ -38,7 +28,7 @@ class MemberViewSet(viewsets.ModelViewSet):
         
 
 def index(request):
-    return render(request, 'fastcookapp/login.html')
+    return render(request, 'fastcookapp/ports.html')
 
 # Decorator to test if user logs in
 def loggedin(view):

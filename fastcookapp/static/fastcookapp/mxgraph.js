@@ -369,9 +369,29 @@ function main()
                 
                     addToolbarItem(graph, toolbar, vertex, icon);
                 };
+
+                var style = new Object();
+
+                style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                style[mxConstants.STYLE_IMAGE] = '/images/icons/flour.png';
+                style[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
                 
-                addVertex('/images/swimlane.gif', 120, 160, 'shape=swimlane;startSize=20;');
-                addVertex('/images/rectangle.gif', 100, 40, '');
+                graph.getStylesheet().putCellStyle('rounded2', style);
+
+                
+                addVertex('/images/icons/flour.png', 120, 160, 'rounded2');
+
+                var style2 = new Object();;
+
+                style2[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                style2[mxConstants.STYLE_IMAGE] = '/images/icons/whisk.png';
+                style2[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                
+                graph.getStylesheet().putCellStyle('rounded3', style2);
+                
+                addVertex('/images/icons/whisk.png', 100, 40, 'rounded3');
+                
+
                 addVertex('/images/rounded.gif', 100, 40, 'shape=rounded');
                 addVertex('/images/ellipse.gif', 40, 40, 'shape=ellipse');
                 addVertex('/images/rhombus.gif', 40, 40, 'shape=rhombus');
