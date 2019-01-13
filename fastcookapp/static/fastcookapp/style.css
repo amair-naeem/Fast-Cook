@@ -20,11 +20,10 @@
   background-color: #555;
 }
 
-#content {
+#content, #generalContent {
   padding: 0 18px;
   display: none;
   overflow: hidden;
-  background-color: #f1f1f1;
 }
 
 img.mxToolbarmode{

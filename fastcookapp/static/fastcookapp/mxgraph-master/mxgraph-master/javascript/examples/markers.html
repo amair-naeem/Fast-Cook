@@ -169,8 +169,12 @@
 
 					var v5 = graph.insertVertex(parent, null, 'v5', 40, 220, 40, 40, 'shape=ellipse;perimeter=ellipsePerimeter;');
 					var v6 = graph.insertVertex(parent, null, 'v6', 460, 220, 40, 40, 'shape=doubleEllipse;perimeter=ellipsePerimeter;');
-					var e3 = graph.insertEdge(parent, null, 'Link', v5, v6,
+					var e3 = graph.insertEdge(parent, null, 'Link', v4, v5,
 						'shape=link;labelBackgroundColor=#FFFFFF;');
+
+					var edge = mxConnectionHandler.prototype.insertEdge(parent,null,'test',	null, null, 'shape=link;labelBackgroundColor=#FFFFFF;')
+
+					console.log(edge)
 				}
 				finally
 				{

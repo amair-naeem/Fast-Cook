@@ -18,9 +18,10 @@ function getCookie(name) {
 
 function main()
         {
+            
             // Defines an icon for creating new connections in the connection handler.
             // This will automatically disable the highlighting of the source vertex.
-            mxConnectionHandler.prototype.connectImage = new mxImage("/images/connector.gif", 16, 16);
+            //mxConnectionHandler.prototype.connectImage = new mxImage("/images/connector.gif", 16, 16);
             //var mxPopupMenuShowMenu = mxPopupMenu.prototype.showMenu;
             //mxDefaultPopupMenu.prototype.addItems = function(editor){editor = editor};
 
@@ -43,12 +44,17 @@ function main()
                 document.body.appendChild(tbContainer);
 
                 var content = document.getElementById('content')
+                var generalContent = document.getElementById('generalContent')
             
                 // Creates new toolbar without event processing
                 var toolbar = new mxToolbar(content);
                 toolbar.enabled = false
 
+                var generalToolbar = new mxToolbar(generalContent)
+                generalToolbar.enabled = false
+
                 var coll = document.getElementsByClassName("collapsible");
+
                 var i;
 
                 for (i = 0; i < coll.length; i++) {
@@ -437,6 +443,60 @@ function main()
                 addVertex('/images/cylinder.gif', 40, 40, 'shape=cylinder');
                 addVertex('/images/actor.gif', 30, 40, 'shape=actor');
                 toolbar.addLine();
+
+                var addGeneralVertex = function(icon,w,h,style, value, arrow)
+                {
+                    
+                    if(arrow == true)
+                    {
+                        
+                       
+                        var edge2 = new mxCell(null, new mxGeometry(0, 0, w, h), 'curved=1;endArrow=classic;html=1;');
+                        edge2.geometry.setTerminalPoint(new mxPoint(50, 150), true);
+                        edge2.geometry.setTerminalPoint(new mxPoint(150, 50), false);
+
+                        edge2.geometry.relative = true;
+                        edge2.edge = true;
+
+                        graph.fireEvent(new mxEventObject('cellsInserted', 'cells', [edge2]));
+                        addToolbarItem(graph, generalToolbar, edge2, icon);
+
+
+                    }
+
+                    else
+                    {
+                        var vertex = new mxCell(null, new mxGeometry(0, 0, w, h), style);
+                        vertex.value = value
+                        vertex.setVertex(true);
+                        addToolbarItem(graph, generalToolbar, vertex, icon);
+
+                    }
+
+                }
+
+                var style3 = new Object();
+
+                style3[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                style3[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+
+                graph.getStylesheet().putCellStyle('text', style3);
+
+                var style4 = new Object();
+
+                style4[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                style4[mxConstants.STYLE_IMAGE] = '/images/block_end.gif';
+
+                style4[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+
+                graph.getStylesheet().putCellStyle('connector', style4);
+
+
+                addGeneralVertex('/images/rounded.gif', 100, 40, 'text', "Text", false);
+                addGeneralVertex('/images/block_end.gif', 100, 40, 'connector', null, true);
+
+                generalToolbar.addLine();
+
             }
 
             //localGraph = localStorage.getItem("mxGraph");
