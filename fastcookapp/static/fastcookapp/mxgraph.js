@@ -41,10 +41,27 @@ function main()
                 //Creates the div for the toolbar
                 var tbContainer = document.getElementById('toolbar');
                 document.body.appendChild(tbContainer);
+
+                var content = document.getElementById('content')
             
                 // Creates new toolbar without event processing
-                var toolbar = new mxToolbar(tbContainer);
+                var toolbar = new mxToolbar(content);
                 toolbar.enabled = false
+
+                var coll = document.getElementsByClassName("collapsible");
+                var i;
+
+                for (i = 0; i < coll.length; i++) {
+                  coll[i].addEventListener("click", function() {
+                    this.classList.toggle("active");
+                    var content = this.nextElementSibling;
+                    if (content.style.display === "block") {
+                      content.style.display = "none";
+                    } else {
+                      content.style.display = "block";
+                    }
+                  });
+                }
                 
                 // Creates the div for the graph
                 /*container = document.createElement('div');
@@ -90,7 +107,7 @@ function main()
 
                 $(document).ready(function(){
                     $('.openGraph').on('click',function(event){
-
+                        alert("test")
                         //var openUrl = $(this).attr('href');
                         $('#openModal').modal('hide');
                         var openUrl = $(this).attr('id');
@@ -106,9 +123,10 @@ function main()
                         headers:{
                             "X-CSRFToken": csrftoken
                         },
-                        success: function(){
-                            alert(openXML)
-                            var xmlDoc = mxUtils.parseXml(openXML);
+                        success: function(data){
+                            console.log(data)
+                           //alert(openXML)
+                            var xmlDoc = mxUtils.parseXml(data);
                             var node = xmlDoc.documentElement;
                             var dec = new mxCodec(node.ownerDocument);
                             dec.decode(node, graph.getModel());
@@ -117,6 +135,26 @@ function main()
       
                     })
                 });
+
+                /*$(document).ready(function(){
+                    $('#openXML').on('click',function(event){
+
+                        var csrftoken = getCookie('csrftoken');
+
+                        $.ajax({
+                            type: "GET",
+                            url: "/loadTitles/",
+                            dataType: 'text',
+                            headers:{
+                                "X-CSRFToken": csrftoken
+                                },
+                            success: function(data){
+                                
+                            }
+                        });
+      
+                    })
+                });*/
 
 
                 $(document).ready(function(){
@@ -174,8 +212,8 @@ function main()
                             //var xmlDoc = data[0]
 
                             //graph.getModel().beginUpdate();
-                            console.log("success" + xmlTest)
-                            var xmlDoc = mxUtils.parseXml(xmlTest);
+                            console.log("success" + xml)
+                            var xmlDoc = mxUtils.parseXml(xml);
                             //var xmlDoc = mxUtils.load("/saveData/").getXml();
                             //console.log("xmlDoc " + xmlDoc)
                             var node = xmlDoc.documentElement;
@@ -415,6 +453,7 @@ function main()
                         url: "/home/",
                         dataType: 'text',
                         success: function(data){
+                            console.log(xml22)
                             //alert(xml22)
                             //alert("hi")
                             //console.log(graph)

@@ -10,10 +10,12 @@
 <meta charset="utf-8"> 
 <script type="text/javascript">
   var xml22 = {{xml | safe}}
-</script>       
-<script type="text/javascript">
+</script> 
+
+<!--<script type="text/javascript">
   var openXML = {{openXML | safe}}
-</script>   
+</script> -->
+
 <script src="{% static 'fastcookapp/mxgraph.js' %}"></script> 
 <script type="text/javascript">
     mxBasePath = "{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/src' %}";
@@ -28,17 +30,20 @@ window.onload = function(){
 
 </head>
 
-<div id = "toolbar" style="left: 0px; top: 95px; width: 156px; bottom: 36px;">
 
-  <div id = "square">
+<div id = "toolbar" style="left: 0px; top: 95px; width: 156px; bottom: 36px;">
+  <button class="collapsible">Open Collapsible</button>
+  <div id = "content"></div>
+  <!--<div id = "square">
     <form method = "get">
       <input id = "q" name = "q" type="text"> 
+
     </form>
 
     {% for item in members %}
       {{item.username}}
     {% endfor %}
-  </div>
+  </div>-->
 </br>
 
 </div>
@@ -61,12 +66,10 @@ window.onload = function(){
     File
   </button>
   <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-
     <button class="dropdown-item" type="button" data-toggle="modal" data-target="#newModal">New</button>
-    <button class="dropdown-item" type="button" data-toggle="modal" data-target="#saveAsModal">Save as</button>
-    <button class="dropdown-item" type="button" data-toggle="modal" data-target="#openModal">Open</button>
+    <button id = "openXML" class="dropdown-item" type="button" data-toggle="modal" data-target="#openModal">Open</button>
     <button class="dropdown-item" type="button" id = "saveButton">Save</button>
-
+    <button class="dropdown-item" type="button" data-toggle="modal" data-target="#saveAsModal">Save as</button>
   </div>
   </div>
 </div>
@@ -85,6 +88,7 @@ window.onload = function(){
         <!-- Modal body -->
         <div class="modal-body">
           <input id = "title" type="text" placeholder="Name" name="title">
+
         </div>
         
         <!-- Modal footer -->

@@ -52,7 +52,6 @@ def home(request,user):
     #return render(request, 'fastcookapp/index.html', {'xml': json.dumps(member.XMLGraph)})
     #for xmlData in member.XMLGraph.all():
         #return render(request, 'fastcookapp/index.html', {'xml': json.dumps(xmlData.XMLGraph),'title': member.title.all()})
-
     return render(request, 'fastcookapp/index.html', {'xml': json.dumps(str(member.XMLGraph)), 'title':title })
 
  
@@ -170,7 +169,8 @@ def saveTitle(request, user):
         return render_to_response("fastcookapp/index.html", content_type="text/xml;")
     return HttpResponse('POST is not used')
 
-#Open Graph by title
+
+# Open Graph by title
 def openGraph(request, title):
     if 'username' in request.session:
         username = request.session['username']
@@ -179,4 +179,6 @@ def openGraph(request, title):
         #member = Member.objects.get(username = username, XMLGraph = xml)
         #for xmlData in member.XMLGraph.all():
             #return render_to_response("fastcookapp/index.html",{'openXML': json.dumps(xmlData.XMLGraph)})
-        return render(request, 'fastcookapp/index.html', {'openXML': json.dumps(str(xml))})
+        #return render(request, 'fastcookapp/index.html', {'openXML': json.dumps(str(xml))})
+        return HttpResponse(str(xml));
+
