@@ -16,6 +16,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import MemberSerializer
 
+from django.core.exceptions import MultipleObjectsReturned
+
+from django.core import serializers
+
+
 from rest_framework import viewsets
 from fastcookapp.documents import MemberDocument
 
@@ -49,10 +54,12 @@ def loggedin(view):
 def home(request,user):
     member = Member.objects.get(username=user)
     title = Title.objects.all()
+    currentTitle = member.XMLGraph.title
     #return render(request, 'fastcookapp/index.html', {'xml': json.dumps(member.XMLGraph)})
     #for xmlData in member.XMLGraph.all():
         #return render(request, 'fastcookapp/index.html', {'xml': json.dumps(xmlData.XMLGraph),'title': member.title.all()})
-    return render(request, 'fastcookapp/index.html', {'xml': json.dumps(str(member.XMLGraph)), 'title':title })
+
+    return render(request, 'fastcookapp/index.html', {'xml': json.dumps(str(member.XMLGraph)), 'title':title, 'currentTitle' : currentTitle })
 
  
 # Register view displays login when successful details have been passed
@@ -138,10 +145,13 @@ def saveData(request, user):
         #skill = Skill.objects.get(name__iexact=s)
         # need to update the current mxGraph, so have to delete previously created xmlgraph
         xmlData = request.POST['xml']
-        member = Member.objects.get(username=user)
+        member = Member.objects.filter(username=user).first()
         #xml, _ = XMLGraph.objects.get_or_create()
         #XMLGraph.objects.all().delete()
+
+        ##https://stackoverflow.com/questions/17960593/multipleobjectsreturned-with-get-or-create
         xml, _ = XMLGraph.objects.get_or_create(XMLGraph = xmlData)
+
         
         #member.XMLGraph.add(xml)
         member.XMLGraph = xml
@@ -176,9 +186,20 @@ def openGraph(request, title):
         username = request.session['username']
         titleName = Title.objects.get(id = title)
         xml = XMLGraph.objects.get(title = titleName)
+
+        data = serializers.serialize('json', [xml,titleName])
+
+        struct = json.loads(data)
+        data = json.dumps(struct)
+
+        print(data)
+
+
         #member = Member.objects.get(username = username, XMLGraph = xml)
         #for xmlData in member.XMLGraph.all():
             #return render_to_response("fastcookapp/index.html",{'openXML': json.dumps(xmlData.XMLGraph)})
         #return render(request, 'fastcookapp/index.html', {'openXML': json.dumps(str(xml))})
-        return HttpResponse(str(xml));
+        #return HttpResponse(str(xml));
+        return HttpResponse(data, content_type="application/json")
+
 

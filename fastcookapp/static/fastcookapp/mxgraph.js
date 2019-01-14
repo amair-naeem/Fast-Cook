@@ -130,12 +130,20 @@ function main()
                             "X-CSRFToken": csrftoken
                         },
                         success: function(data){
-                            console.log(data)
                            //alert(openXML)
-                            var xmlDoc = mxUtils.parseXml(data);
+                            var json = JSON.parse(data)
+
+                            xmlGraph = json[0]['fields']['XMLGraph']
+
+                            title = json[1]['fields']['title']
+
+                            var xmlDoc = mxUtils.parseXml(xmlGraph);
                             var node = xmlDoc.documentElement;
                             var dec = new mxCodec(node.ownerDocument);
                             dec.decode(node, graph.getModel());
+
+                            $("#test").append(title)
+                            
                         }
                     });
       
@@ -452,6 +460,10 @@ function main()
                         
                        
                         var edge2 = new mxCell(null, new mxGeometry(0, 0, w, h), 'curved=1;endArrow=classic;html=1;');
+                        var sourceX = edge2.getGeometry();
+                        console.log(sourceX)
+                        //var sourceY = edge2.geometry.y;
+
                         edge2.geometry.setTerminalPoint(new mxPoint(50, 150), true);
                         edge2.geometry.setTerminalPoint(new mxPoint(150, 50), false);
 
@@ -467,8 +479,10 @@ function main()
                     else
                     {
                         var vertex = new mxCell(null, new mxGeometry(0, 0, w, h), style);
+
                         vertex.value = value
                         vertex.setVertex(true);
+
                         addToolbarItem(graph, generalToolbar, vertex, icon);
 
                     }
