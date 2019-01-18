@@ -11,7 +11,7 @@ from django.core.validators import RegexValidator
 	#image = models.ImageField(upload_to='images')
 
 class Title(models.Model):
-    title = models.TextField(null=True)
+    title = models.TextField(null=True, unique=True, default='Untitled Graph')
     def __str__(self):
         return self.title
 
