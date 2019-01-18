@@ -21,8 +21,14 @@ urlpatterns = [
     path('saveData/', views.saveData, name='saveData'),
     # saveTitle
     path('saveTitle/', views.saveTitle, name='saveTitle'),
+    # loadTitle
+    path('loadTitles/', views.loadTitles, name='loadTitles'),
+    # saveNewTitle
+    path('saveNewTitle/', views.saveNewTitle, name='saveNewTitle'),
     # openGraph
     url(r'^openGraph/(?P<title>\d+)/$', views.openGraph, name='openGraph'),
+    # share
+    path('share/', views.share, name='share'),
     # API
     path('api/', include(router.urls)),
 

@@ -54,12 +54,12 @@ def loggedin(view):
 def home(request,user):
     member = Member.objects.get(username=user)
     title = Title.objects.all()
-    currentTitle = member.XMLGraph.title
+    #currentTitle = member.XMLGraph.title
     #return render(request, 'fastcookapp/index.html', {'xml': json.dumps(member.XMLGraph)})
     #for xmlData in member.XMLGraph.all():
         #return render(request, 'fastcookapp/index.html', {'xml': json.dumps(xmlData.XMLGraph),'title': member.title.all()})
 
-    return render(request, 'fastcookapp/index.html', {'xml': json.dumps(str(member.XMLGraph)), 'title':title, 'currentTitle' : currentTitle })
+    return render(request, 'fastcookapp/index.html', {'xml': json.dumps(str(member.XMLGraph)), 'title':title})
 
  
 # Register view displays login when successful details have been passed
@@ -169,7 +169,8 @@ def saveData(request, user):
 def saveTitle(request, user):
     if request.method == "POST":
         member = Member.objects.get(username=user)
-        graphTitle = request.POST['title']
+        graphTitle = request.POST['saveAsTitle']
+        print("test" + str(graphTitle))
         title = Title.objects.create(title=graphTitle)
         member.title = title
         xmlData = request.POST['xml']
@@ -178,6 +179,16 @@ def saveTitle(request, user):
         member.save()
         return render_to_response("fastcookapp/index.html", content_type="text/xml;")
     return HttpResponse('POST is not used')
+
+# load titles
+@loggedin
+def loadTitles(request, user):
+	member = Member.objects.get(username=user)
+	title = Title.objects.all()
+	data = serializers.serialize('json', title)
+	
+	return HttpResponse(data, content_type="application/json")
+
 
 
 # Open Graph by title
@@ -202,4 +213,28 @@ def openGraph(request, title):
         #return HttpResponse(str(xml));
         return HttpResponse(data, content_type="application/json")
 
+# Save new title
+@loggedin
+def saveNewTitle(request, user):
+	newTitle = request.POST['newTitle']
+	member = Member.objects.get(username=user)
+	xml = request.POST['xml']
+	currentTitle = request.POST['currentTitle']
+	#print(title)
+	currentTitle  = Title.objects.get(title = currentTitle)
+	currentTitle.title = newTitle
+	currentTitle.save()
 
+	#print(currentTitle)
+	#xmlObject = XMLGraph.objects.get(XMLGraph = xml)
+	#xmlModel = Title.objects.get(xmlgraph=xmlObject)
+	#for i in title:
+	#	print(i['fields'])
+	#newTitle = xmlModel.title
+	#xmlModel.save()
+	#print(currentTitle)
+	return HttpResponse("test")
+
+@loggedin
+def share(request, user):
+	return render(request, 'fastcookapp/share.html')

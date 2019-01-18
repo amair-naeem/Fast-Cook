@@ -105,6 +105,7 @@ function main()
                 // Creates the model and the graph inside the container
                 // using the fastest rendering available on the browser
                 var model = new mxGraphModel();
+                var editor = new mxEditor();
                 var graph = new mxGraph(container, model);
                 graph.dropEnabled = true;
 
@@ -112,8 +113,8 @@ function main()
                 var model = new mxGraphModel();
 
                 $(document).ready(function(){
-                    $('.openGraph').on('click',function(event){
-                        alert("test")
+                    $('#loadAllTitles').on('click','.openGraph' ,function(event){
+                        //alert("test")
                         //var openUrl = $(this).attr('href');
                         $('#openModal').modal('hide');
                         var openUrl = $(this).attr('id');
@@ -142,15 +143,61 @@ function main()
                             var dec = new mxCodec(node.ownerDocument);
                             dec.decode(node, graph.getModel());
 
-                            $("#test").append(title)
+                            //$("#test").append(title)
+                            $("#currentTitle").val(title)
                             
                         }
                     });
+
+
+
+      
+                    })
+                });
+                    
+
+                $(document).ready(function(){
+                    $('#saveNewTitle').on('click',function(event){
+                        var csrftoken = getCookie('csrftoken');
+                        title = $('#newTitle').val()
+                        var encoder = new mxCodec();
+                        var node = encoder.encode(graph.getModel());
+                        xml = mxUtils.getXml(node)
+                        currentTitle = $('#currentTitle').val()
+                        //console.log(xml)
+                        $.ajax({
+                            type: "POST",
+                            url: "/saveNewTitle/",
+                            dataType: 'text',
+                            data: {
+                            'newTitle': title,
+                            'currentTitle': currentTitle,
+                            'xml': xml
+                            },
+                            headers:{
+                                "X-CSRFToken": csrftoken
+                                },
+                            success: function(data){
+                                $('.openGraph').each(function(i,obj){
+                                    if($(this).val() == currentTitle)
+                                    {
+                                        //console.log("button has been located")
+                                        $(this).val(title) 
+                                    }
+                                })
+                                //console.log($(".openGraph").val())
+                                $('#currentTitle').val(title)
+
+                            }
+                        });
       
                     })
                 });
 
-                /*$(document).ready(function(){
+
+               
+                //open xml buttons
+                $(document).ready(function(){
                     $('#openXML').on('click',function(event){
 
                         var csrftoken = getCookie('csrftoken');
@@ -163,12 +210,41 @@ function main()
                                 "X-CSRFToken": csrftoken
                                 },
                             success: function(data){
+                                var json = JSON.parse(data)
+                                var length = Object.keys(json).length
+
+
+                                for (var i = length - 1; i >= 0; i--) {
+                                    /*var pk = "/openGraph/" + json[i]['pk']
+                                    var title = json[i]['fields']['title']                           
+                                    myButton="<input type=\"button\" class = \"openGraph\" value=\""+title+"\" id="+pk+"/\>";*/
+
+                                }
+
+
+                                var pk = "/openGraph/" + json[length-1]['pk']
+                                var title = json[length-1]['fields']['title']
+
+                                myButton="<input type=\"button\" class = \"openGraph\" value=\""+title+"\" id="+pk+"/\>";
+
                                 
+                                 if ($("#loadAllTitles").find('#' + $.escapeSelector(pk + '/')).length == 0)
+                                    $("#loadAllTitles").append(myButton)
                             }
                         });
       
                     })
-                });*/
+                });
+
+
+                $('#share').on('click',function(event){
+                    var encoder = new mxCodec();
+                    var node = encoder.encode(graph.getModel());
+                    //var xml = mxUtils.getPrettyXml(node); 
+                    xml = mxUtils.getXml(node);
+
+      
+                    })
 
 
                 $(document).ready(function(){
@@ -180,12 +256,12 @@ function main()
                         //var xml = mxUtils.getPrettyXml(node); 
                         xml = "";
                         var csrftoken = getCookie('csrftoken');
-                        var title = $('#title').val()
+                        var title = $('#openTitle').val()
                         $.ajax({
                             type: "POST",
                             url: "/saveTitle/",
                             data: {
-                                'title': title,
+                                'openTitle': title,
                                 'xml': xml
                             },
                             dataType: 'text',
@@ -274,12 +350,12 @@ function main()
                     //var xml = mxUtils.getPrettyXml(node); 
                     xml = mxUtils.getXml(node);
                     var csrftoken = getCookie('csrftoken');
-                    var title = $('#title').val()
+                    var title = $('#saveAsTitle').val()
                     $.ajax({
                         type: "POST",
                         url: "/saveTitle/",
                         data: {
-                            'title': title,
+                            'saveAsTitle': title,
                             'xml': xml
                         },
                         dataType: 'text',
@@ -287,30 +363,8 @@ function main()
                             "X-CSRFToken": csrftoken
                         },
                         success: function(data){
-
                         }
                     });
-
-                });
-
-                //search 
-                $("#q").keypress(function (event) 
-                {
-                    if(event.which == 13) {
-                        event.preventDefault()
-                        var search = $('#q').val()
-                        var query = {
-                                    'q': $('#q').val()
-                                    };
-                        $.ajax({
-                            type: "GET",
-                            //data: query,
-                            url: "/search/?q="+search+"/",
-                            dataType: 'json',
-                            data: JSON.stringify(query),
-                            success: console.log(query)//$('#square').append($('#square').text())
-                        });
-                    }
 
                 });
 

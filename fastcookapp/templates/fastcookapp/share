@@ -17,20 +17,16 @@
 </script> -->
 
 <script src="{% static 'fastcookapp/mxgraph.js' %}"></script> 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
 <script type="text/javascript">
     mxBasePath = "{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/src' %}";
 </script>
 <script src="{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/mxClient.js' %}"></script>
-<script src="{% static 'fastcookapp/ajax.js' %}"></script> 
 <script type="text/javascript">
 window.onload = function(){
     main(document.getElementById("graphContainer"));
 }
 
 </script> 
-
 
 </head>
 
@@ -82,11 +78,7 @@ window.onload = function(){
   <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     File
   </button>
-
-  <form action="{% url 'share' %}">
-      <button id = share type="submit">Share</button>
-
-  </form>
+  <button id = share>Share</button>
   <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
     <button class="dropdown-item" type="button" data-toggle="modal" data-target="#newModal">New</button>
     <button id = "openXML" class="dropdown-item" type="button" data-toggle="modal" data-target="#openModal">Open</button>
@@ -218,8 +210,6 @@ window.onload = function(){
       </div>
     </div>
   </div>
-
-
     
 </html>
 {% endblock %}
