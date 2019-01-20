@@ -1,5 +1,5 @@
 from django_elasticsearch_dsl import DocType, Index, fields
-from fastcookapp.models import Member,Profile,XMLGraph,Title
+from fastcookapp.models import Member,Profile,XMLGraph
 
 members = Index('members')
 

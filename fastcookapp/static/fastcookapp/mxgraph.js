@@ -109,6 +109,9 @@ function main()
                 var graph = new mxGraph(container, model);
                 graph.dropEnabled = true;
 
+                //graph.setEnabled(false);
+
+
                 //save xml upon click
                 var model = new mxGraphModel();
 
@@ -131,12 +134,10 @@ function main()
                             "X-CSRFToken": csrftoken
                         },
                         success: function(data){
-                           //alert(openXML)
                             var json = JSON.parse(data)
 
                             xmlGraph = json[0]['fields']['XMLGraph']
-
-                            title = json[1]['fields']['title']
+                            title = json[0]['fields']['title']
 
                             var xmlDoc = mxUtils.parseXml(xmlGraph);
                             var node = xmlDoc.documentElement;
@@ -178,6 +179,7 @@ function main()
                                 "X-CSRFToken": csrftoken
                                 },
                             success: function(data){
+                                $('#saveTitleModal').modal('hide');
                                 $('.openGraph').each(function(i,obj){
                                     if($(this).val() == currentTitle)
                                     {
@@ -188,11 +190,34 @@ function main()
                                 //console.log($(".openGraph").val())
                                 $('#currentTitle').val(title)
 
+                            },
+
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                 
+                                alert(title+ " is already in use")
                             }
                         });
       
                     })
                 });
+
+                //Delete
+                $('#loadAllTitles').on('click','.deleteGraph' ,function(event){
+                    var csrftoken = getCookie('csrftoken');
+                    event.preventDefault();
+                    var id = $(this).attr('id');
+                    var $tr = $(this).closest('tr');
+                    $.ajax({
+                        type: "DELETE",
+                        url: id, 
+                        headers:{
+                                "X-CSRFToken": csrftoken
+                                },
+                        success: $($(this)).closest("tr").remove()
+
+                    })
+                    
+                }); 
 
 
                
@@ -214,22 +239,27 @@ function main()
                                 var length = Object.keys(json).length
 
 
-                                for (var i = length - 1; i >= 0; i--) {
+                                /*for (var i = length - 1; i >= 0; i--) {
                                     /*var pk = "/openGraph/" + json[i]['pk']
                                     var title = json[i]['fields']['title']                           
-                                    myButton="<input type=\"button\" class = \"openGraph\" value=\""+title+"\" id="+pk+"/\>";*/
+                                    myButton="<input type=\"button\" class = \"openGraph\" value=\""+title+"\" id="+pk+"/\>";
 
-                                }
+                                }*/
 
 
-                                var pk = "/openGraph/" + json[length-1]['pk']
+                                var pkTitle = "/openGraph/" + json[length-1]['pk']
+
+
                                 var title = json[length-1]['fields']['title']
 
-                                myButton="<input type=\"button\" class = \"openGraph\" value=\""+title+"\" id="+pk+"/\>";
+                                var pkDelete = "/deleteGraph/" + json[length-1]['pk']
+
+                                var titleButton="<input type=\"button\" class = \"openGraph\" value=\""+title+"\" id="+pkTitle+"/\>";
+                                var deleteButton= "<input type=\"button\" class = \"deleteGraph\" value=\"Delete\" id="+pkDelete+"/\>";
 
                                 
-                                 if ($("#loadAllTitles").find('#' + $.escapeSelector(pk + '/')).length == 0)
-                                    $("#loadAllTitles").append(myButton)
+                                 if ($("#loadAllTitles").find('#' + $.escapeSelector(pkTitle + '/')).length == 0)
+                                    $("#loadAllTitles").append("<table> <tr> <td>" + titleButton + "</td> <td>" + deleteButton + "</td> </tr> </table>")
                             }
                         });
       
@@ -276,8 +306,8 @@ function main()
 
                
                 //var button = mxUtils.button('Save', function()
-                $("#saveButton").click(function (event) 
-                {
+                $('.dropdown-menu').on('click','#saveButton' ,function(event){
+                
                     //var url = "{%url'login'%}"
                     //var url = "{% url 'myapp:productdetail' %}";
                     //location.href = '/saveData/'
@@ -291,7 +321,10 @@ function main()
         
                         type: "POST",
                         url: "/saveData/",
-                        data: { "xml": xml},
+                        data: { 
+                            "xml": xml,
+                            "title": $('#currentTitle').val()
+                        },
                         dataType: 'text',
                         headers:{
                             "X-CSRFToken": csrftoken
@@ -363,6 +396,9 @@ function main()
                             "X-CSRFToken": csrftoken
                         },
                         success: function(data){
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            alert(title+ " is already in use")
                         }
                     });
 
@@ -626,5 +662,7 @@ function main()
             mxUtils.makeDraggable(img, graph, funct);
 
         }
+
+
 
 

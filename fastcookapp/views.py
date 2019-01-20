@@ -3,7 +3,7 @@ import requests
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Count
 from django.http import HttpResponse, Http404
-from fastcookapp.models import Member,Profile,XMLGraph,Title
+from fastcookapp.models import Member,Profile,XMLGraph
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate
 from django.http import JsonResponse
@@ -38,28 +38,30 @@ def index(request):
 # Decorator to test if user logs in
 def loggedin(view):
     def mod_view(request):
-        form = UserLogInForm()
         if 'username' in request.session:
             username = request.session['username']
             try: user = Member.objects.get(username=username)
             except Member.DoesNotExist: raise Http404('Member does not exist')
             return view(request, user)
         else:
-            return render(request, 'fastcookapp/index.html', {'form': form})
+            return render(request, 'fastcookapp/index.html')
     return mod_view
 
 
 # Homepage
 @loggedin
 def home(request,user):
-    member = Member.objects.get(username=user)
-    title = Title.objects.all()
+	graphTitle = XMLGraph.objects.filter(user=user).values('title','id')
+	graph  = XMLGraph.objects.filter(user=user).values('XMLGraph')
+	print(graph)
+	print(graphTitle)
+    #member = Member.objects.get(username=user)
+    #title = Title.objects.all()
     #currentTitle = member.XMLGraph.title
     #return render(request, 'fastcookapp/index.html', {'xml': json.dumps(member.XMLGraph)})
     #for xmlData in member.XMLGraph.all():
         #return render(request, 'fastcookapp/index.html', {'xml': json.dumps(xmlData.XMLGraph),'title': member.title.all()})
-
-    return render(request, 'fastcookapp/index.html', {'xml': json.dumps(str(member.XMLGraph)), 'title':title})
+	return render(request, 'fastcookapp/index.html', {'xml': json.dumps(str(graph)), 'title':graphTitle})
 
  
 # Register view displays login when successful details have been passed
@@ -144,23 +146,36 @@ def saveData(request, user):
         #XMLGraph = XMLGraph.objects.filter(username=user)
         #skill = Skill.objects.get(name__iexact=s)
         # need to update the current mxGraph, so have to delete previously created xmlgraph
-        xmlData = request.POST['xml']
-        member = Member.objects.filter(username=user).first()
+        #member = Member.objects.get(username=user)
+        graphTitle = request.POST['title']
+
+        """for xmlgraph in member.XMLGraph.all():
+        	print(xmlgraph.title)"""
+
+        #member = Member.objects.get(Title__title=graphTitle)
+
+        #for graph in member.XMLGraph:
+        	#print("test" + str(graph))
+
+        	#print(member.XMLGraph.all())
         #xml, _ = XMLGraph.objects.get_or_create()
         #XMLGraph.objects.all().delete()
 
-        ##https://stackoverflow.com/questions/17960593/multipleobjectsreturned-with-get-or-create
-        xml, _ = XMLGraph.objects.get_or_create(XMLGraph = xmlData)
 
-        
+        #title = Title.objects.get(title = graphTitle)
+        xmlData = request.POST['xml']
+        xml = XMLGraph.objects.filter(user = user, title = graphTitle).update(XMLGraph = xmlData)
+
+
         #member.XMLGraph.add(xml)
-        member.XMLGraph = xml
+        #member.XMLGraph = (xml)
 
-        member.save(force_update=True)
+        #member.save()
 
         """response = JsonResponse([
             member.XMLGraph
         ], safe = False);"""
+        
         return render_to_response("fastcookapp/index.html", content_type="text/xml;")
         #return render_to_response("fastcookapp/index.html",{"xmlData": json.dumps(member.XMLGraph)}, content_type="text/xml;")
     return HttpResponse('POST is not used')
@@ -168,23 +183,24 @@ def saveData(request, user):
 @loggedin
 def saveTitle(request, user):
     if request.method == "POST":
-        member = Member.objects.get(username=user)
+        #member = Member.objects.get(username=user)
         graphTitle = request.POST['saveAsTitle']
-        print("test" + str(graphTitle))
-        title = Title.objects.create(title=graphTitle)
-        member.title = title
+        #title = Title.objects.create(title=graphTitle)
+        #member.title = title
         xmlData = request.POST['xml']
-        xml = XMLGraph.objects.create(XMLGraph = xmlData, title=title)
-        member.XMLGraph = (xml)
-        member.save()
+        xml = XMLGraph.objects.create(XMLGraph = xmlData, title=graphTitle, user=user)
+        #member.XMLGraph.add(xml)
+        #member.Title.add(title)
         return render_to_response("fastcookapp/index.html", content_type="text/xml;")
     return HttpResponse('POST is not used')
 
 # load titles
 @loggedin
 def loadTitles(request, user):
-	member = Member.objects.get(username=user)
-	title = Title.objects.all()
+	#member = Member.objects.get(username=user)
+	#print(member.XMLGraph)
+	#title = Title.objects.all()
+	title = XMLGraph.objects.filter(user=user)
 	data = serializers.serialize('json', title)
 	
 	return HttpResponse(data, content_type="application/json")
@@ -195,15 +211,17 @@ def loadTitles(request, user):
 def openGraph(request, title):
     if 'username' in request.session:
         username = request.session['username']
-        titleName = Title.objects.get(id = title)
-        xml = XMLGraph.objects.get(title = titleName)
+        print(username)
+        #member = Member.objects.get(username=username)
+        #titleName = Title.objects.get(id = title)
+        xml = XMLGraph.objects.filter(id = title).only('id', 'title', 'XMLGraph')
+        data = serializers.serialize("json", xml)
+        #print("test " + str(xml))
+        #data = serializers.serialize('json', [xml])
 
-        data = serializers.serialize('json', [xml,titleName])
+        #struct = json.loads(data)
+        #data = json.dumps(struct)
 
-        struct = json.loads(data)
-        data = json.dumps(struct)
-
-        print(data)
 
 
         #member = Member.objects.get(username = username, XMLGraph = xml)
@@ -211,19 +229,43 @@ def openGraph(request, title):
             #return render_to_response("fastcookapp/index.html",{'openXML': json.dumps(xmlData.XMLGraph)})
         #return render(request, 'fastcookapp/index.html', {'openXML': json.dumps(str(xml))})
         #return HttpResponse(str(xml));
+        #return JsonResponse({'results': list(xml)})
         return HttpResponse(data, content_type="application/json")
+
+# Open Graph by title
+def deleteGraph(request, title):
+    if 'username' in request.session:
+        username = request.session['username']
+        #titleName = Title.objects.get(id = title)
+        #xml = XMLGraph.objects.get(title = titleName)
+        xml = XMLGraph.objects.get(id = title)
+        xml.delete()
+        #titleName.delete()
+        
+
+
+        #member = Member.objects.get(username = username, XMLGraph = xml)
+        #for xmlData in member.XMLGraph.all():
+            #return render_to_response("fastcookapp/index.html",{'openXML': json.dumps(xmlData.XMLGraph)})
+        #return render(request, 'fastcookapp/index.html', {'openXML': json.dumps(str(xml))})
+        #return HttpResponse(str(xml));
+        return HttpResponse("deleted")
 
 # Save new title
 @loggedin
 def saveNewTitle(request, user):
 	newTitle = request.POST['newTitle']
-	member = Member.objects.get(username=user)
+	#member = Member.objects.get(username=user)
 	xml = request.POST['xml']
 	currentTitle = request.POST['currentTitle']
 	#print(title)
-	currentTitle  = Title.objects.get(title = currentTitle)
-	currentTitle.title = newTitle
-	currentTitle.save()
+	#currentTitle  = Title.objects.get(title = currentTitle)
+	#currentTitle.title = newTitle
+	graph = XMLGraph.objects.get(title=currentTitle, user=user)
+
+	graph.title = newTitle 
+
+	graph.save()
 
 	#print(currentTitle)
 	#xmlObject = XMLGraph.objects.get(XMLGraph = xml)

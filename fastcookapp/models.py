@@ -10,32 +10,33 @@ from django.core.validators import RegexValidator
 #class Item(models.Model):
 	#image = models.ImageField(upload_to='images')
 
-class Title(models.Model):
+"""class Title(models.Model):
     title = models.TextField(null=True, unique=True, default='Untitled Graph')
     def __str__(self):
-        return self.title
-
-class XMLGraph(models.Model):
-    #only one title per graph
-    title = models.OneToOneField(
-        to=Title,
-        blank=True,
-        null=True,
-        on_delete=models.CASCADE)
-    
-    XMLGraph = models.TextField(null=True)
-
-    def __str__(self):
-        return str(self.XMLGraph)
+        return self.title"""
 
 class Member(User):
 
-    XMLGraph = models.ForeignKey('XMLGraph',
-        null=True,
-        on_delete=models.CASCADE)
+    #XMLGraph = models.ManyToManyField(XMLGraph)
 
     def __str__(self):
         return self.username
+
+class XMLGraph(models.Model):
+    #only one title per graph
+    """title = models.OneToOneField(
+        to=Title,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL)"""
+
+    title = models.CharField(max_length=100, null=True, unique=True, default='Untitled Graph')
+    XMLGraph = models.TextField(null=True)
+    user = models.ForeignKey(to = Member, null=True, on_delete=models.SET_NULL)
+
+
+    def __str__(self):
+        return str(self.XMLGraph)
 
 class Profile(models.Model):
     user = models.OneToOneField(

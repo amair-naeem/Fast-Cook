@@ -141,9 +141,12 @@ window.onload = function(){
         <!-- Modal body -->
         <div id = "loadAllTitles" class="modal-body">
           {% for titles in title %}
-
-          <input type = "button" class = "openGraph" value = "{{titles}}" id="{% url 'openGraph' title=titles.id %}">
-
+          <table>
+          <tr> 
+            <td> <input type = "button" class = "openGraph" value = "{{titles.title}}" id="{% url 'openGraph' title=titles.id %}"> </td> 
+            <td> <input type = "button" class = "deleteGraph" value = "Delete" id="{% url 'deleteGraph' title=titles.id %}"> </td>
+          </tr>
+          </table>
           {% endfor %}
         </div>
         
@@ -208,7 +211,7 @@ window.onload = function(){
         <!-- Modal footer -->
         <div class="modal-footer">
         
-        <button type="button" class="btn btn-primary" data-dismiss="modal" id = saveNewTitle>Save</button>
+        <button type="button" class="btn btn-primary" id = saveNewTitle>Save</button>
          
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 

@@ -27,6 +27,8 @@ urlpatterns = [
     path('saveNewTitle/', views.saveNewTitle, name='saveNewTitle'),
     # openGraph
     url(r'^openGraph/(?P<title>\d+)/$', views.openGraph, name='openGraph'),
+    # deleteGraph
+    url(r'^deleteGraph/(?P<title>\d+)/$', views.deleteGraph, name='deleteGraph'),
     # share
     path('share/', views.share, name='share'),
     # API
