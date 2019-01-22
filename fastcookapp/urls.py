@@ -25,6 +25,8 @@ urlpatterns = [
     path('loadTitles/', views.loadTitles, name='loadTitles'),
     # saveNewTitle
     path('saveNewTitle/', views.saveNewTitle, name='saveNewTitle'),
+    # overwrite
+    path('overwrite/', views.overwrite, name='overwrite'),
     # openGraph
     url(r'^openGraph/(?P<title>\d+)/$', views.openGraph, name='openGraph'),
     # deleteGraph

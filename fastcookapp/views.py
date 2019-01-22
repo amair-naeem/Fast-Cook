@@ -149,6 +149,8 @@ def saveData(request, user):
         #member = Member.objects.get(username=user)
         graphTitle = request.POST['title']
 
+
+
         """for xmlgraph in member.XMLGraph.all():
         	print(xmlgraph.title)"""
 
@@ -164,8 +166,20 @@ def saveData(request, user):
 
         #title = Title.objects.get(title = graphTitle)
         xmlData = request.POST['xml']
-        xml = XMLGraph.objects.filter(user = user, title = graphTitle).update(XMLGraph = xmlData)
 
+        #xml, created = XMLGraph.objects.get_or_create(user = user, title = graphTitle, XMLGraph = xmlData)
+
+        #XMLGraph.objects.filter(user = user, title = graphTitle).update(XMLGraph = xmlData)
+
+        xml, created = XMLGraph.objects.get_or_create(user = user, title = graphTitle)
+
+        if not created:
+        	if XMLGraph.objects.filter(user = user, title = graphTitle).exists():
+        		return HttpResponse("overwrite")
+
+        	else:
+        		xml.XMLGraph = xmlData 
+        		xml.save()
 
         #member.XMLGraph.add(xml)
         #member.XMLGraph = (xml)
@@ -181,13 +195,32 @@ def saveData(request, user):
     return HttpResponse('POST is not used')
 
 @loggedin
+def overwrite(request, user):
+	if request.method =="POST":
+
+		graphTitle = request.POST['title']
+		xmlData = request.POST['xml']
+
+		xml, created = XMLGraph.objects.get_or_create(user = user, title = graphTitle)
+
+		if not created:
+			xml.XMLGraph = xmlData 
+			xml.save()
+
+		return render_to_response("fastcookapp/index.html", content_type="text/xml;")
+
+
+@loggedin
 def saveTitle(request, user):
     if request.method == "POST":
         #member = Member.objects.get(username=user)
         graphTitle = request.POST['saveAsTitle']
-        #title = Title.objects.create(title=graphTitle)
         #member.title = title
         xmlData = request.POST['xml']
+
+        if XMLGraph.objects.filter(title=graphTitle).exists():
+        	raise Exception('Title already exists')
+
         xml = XMLGraph.objects.create(XMLGraph = xmlData, title=graphTitle, user=user)
         #member.XMLGraph.add(xml)
         #member.Title.add(title)
@@ -261,11 +294,15 @@ def saveNewTitle(request, user):
 	#print(title)
 	#currentTitle  = Title.objects.get(title = currentTitle)
 	#currentTitle.title = newTitle
-	graph = XMLGraph.objects.get(title=currentTitle, user=user)
+	graph, created = XMLGraph.objects.get_or_create(title=currentTitle, user=user)
 
-	graph.title = newTitle 
-
-	graph.save()
+	if not created:
+		if XMLGraph.objects.filter(user = user, title = graph.title).exists():
+        		return HttpResponse("overwrite")
+		else:
+			graph.title = newTitle 
+			graph.save()
+		
 
 	#print(currentTitle)
 	#xmlObject = XMLGraph.objects.get(XMLGraph = xml)

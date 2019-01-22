@@ -30,7 +30,7 @@ class XMLGraph(models.Model):
         null=True,
         on_delete=models.SET_NULL)"""
 
-    title = models.CharField(max_length=100, null=True, unique=True, default='Untitled Graph')
+    title = models.CharField(max_length=100, null=True, default='Untitled Graph')
     XMLGraph = models.TextField(null=True)
     user = models.ForeignKey(to = Member, null=True, on_delete=models.SET_NULL)
 
