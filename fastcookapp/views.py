@@ -1,6 +1,6 @@
 import json
 import requests
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from django.db.models import Count
 from django.http import HttpResponse, Http404
 from fastcookapp.models import Member,Profile,XMLGraph
@@ -15,10 +15,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import MemberSerializer
+from django.core.exceptions import ObjectDoesNotExist
 
 from django.core.exceptions import MultipleObjectsReturned
 
 from django.core import serializers
+from django.contrib import messages
 
 
 from rest_framework import viewsets
@@ -51,10 +53,24 @@ def loggedin(view):
 # Homepage
 @loggedin
 def home(request,user):
+
+	if request.method == 'POST':
+		xmlData = request.POST['sharedXMLData']
+		graphId = request.POST['currentGraphId']
+		shareGraph = XMLGraph.objects.get(id=graphId)
+		#request.session['sharedXMLGraph'] = xmlData
+		#messages.add_message(request, messages.INFO, xmlData)
+		shareGraph.XMLGraph = xmlData
+		shareGraph.save()
+		return redirect('share', random_url=shareGraph.random_url, id=graphId)
+
+
 	graphTitle = XMLGraph.objects.filter(user=user).values('title','id')
 	graph  = XMLGraph.objects.filter(user=user).values('XMLGraph')
+	graphTitle = XMLGraph.objects.filter(user=user)
 	print(graph)
 	print(graphTitle)
+
     #member = Member.objects.get(username=user)
     #title = Title.objects.all()
     #currentTitle = member.XMLGraph.title
@@ -62,6 +78,10 @@ def home(request,user):
     #for xmlData in member.XMLGraph.all():
         #return render(request, 'fastcookapp/index.html', {'xml': json.dumps(xmlData.XMLGraph),'title': member.title.all()})
 	return render(request, 'fastcookapp/index.html', {'xml': json.dumps(str(graph)), 'title':graphTitle})
+
+
+
+
 
  
 # Register view displays login when successful details have been passed
@@ -167,19 +187,25 @@ def saveData(request, user):
         #title = Title.objects.get(title = graphTitle)
         xmlData = request.POST['xml']
 
+
         #xml, created = XMLGraph.objects.get_or_create(user = user, title = graphTitle, XMLGraph = xmlData)
 
         #XMLGraph.objects.filter(user = user, title = graphTitle).update(XMLGraph = xmlData)
 
-        xml, created = XMLGraph.objects.get_or_create(user = user, title = graphTitle)
+        try:
+        	xml, created = XMLGraph.objects.get_or_create(user = user, title = graphTitle)
+
+        except XMLGraph.MultipleObjectsReturned:
+
+        	event = XMLGraph.objects.filter(user = user, title = graphTitle).order_by('id').first()
+
 
         if not created:
-        	if XMLGraph.objects.filter(user = user, title = graphTitle).exists():
-        		return HttpResponse("overwrite")
-
-        	else:
-        		xml.XMLGraph = xmlData 
-        		xml.save()
+        	#if XMLGraph.objects.filter(user = user, title = graphTitle).exists():
+        		#return HttpResponse("overwrite")
+        #else:
+        	xml.XMLGraph = xmlData 
+        	xml.save()
 
         #member.XMLGraph.add(xml)
         #member.XMLGraph = (xml)
@@ -198,14 +224,28 @@ def saveData(request, user):
 def overwrite(request, user):
 	if request.method =="POST":
 
+
 		graphTitle = request.POST['title']
 		xmlData = request.POST['xml']
+		graphId = request.POST['graphId']
 
-		xml, created = XMLGraph.objects.get_or_create(user = user, title = graphTitle)
 
-		if not created:
-			xml.XMLGraph = xmlData 
-			xml.save()
+		try:
+			exclude = XMLGraph.objects.exclude(id=graphId)
+			if exclude.filter(title=graphTitle, user = user).exists():
+				return JsonResponse({'overwrite':True})
+			else:
+				xml = XMLGraph.objects.get(id = graphId)
+				xml.XMLGraph = xmlData
+				xml.title = graphTitle
+				xml.save()
+				return JsonResponse({'overwrite': False})
+
+		except (ValueError, NameError) as e:
+			if XMLGraph.objects.filter(title=graphTitle).exists():
+				return JsonResponse({'overwrite':True})
+
+		XMLGraph.objects.create(user = user, title = graphTitle)
 
 		return render_to_response("fastcookapp/index.html", content_type="text/xml;")
 
@@ -218,13 +258,14 @@ def saveTitle(request, user):
         #member.title = title
         xmlData = request.POST['xml']
 
-        if XMLGraph.objects.filter(title=graphTitle).exists():
-        	raise Exception('Title already exists')
+        if XMLGraph.objects.filter(title=graphTitle, user=user).exists():
+        	return JsonResponse({"overwrite": True})
+        	#raise Exception('Title already exists')
 
         xml = XMLGraph.objects.create(XMLGraph = xmlData, title=graphTitle, user=user)
         #member.XMLGraph.add(xml)
         #member.Title.add(title)
-        return render_to_response("fastcookapp/index.html", content_type="text/xml;")
+        return JsonResponse({"id": xml.id, "overwrite": False})
     return HttpResponse('POST is not used')
 
 # load titles
@@ -288,32 +329,60 @@ def deleteGraph(request, title):
 @loggedin
 def saveNewTitle(request, user):
 	newTitle = request.POST['newTitle']
-	#member = Member.objects.get(username=user)
 	xml = request.POST['xml']
 	currentTitle = request.POST['currentTitle']
-	#print(title)
-	#currentTitle  = Title.objects.get(title = currentTitle)
-	#currentTitle.title = newTitle
-	graph, created = XMLGraph.objects.get_or_create(title=currentTitle, user=user)
+	graphId = request.POST['graphId']
+	
 
-	if not created:
-		if XMLGraph.objects.filter(user = user, title = graph.title).exists():
-        		return HttpResponse("overwrite")
+	try:
+
+		exclude = XMLGraph.objects.exclude(id=graphId)
+		print("test1")
+
+		if exclude.filter(title=newTitle).exists():
+			print("test2")
+			return JsonResponse({'overwrite':True})
+
 		else:
-			graph.title = newTitle 
-			graph.save()
-		
+			print("test3")
+			xml = XMLGraph.objects.get(id = graphId)
+			print("test4")
+			xml.title = newTitle
+			print("test5")
+			xml.save()
+			return JsonResponse({'overwrite': False})
 
-	#print(currentTitle)
-	#xmlObject = XMLGraph.objects.get(XMLGraph = xml)
-	#xmlModel = Title.objects.get(xmlgraph=xmlObject)
-	#for i in title:
-	#	print(i['fields'])
-	#newTitle = xmlModel.title
-	#xmlModel.save()
-	#print(currentTitle)
-	return HttpResponse("test")
+	except (ValueError, ObjectDoesNotExist) as e:
+		print("test6")
+		if XMLGraph.objects.filter(title=newTitle, user = user).exists():
+			print("test7")
+			return JsonResponse({'overwrite':True})
 
-@loggedin
-def share(request, user):
-	return render(request, 'fastcookapp/share.html')
+	print("test8")
+	XMLGraph.objects.create(user = user, title = newTitle)
+
+	return JsonResponse({'created':True})
+
+"""@loggedin
+def shareGraph(request, user):
+	if request.method == 'POST':
+		xmlData = request.POST['sharedXMLData']
+		graphId = request.POST['currentGraphId']
+		shareGraph = XMLGraph.objects.get(id=graphId)
+		request.session['sharedXMLGraph'] = xmlData
+		return redirect('share', random_url=shareGraph.random_url)
+
+	return render(request, 'fastcookapp/index.html')"""
+
+def share(request, random_url, id):
+	#xmlData = request.POST['sharedXMLData']
+	#print(str(request.POST['sharedXMLData']))
+	xmlGraph = XMLGraph.objects.get(id=id)
+	print("test" + str(xmlGraph.XMLGraph))
+	context = {
+        "article": get_list_or_404(XMLGraph, random_url=random_url),
+        "graph": xmlGraph.XMLGraph
+        #'xmlData': xmlData,
+    }
+
+	return render(request, 'fastcookapp/share.html', context)

@@ -1,4 +1,4 @@
-//cookie
+//get the cookie
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -15,6 +15,17 @@ function getCookie(name) {
     return cookieValue;
 }
 
+//set the cookie
+function setCookie(name,value,days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+
 
 function main()
         {
@@ -28,7 +39,15 @@ function main()
             //mxPopupMenu.prototype.addItem = function(</td><td class=PParameter nowrap>title,</td></tr><tr><td></td><td class=PParameter nowrap>image,</td></tr><tr><td></td><td class=PParameter nowrap>funct,</td></tr><tr><td></td><td class=PParameter nowrap>parent,</td></tr><tr><td></td><td class=PParameter nowrap>iconCls,</td></tr><tr><td></td><td class=PParameter nowrap>enabled</td><td class=PAfterParameters nowrap>)
             //console.log(mxPopupMenu.prototype.itemCount)
 
+            $('#share').on('click',function(event){
+                var encoder = new mxCodec();
+                var node = encoder.encode(graph.getModel());
+                xml = mxUtils.getXml(node)
+                var url = "/home/";
+                post(url, {sharedXMLData:xml});
 
+                //alert("hey")
+            });
 
             // Checks if browser is supported
             if (!mxClient.isBrowserSupported())
@@ -149,6 +168,9 @@ function main()
 
                             //$("#test").append(title)
                             $("#currentTitle").val(title)
+
+                            var id = parseInt(openUrl.match(/\d+/),10)
+                            $("#idOfGraph").val(id)
                             
                         }
                     });
@@ -168,6 +190,7 @@ function main()
                         var node = encoder.encode(graph.getModel());
                         xml = mxUtils.getXml(node)
                         currentTitle = $('#currentTitle').val()
+                        graphId = $("#idOfGraph").val()
                         //console.log(xml)
                         $.ajax({
                             type: "POST",
@@ -176,63 +199,47 @@ function main()
                             data: {
                             'newTitle': title,
                             'currentTitle': currentTitle,
-                            'xml': xml
+                            'xml': xml, 
+                            'graphId': graphId
                             },
                             headers:{
                                 "X-CSRFToken": csrftoken
                                 },
                             success: function(data){
-                                $('#saveTitleModal').modal('hide');
-                                $('.openGraph').each(function(i,obj){
-                                    if($(this).val() == currentTitle)
-                                    {
-                                        //console.log("button has been located")
-                                        $(this).val(title) 
-                                    }
-                                })
+                                
                                 //console.log($(".openGraph").val())
-                                $('#currentTitle').val(title)
 
-                                 if(data == "overwrite"){
+                                parseData = JSON.parse(data)
 
-                                if(confirm('Are you sure you want to save this thing into the database?')){
+                                if(parseData["overwrite"]){
 
-                                    $.ajax({
-                                    type: "POST",
-                                    url: "/overwrite/",
-                                    data: { 
-                                        "xml": xml,
-                                        "title": $('#currentTitle').val()
-                                        },
-                                    headers:{
-                                        "X-CSRFToken": csrftoken
-                                    },
-                                    success: function (data) {
+                                    alert(title + " already exists")
+                                    
+                                }
 
-                                        var xmlDoc = mxUtils.parseXml(xml);
-                                        //var xmlDoc = mxUtils.load("/saveData/").getXml();
-                                        //console.log("xmlDoc " + xmlDoc)
-                                        var node = xmlDoc.documentElement;
-                                        //console.log("node " + node)
-                                        var dec = new mxCodec(node.ownerDocument);
-                                        //console.log("dec " + dec)
-                                        //console.log("graph model " + graph.getModel())
-                                        dec.decode(node, graph.getModel());
+                                else{
 
-                                        }
+                                    $('#currentTitle').val(title)
+                                    $('#saveTitleModal').modal('hide');
 
+
+                                    $('.currentGraph').each(function(i, obj){
+                                        
+                                            
+                                        $('.openGraph').each(function(i,obj){
+                                            if($(this).val() == currentTitle){
+                                                $(this).val(title);
+                                            }
+
+                                        })
+
+                                        
                                     })
 
                                 }
 
-                            }
-
                             },
 
-                            error: function (xhr, ajaxOptions, thrownError) {
-                                 
-                                alert(title+ " is already in use")
-                            }
                         });
       
                     })
@@ -272,6 +279,9 @@ function main()
                                 "X-CSRFToken": csrftoken
                                 },
                             success: function(data){
+
+                                window.confirm = function() { return false; };
+
                                 var json = JSON.parse(data)
                                 var length = Object.keys(json).length
 
@@ -298,41 +308,6 @@ function main()
                                  if ($("#loadAllTitles").find('#' + $.escapeSelector(pkTitle + '/')).length == 0)
                                     $("#loadAllTitles").append("<table> <tr> <td>" + titleButton + "</td> <td>" + deleteButton + "</td> </tr> </table>")
 
-                                document.getElementById('saveButton').onclick = function() {
-
-                                    var encoder = new mxCodec();
-                                    var node = encoder.encode(graph.getModel());
-                                    xml = mxUtils.getXml(node);
-                                    var csrftoken = getCookie('csrftoken');
-
-                                    $.ajax({
-                        
-                                        type: "POST",
-                                        url: "/saveData/",
-                                        data: { 
-                                            "xml": xml,
-                                            "title": $('#currentTitle').val()
-                                        },
-                                        dataType: 'text',
-                                        headers:{
-                                            "X-CSRFToken": csrftoken
-                                        },
-                                        success: function(data){
-
-                                            window.confirm = function() { return false; };
-                                            
-                                            var xmlDoc = mxUtils.parseXml(xml);
-
-                                            var node = xmlDoc.documentElement;
-                                            
-                                            var dec = new mxCodec(node.ownerDocument);
-                                          
-                                            dec.decode(node, graph.getModel());
-
-                                        }
-                                    });
-
-                                };
                             }
                         });
       
@@ -371,7 +346,19 @@ function main()
                             headers:{
                                 "X-CSRFToken": csrftoken
                             },
-                            success: graph.removeCells(graph.getChildVertices(graph.getDefaultParent()))
+                            success: function(data){
+                                    
+                                    parseData = JSON.parse(data)
+                                    if(parseData["overwrite"]){
+                                        alert(title+ " is already in use")
+                                        
+                                    }
+                                    else{
+                                        $("#idOfGraph").val(parseData["id"])
+                                        graph.removeCells(graph.getChildVertices(graph.getDefaultParent()))
+                                        $("#currentTitle").val(title)
+                                    }
+                                },
                         });
       
                     })
@@ -388,16 +375,18 @@ function main()
                     var encoder = new mxCodec();
                     var node = encoder.encode(graph.getModel());
                     //var xml = mxUtils.getPrettyXml(node); 
-                    xml = mxUtils.getXml(node);
+                    var xml = mxUtils.getXml(node);
                     var csrftoken = getCookie('csrftoken');
 
                     $.ajax({
         
                         type: "POST",
-                        url: "/saveData/",
+                        url: "/overwrite/",
                         data: { 
                             "xml": xml,
-                            "title": $('#currentTitle').val()
+                            "title": $('#currentTitle').val(),
+                            "graphId": $("#idOfGraph").val()
+
                         },
                         dataType: 'text',
                         headers:{
@@ -409,7 +398,42 @@ function main()
                             //var xmlDoc = data[0]
 
                             //graph.getModel().beginUpdate();
-                            
+
+                            var title = $('#currentTitle').val();
+
+                            var overwrite = JSON.parse(data);
+
+
+                            if(overwrite["overwrite"])
+                            {
+
+                                    if(confirm(title + " already exists. Are you sure you want to overwrite changes to this file?")){
+
+                                        $.ajax({
+                                        type: "POST",
+                                        url: "/saveData/",
+                                        data: { 
+                                            "xml": xml,
+                                            "title": $('#currentTitle').val()
+                                            },
+                                        headers:{
+                                            "X-CSRFToken": csrftoken
+                                        },
+                                        success: function (data) {
+
+                                            var xmlDoc = mxUtils.parseXml(xml);
+                                            var node = xmlDoc.documentElement;
+                                            var dec = new mxCodec(node.ownerDocument);
+                                            dec.decode(node, graph.getModel());
+
+                                            }
+
+                                        })
+
+                                    }
+                            }
+
+                            //console.log(xml);
                             var xmlDoc = mxUtils.parseXml(xml);
                             //var xmlDoc = mxUtils.load("/saveData/").getXml();
                             //console.log("xmlDoc " + xmlDoc)
@@ -420,39 +444,7 @@ function main()
                             //console.log("graph model " + graph.getModel())
                             dec.decode(node, graph.getModel());
 
-                            if(data == "overwrite"){
-
-                                if(confirm('Are you sure you want to save this thing into the database?')){
-
-                                    $.ajax({
-                                    type: "POST",
-                                    url: "/overwrite/",
-                                    data: { 
-                                        "xml": xml,
-                                        "title": $('#currentTitle').val()
-                                        },
-                                    headers:{
-                                        "X-CSRFToken": csrftoken
-                                    },
-                                    success: function (data) {
-
-                                        var xmlDoc = mxUtils.parseXml(xml);
-                                        //var xmlDoc = mxUtils.load("/saveData/").getXml();
-                                        //console.log("xmlDoc " + xmlDoc)
-                                        var node = xmlDoc.documentElement;
-                                        //console.log("node " + node)
-                                        var dec = new mxCodec(node.ownerDocument);
-                                        //console.log("dec " + dec)
-                                        //console.log("graph model " + graph.getModel())
-                                        dec.decode(node, graph.getModel());
-
-                                        }
-
-                                    })
-
-                                }
-
-                            }
+                            
                         }
                     });
 
@@ -479,9 +471,17 @@ function main()
                             "X-CSRFToken": csrftoken
                         },
                         success: function(data){
-                        },
-                        error: function (xhr, ajaxOptions, thrownError) {
-                            alert(title+ " is already in use")
+                            var parseData = JSON.parse(data)
+                            if(parseData["overwrite"])
+                            {
+                                alert(title + " already exists")
+                            }
+
+                            else
+                            {
+                                $("#currentTitle").val(title)
+                                $("#idOfGraph").val(parseData["id"])
+                            }
                         }
                     });
 
@@ -587,9 +587,9 @@ function main()
                 var keyHandler = new mxKeyHandler(graph);
                 var rubberband = new mxRubberband(graph);
                 
-                var addVertex = function(icon, w, h, style)
+                var addVertex = function(label, icon, w, h, style)
                 {
-                    var vertex = new mxCell(null, new mxGeometry(0, 0, w, h), style);
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
                     vertex.setVertex(true);
                 
                     addToolbarItem(graph, toolbar, vertex, icon);
@@ -600,11 +600,13 @@ function main()
                 style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
                 style[mxConstants.STYLE_IMAGE] = '/images/icons/flour.png';
                 style[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
-                
+                style[mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+
                 graph.getStylesheet().putCellStyle('rounded2', style);
 
                 
-                addVertex('/images/icons/flour.png', 120, 160, 'rounded2');
+                addVertex("300g",'/images/icons/flour.png', 120, 160, 'rounded2');
 
                 var style2 = new Object();;
 
@@ -614,15 +616,15 @@ function main()
                 
                 graph.getStylesheet().putCellStyle('rounded3', style2);
                 
-                addVertex('/images/icons/whisk.png', 100, 40, 'rounded3');
+                addVertex(null,'/images/icons/whisk.png', 100, 40, 'rounded3');
                 
 
-                addVertex('/images/rounded.gif', 100, 40, 'shape=rounded');
-                addVertex('/images/ellipse.gif', 40, 40, 'shape=ellipse');
-                addVertex('/images/rhombus.gif', 40, 40, 'shape=rhombus');
-                addVertex('/images/triangle.gif', 40, 40, 'shape=triangle');
-                addVertex('/images/cylinder.gif', 40, 40, 'shape=cylinder');
-                addVertex('/images/actor.gif', 30, 40, 'shape=actor');
+                addVertex(null,'/images/rounded.gif', 100, 40, 'shape=rounded');
+                addVertex(null,'/images/ellipse.gif', 40, 40, 'shape=ellipse');
+                addVertex(null,'/images/rhombus.gif', 40, 40, 'shape=rhombus');
+                addVertex(null,'/images/triangle.gif', 40, 40, 'shape=triangle');
+                addVertex(null,'/images/cylinder.gif', 40, 40, 'shape=cylinder');
+                addVertex(null,'/images/actor.gif', 30, 40, 'shape=actor');
                 toolbar.addLine();
 
                 var addGeneralVertex = function(icon,w,h,style, value, arrow)
@@ -683,6 +685,10 @@ function main()
                 addGeneralVertex('/images/block_end.gif', 100, 40, 'connector', null, true);
 
                 generalToolbar.addLine();
+
+
+
+                
 
             }
 
@@ -745,6 +751,44 @@ function main()
             mxUtils.makeDraggable(img, graph, funct);
 
         }
+
+        function post(path, params, method) {
+            
+            method = method || "post"; // Set method to post by default if not specified.
+
+            // The rest of this code assumes you are not using a library.
+            // It can be made less wordy if you use one.
+            var form = document.createElement("form");
+            form.setAttribute("method", method);
+            form.setAttribute("action", path);
+
+            var inputElem = document.createElement('input');
+            inputElem.type = 'hidden';
+            inputElem.name = 'csrfmiddlewaretoken';
+            inputElem.value = getCookie("csrftoken");
+            form.appendChild(inputElem);
+
+            var hiddenId = document.createElement("input");
+            hiddenId.setAttribute("type", "hidden");
+            hiddenId.setAttribute("name", "currentGraphId");
+            hiddenId.setAttribute("value", $("#idOfGraph").val());
+            form.appendChild(hiddenId)
+
+            for(var key in params) {
+                if(params.hasOwnProperty(key)) {
+                    var hiddenField = document.createElement("input");
+                    hiddenField.setAttribute("type", "hidden");
+                    hiddenField.setAttribute("name", key);
+                    console.log(key)
+                    hiddenField.setAttribute("value", params[key]);
+
+                    form.appendChild(hiddenField);
+                }
+            }
+
+            document.body.appendChild(form);
+            form.submit();
+    }
 
 
 

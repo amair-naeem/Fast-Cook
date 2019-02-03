@@ -12,7 +12,7 @@ urlpatterns = [
 	#login
     path('', views.index, name='index'),
     #homepage
-    path('home/', views.home, name='home'),
+    url(r'^home/', views.home, name="home"),
     # register
     path('register/', views.register, name='register'),
     # login
@@ -31,8 +31,13 @@ urlpatterns = [
     url(r'^openGraph/(?P<title>\d+)/$', views.openGraph, name='openGraph'),
     # deleteGraph
     url(r'^deleteGraph/(?P<title>\d+)/$', views.deleteGraph, name='deleteGraph'),
+    # shareGraph
+    #path('shareGraph/', views.shareGraph, name='shareGraph'),
     # share
+    url(r'^share/(?P<id>\d+)/(?P<random_url>[-\w]+)/', views.share, name="share"),
     path('share/', views.share, name='share'),
+    #url(r'^(?P<slug>[\w-]+)/$',  views.share, name='share'),
+    #path('<slug:slug>', views.share, name='share'),
     # API
     path('api/', include(router.urls)),
 
