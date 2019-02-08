@@ -133,6 +133,24 @@ function main()
 
                 //graph.setEnabled(false);
 
+                //connectors around the object
+                graph.getAllConnectionConstraints = function(terminal)
+                {
+                    if (terminal != null && this.model.isVertex(terminal.cell))
+                    {
+                        return [new mxConnectionConstraint(new mxPoint(0, 0), true),
+                            new mxConnectionConstraint(new mxPoint(0.5, 0), true),
+                            new mxConnectionConstraint(new mxPoint(1, 0), true),
+                            new mxConnectionConstraint(new mxPoint(0, 0.5), true),
+                            new mxConnectionConstraint(new mxPoint(1, 0.5), true),
+                            new mxConnectionConstraint(new mxPoint(0, 1), true),
+                            new mxConnectionConstraint(new mxPoint(0.5, 1), true),
+                            new mxConnectionConstraint(new mxPoint(1, 1), true)];
+                    }
+
+                    return null;
+                };
+                
 
                 //save xml upon click
                 var model = new mxGraphModel();
@@ -583,6 +601,19 @@ function main()
                 mxVertexHandler.prototype.rotationEnabled = true;
 
 
+                // Disables floating connections (only use with no connect image)
+                if (graph.connectionHandler.connectImage == null)
+                {
+                    graph.connectionHandler.isConnectableCell = function(cell)
+                    {
+                       return false;
+                    };
+                    mxEdgeHandler.prototype.isConnectableCell = function(cell)
+                    {
+                        return graph.connectionHandler.isConnectableCell(cell);
+                    };
+                }
+
                 // Stops editing on enter or escape keypress
                 var keyHandler = new mxKeyHandler(graph);
                 var rubberband = new mxRubberband(graph);
@@ -602,6 +633,7 @@ function main()
                 style[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
                 style[mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
                 style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                
 
                 graph.getStylesheet().putCellStyle('rounded2', style);
 
