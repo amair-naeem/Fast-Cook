@@ -36,6 +36,7 @@ urlpatterns = [
     # share
     url(r'^share/(?P<id>\d+)/(?P<random_url>[-\w]+)/', views.share, name="share"),
     path('share/', views.share, name='share'),
+    path('loadIcons/', views.loadIcons, name='loadIcons'),
     #url(r'^(?P<slug>[\w-]+)/$',  views.share, name='share'),
     #path('<slug:slug>', views.share, name='share'),
     # API

@@ -626,37 +626,34 @@ function main()
                     addToolbarItem(graph, toolbar, vertex, icon);
                 };
 
-                var style = new Object();
 
-                style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
-                style[mxConstants.STYLE_IMAGE] = '/images/icons/flour.png';
-                style[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
-                style[mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
-                style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
-                
+                //addVertex("300g",'/images/icons/flour.png', 120, 160, 'rounded0');   
+                //addVertex(null,'/images/icons/whisk.png', 100, 40, 'rounded3');
 
-                graph.getStylesheet().putCellStyle('rounded2', style);
+                $.ajax({
+                //This will retrieve the contents of the folder if the folder is configured as 'browsable'
+                    
+                    url: "/loadIcons/",
+                    success: function (data) {
+                        //console.log(data["images"][i])
+                            for (var i = 179; i >= 0; i--) {
+                                
+                                addVertex("300g",'/images/ingredients/'+ data["images"][i] + "/", 120, 160, 'rounded'+i); 
 
-                
-                addVertex("300g",'/images/icons/flour.png', 120, 160, 'rounded2');
+                            }
 
-                var style2 = new Object();;
+                        }   
+                });
 
-                style2[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
-                style2[mxConstants.STYLE_IMAGE] = '/images/icons/whisk.png';
-                style2[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
-                
-                graph.getStylesheet().putCellStyle('rounded3', style2);
-                
-                addVertex(null,'/images/icons/whisk.png', 100, 40, 'rounded3');
-                
+                //addVertex(null,'/images/rounded.gif', 100, 40, 'shape=rounded');
+                //addVertex(null,'/images/ellipse.gif', 40, 40, 'shape=ellipse');
+                //addVertex(null,'/images/rhombus.gif', 40, 40, 'shape=rhombus');
+                //addVertex(null,'/images/triangle.gif', 40, 40, 'shape=triangle');
+                //addVertex(null,'/images/cylinder.gif', 40, 40, 'shape=cylinder');
+                //addVertex(null,'/images/actor.gif', 30, 40, 'shape=actor');
 
-                addVertex(null,'/images/rounded.gif', 100, 40, 'shape=rounded');
-                addVertex(null,'/images/ellipse.gif', 40, 40, 'shape=ellipse');
-                addVertex(null,'/images/rhombus.gif', 40, 40, 'shape=rhombus');
-                addVertex(null,'/images/triangle.gif', 40, 40, 'shape=triangle');
-                addVertex(null,'/images/cylinder.gif', 40, 40, 'shape=cylinder');
-                addVertex(null,'/images/actor.gif', 30, 40, 'shape=actor');
+
+
                 toolbar.addLine();
 
                 var addGeneralVertex = function(icon,w,h,style, value, arrow)
@@ -696,32 +693,12 @@ function main()
 
                 }
 
-                var style3 = new Object();
-
-                style3[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
-                style3[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
-
-                graph.getStylesheet().putCellStyle('text', style3);
-
-                var style4 = new Object();
-
-                style4[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
-                style4[mxConstants.STYLE_IMAGE] = '/images/block_end.gif';
-
-                style4[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
-
-                graph.getStylesheet().putCellStyle('connector', style4);
-
-
                 addGeneralVertex('/images/rounded.gif', 100, 40, 'text', "Text", false);
                 addGeneralVertex('/images/block_end.gif', 100, 40, 'connector', null, true);
 
                 generalToolbar.addLine();
 
-
-
-                
-
+                loadStyleSheet(graph);
             }
 
             //localGraph = localStorage.getItem("mxGraph");
@@ -820,7 +797,76 @@ function main()
 
             document.body.appendChild(form);
             form.submit();
-    }
+        }
+
+        function loadStyleSheet(graph) {
+            var style = [];
+            var dir = "/loadIcons/";
+            var fileextension = ".png";
+            $.ajax({
+                //This will retrieve the contents of the folder if the folder is configured as 'browsable'
+                url: dir,
+                success: function (data) {
+                    //console.log(data["images"][i])
+
+                    for (var i = 179; i >= 0; i--) {
+                        style[i] = new Object();
+                        style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/'+ data["images"][i] + "/";
+                        //console.log(style[i][mxConstants.STYLE_IMAGE])
+                        style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                        style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                        style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                        graph.getStylesheet().putCellStyle('rounded' + i, style[i]);
+                        console.log(style[i][mxConstants.STYLE_IMAGE])
+
+
+                    }
+
+
+
+                    //List all .png file names in the page
+                    /*$(data).find("a:contains(" + fileextension + ")").each(function () {
+                        var filename = this.href.replace(window.location.host, "").replace("http://", "");
+                        $("body").append("<img src='" + dir + filename + "'>");
+                    });*/
+                }
+            });
+
+                /*var style = new Object();
+
+                style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                style[mxConstants.STYLE_IMAGE] = '/images/icons/flour.png';
+                style[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                style[mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;*/
+
+                var style2 = new Object();
+
+                style2[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                style2[mxConstants.STYLE_IMAGE] = '/images/icons/whisk.png';
+                style2[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;                
+
+                //graph.getStylesheet().putCellStyle('rounded2', style);
+
+                graph.getStylesheet().putCellStyle('rounded3', style2);
+
+                var style3 = new Object();
+
+                style3[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                style3[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+
+                graph.getStylesheet().putCellStyle('text', style3);
+
+                var style4 = new Object();
+
+                style4[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                style4[mxConstants.STYLE_IMAGE] = '/images/block_end.gif';
+
+                style4[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+
+                graph.getStylesheet().putCellStyle('connector', style4);
+        }
 
 
 

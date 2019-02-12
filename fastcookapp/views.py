@@ -1,4 +1,5 @@
 import json
+import os
 import requests
 from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from django.db.models import Count
@@ -14,6 +15,8 @@ from django.shortcuts import render_to_response
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from PIL import Image
+import glob
 from .serializers import MemberSerializer
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -386,3 +389,20 @@ def share(request, random_url, id):
     }
 
 	return render(request, 'fastcookapp/share.html', context)
+
+
+def loadIcons(request):
+    #print(str("1 " + os.listdir("fastcookapp/images/")))
+    image_list = []
+    path = "fastcookapp/images/ingredients/"
+    img_list =os.listdir(path)  
+    print(img_list) 
+    return JsonResponse({'images': img_list})
+    """print("1 "+str(glob.glob('fastcookapp/images/icons/*.png')))
+    for filename in glob.glob('fastcookapp/images/icons/*.png'): 
+        print(filename)
+        im=Image.open(filename)
+        image_list.append(im)
+        #print(str(im))
+        return HttpResponse(filename);
+    return HttpResponse("test22222");"""
