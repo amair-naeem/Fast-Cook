@@ -636,7 +636,7 @@ function main()
                     url: "/loadIcons/",
                     success: function (data) {
                         //console.log(data["images"][i])
-                            for (var i = 179; i >= 0; i--) {
+                            for (var i = 178; i >= 0; i--) {
                                 
                                 addVertex("300g",'/images/ingredients/'+ data["images"][i] + "/", 120, 160, 'rounded'+i); 
 
@@ -809,7 +809,7 @@ function main()
                 success: function (data) {
                     //console.log(data["images"][i])
 
-                    for (var i = 179; i >= 0; i--) {
+                    for (var i = 178; i >= 0; i--) {
                         style[i] = new Object();
                         style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
                         style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/'+ data["images"][i] + "/";

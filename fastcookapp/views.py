@@ -395,7 +395,8 @@ def loadIcons(request):
     #print(str("1 " + os.listdir("fastcookapp/images/")))
     image_list = []
     path = "fastcookapp/images/ingredients/"
-    img_list =os.listdir(path)  
+    img_list =os.listdir(path) 
+    img_list = list(filter(lambda fname: os.path.basename(fname) != 'Thumbs.db', img_list))
     print(img_list) 
     return JsonResponse({'images': img_list})
     """print("1 "+str(glob.glob('fastcookapp/images/icons/*.png')))
