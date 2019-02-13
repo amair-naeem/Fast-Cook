@@ -64,6 +64,17 @@ function main()
 
                 var content = document.getElementById('content')
                 var generalContent = document.getElementById('generalContent')
+                var berries = document.getElementById('berries')
+                var dairies = document.getElementById('dairies')
+                var dessert = document.getElementById('dessert')
+                var dishes = document.getElementById('dishes')
+                var fruits = document.getElementById('fruits')
+                var meat = document.getElementById('meat')
+                var nut = document.getElementById('nut')
+                var vegetables = document.getElementById('vegetables')
+                var seafood = document.getElementById('seafood')
+                var fastfood = document.getElementById('fastfood')
+                var other = document.getElementById('other')
             
                 // Creates new toolbar without event processing
                 var toolbar = new mxToolbar(content);
@@ -71,6 +82,39 @@ function main()
 
                 var generalToolbar = new mxToolbar(generalContent)
                 generalToolbar.enabled = false
+
+                var berriesToolbar = new mxToolbar(berries)
+                berriesToolbar.enabled = false
+
+                var dairiesToolbar = new mxToolbar(dairies);
+                dairiesToolbar.enabled = false
+
+                var dessertToolbar = new mxToolbar(dessert)
+                dessertToolbar.enabled = false
+
+                var fruitsToolbar = new mxToolbar(fruits)
+                fruitsToolbar.enabled = false
+
+                var meatToolbar = new mxToolbar(meat)
+                meatToolbar.enabled = false
+
+                var nutToolbar = new mxToolbar(nut)
+                nutToolbar.enabled = false
+
+                var vegetablesToolbar = new mxToolbar(vegetables)
+                vegetablesToolbar.enabled = false
+
+                 var seafoodToolbar = new mxToolbar(seafood)
+                seafoodToolbar.enabled = false
+
+                var fastfoodToolbar = new mxToolbar(fastfood)
+                fastfoodToolbar.enabled = false
+
+                var otherToolbar = new mxToolbar(other)
+                otherToolbar.enabled = false
+
+                var dishesToolbar = new mxToolbar(dishes)
+                dishesToolbar.enabled = false
 
                 var coll = document.getElementsByClassName("collapsible");
 
@@ -627,6 +671,19 @@ function main()
                 };
 
 
+
+                var addBerriesVertex = function(label, icon, w, h, style)
+                {
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                    vertex.setVertex(true);
+                
+                    addToolbarItem(graph, berriesToolbar, vertex, icon);
+                };
+
+
+
+
+
                 //addVertex("300g",'/images/icons/flour.png', 120, 160, 'rounded0');   
                 //addVertex(null,'/images/icons/whisk.png', 100, 40, 'rounded3');
 
@@ -636,9 +693,24 @@ function main()
                     url: "/loadIcons/",
                     success: function (data) {
                         //console.log(data["images"][i])
-                            for (var i = 178; i >= 0; i--) {
+                            for (var i = 4; i >= 0; i--) {
                                 
-                                addVertex("300g",'/images/ingredients/'+ data["images"][i] + "/", 120, 160, 'rounded'+i); 
+                                addVertex("300g",'/images/ingredients/Bakery/'+ data["bakery"][i] + "/", 120, 160, 'rounded'+i); 
+
+                            }
+
+                        }   
+                });
+
+                $.ajax({
+                //This will retrieve the contents of the folder if the folder is configured as 'browsable'
+                    
+                    url: "/loadIcons/",
+                    success: function (data) {
+                        //console.log(data["images"][i])
+                            for (var i = 3; i >= 0; i--) {
+                                
+                                addBerriesVertex("300g",'/images/ingredients/Berries/'+ data["berries"][i] + "/", 120, 160, 'berries'+i); 
 
                             }
 
@@ -653,7 +725,7 @@ function main()
                 //addVertex(null,'/images/actor.gif', 30, 40, 'shape=actor');
 
 
-
+                berriesToolbar.addLine();
                 toolbar.addLine();
 
                 var addGeneralVertex = function(icon,w,h,style, value, arrow)
@@ -809,10 +881,12 @@ function main()
                 success: function (data) {
                     //console.log(data["images"][i])
 
-                    for (var i = 178; i >= 0; i--) {
+                    for (var i = 4; i >= 0; i--) {
                         style[i] = new Object();
                         style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
-                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/'+ data["images"][i] + "/";
+
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Bakery/'+ data["bakery"][i] + "/";
+                        console.log(data["bakery"][i])
                         //console.log(style[i][mxConstants.STYLE_IMAGE])
                         style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
                         style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
@@ -823,7 +897,19 @@ function main()
 
                     }
 
+                    for (var i = 3; i >= 0; i--) {
+                        style[i] = new Object();
+                        style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
 
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Berries/'+ data["berries"][i] + "/";
+                        //console.log(style[i][mxConstants.STYLE_IMAGE])
+                        style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                        style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                        style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                        graph.getStylesheet().putCellStyle('berries' + i, style[i]);
+
+
+                    }
 
                     //List all .png file names in the page
                     /*$(data).find("a:contains(" + fileextension + ")").each(function () {
