@@ -20,7 +20,10 @@
   background-color: #555;
 }
 
-#content, #generalContent {
+#content, #generalContent, #berries, 
+#dairies, #fruits, #meat, #nut, #vegetables,
+#seafood, #fastfood, #other
+{
   padding: 0 18px;
   display: none;
   overflow: hidden;
