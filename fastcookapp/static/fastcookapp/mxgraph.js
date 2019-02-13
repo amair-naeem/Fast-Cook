@@ -670,8 +670,6 @@ function main()
                     addToolbarItem(graph, toolbar, vertex, icon);
                 };
 
-
-
                 var addBerriesVertex = function(label, icon, w, h, style)
                 {
                     var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
@@ -681,7 +679,86 @@ function main()
                 };
 
 
+                var addDairiesVertex = function(label, icon, w, h, style)
+                {
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                    vertex.setVertex(true);
+                
+                    addToolbarItem(graph, dairiesToolbar, vertex, icon);
+                };
 
+                var addDessertsVertex = function(label, icon, w, h, style)
+                {
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                    vertex.setVertex(true);
+                
+                    addToolbarItem(graph, dessertToolbar, vertex, icon);
+                };
+
+                var addDishesVertex = function(label, icon, w, h, style)
+                {
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                    vertex.setVertex(true);
+                
+                    addToolbarItem(graph, dishesToolbar, vertex, icon);
+                };
+
+                var addFastFoodVertex = function(label, icon, w, h, style)
+                {
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                    vertex.setVertex(true);
+                
+                    addToolbarItem(graph, fastfoodToolbar, vertex, icon);
+                };
+
+                var addFruitsVertex = function(label, icon, w, h, style)
+                {
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                    vertex.setVertex(true);
+                
+                    addToolbarItem(graph, fruitsToolbar, vertex, icon);
+                };
+
+                var addMeatVertex = function(label, icon, w, h, style)
+                {
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                    vertex.setVertex(true);
+                
+                    addToolbarItem(graph, meatToolbar, vertex, icon);
+                };
+
+
+                var addNutVertex = function(label, icon, w, h, style)
+                {
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                    vertex.setVertex(true);
+                
+                    addToolbarItem(graph, nutToolbar, vertex, icon);
+                };
+
+                var addOtherVertex = function(label, icon, w, h, style)
+                {
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                    vertex.setVertex(true);
+                
+                    addToolbarItem(graph, otherToolbar, vertex, icon);
+                };
+
+                var addSeafoodVertex = function(label, icon, w, h, style)
+                {
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                    vertex.setVertex(true);
+                
+                    addToolbarItem(graph, seafoodToolbar, vertex, icon);
+                };
+
+                var addVegetablesVertex = function(label, icon, w, h, style)
+                {
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                    vertex.setVertex(true);
+                
+                    addToolbarItem(graph, vegetablesToolbar, vertex, icon);
+                };
 
 
                 //addVertex("300g",'/images/icons/flour.png', 120, 160, 'rounded0');   
@@ -699,23 +776,58 @@ function main()
 
                             }
 
-                        }   
-                });
-
-                $.ajax({
-                //This will retrieve the contents of the folder if the folder is configured as 'browsable'
-                    
-                    url: "/loadIcons/",
-                    success: function (data) {
-                        //console.log(data["images"][i])
                             for (var i = 3; i >= 0; i--) {
                                 
                                 addBerriesVertex("300g",'/images/ingredients/Berries/'+ data["berries"][i] + "/", 120, 160, 'berries'+i); 
 
                             }
 
+                            for (var i = 2; i >= 0; i--) {
+                                
+                                addDairiesVertex("300g",'/images/ingredients/Dairies/'+ data["dairies"][i] + "/", 120, 160, 'dairies'+i); 
+
+                            }
+
+                    
+                            for (var i = 19; i >= 0; i--) {
+                                
+                                addFruitsVertex("300g",'/images/ingredients/Fruits/'+ data["fruits"][i] + "/", 120, 160, 'fruits'+i); 
+
+                            }
+
+                            for (var i = 8; i >= 0; i--) {
+                                
+                                addMeatVertex("300g",'/images/ingredients/Meat/'+ data["meat"][i] + "/", 120, 160, 'meat'+i); 
+
+                            }
+
+                            for (var i = 3; i >= 0; i--) {
+                                
+                                addNutVertex("300g",'/images/ingredients/Nut/'+ data["nut"][i] + "/", 120, 160, 'nut'+i); 
+
+                            }
+
+                            for (var i = 13; i >= 0; i--) {
+                                
+                                addOtherVertex("300g",'/images/ingredients/other/'+ data["other"][i] + "/", 120, 160, 'other'+i); 
+
+                            }
+
+                            for (var i = 4; i >= 0; i--) {
+                                
+                                addSeafoodVertex("300g",'/images/ingredients/Seafood/'+ data["seafood"][i] + "/", 120, 160, 'seafood'+i); 
+
+                            }
+
+                            for (var i = 26; i >= 0; i--) {
+                                
+                                addVegetablesVertex("300g",'/images/ingredients/Vegetables/'+ data["vegetables"][i] + "/", 120, 160, 'vegetables'+i); 
+
+                            }
+
                         }   
                 });
+
 
                 //addVertex(null,'/images/rounded.gif', 100, 40, 'shape=rounded');
                 //addVertex(null,'/images/ellipse.gif', 40, 40, 'shape=ellipse');
@@ -893,22 +1005,66 @@ function main()
                         style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
                         graph.getStylesheet().putCellStyle('rounded' + i, style[i]);
                         console.log(style[i][mxConstants.STYLE_IMAGE])
+                    }
 
+                    for (var i = 2; i >= 0; i--) {
+                        style[i] = new Object();
+                        style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Dairies/'+ data["dairies"][i] + "/";
+                        style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                        style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                        style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                        graph.getStylesheet().putCellStyle('dairies' + i, style[i]);
+                    }
 
+                    for (var i = 19; i >= 0; i--) {
+                        style[i] = new Object();
+                        style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Fruits/'+ data["fruits"][i] + "/";
+                        style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                        style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                        style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                        graph.getStylesheet().putCellStyle('fruits' + i, style[i]);
+                    }
+
+                    for (var i = 8; i >= 0; i--) {
+                        style[i] = new Object();
+                        style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Meat/'+ data["meat"][i] + "/";
+                        style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                        style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                        style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                        graph.getStylesheet().putCellStyle('meat' + i, style[i]);
                     }
 
                     for (var i = 3; i >= 0; i--) {
                         style[i] = new Object();
                         style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
-
-                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Berries/'+ data["berries"][i] + "/";
-                        //console.log(style[i][mxConstants.STYLE_IMAGE])
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Nut/'+ data["nut"][i] + "/";
                         style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
                         style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
                         style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
-                        graph.getStylesheet().putCellStyle('berries' + i, style[i]);
+                        graph.getStylesheet().putCellStyle('nut' + i, style[i]);
+                    }
 
+                    for (var i = 26; i >= 0; i--) {
+                        style[i] = new Object();
+                        style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Vegetables/'+ data["vegetables"][i] + "/";
+                        style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                        style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                        style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                        graph.getStylesheet().putCellStyle('vegetables' + i, style[i]);
+                    }
 
+                    for (var i = 4; i >= 0; i--) {
+                        style[i] = new Object();
+                        style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Seafood/'+ data["vegetables"][i] + "/";
+                        style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                        style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                        style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                        graph.getStylesheet().putCellStyle('seafood' + i, style[i]);
                     }
 
                     //List all .png file names in the page
