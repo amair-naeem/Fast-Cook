@@ -82,11 +82,18 @@ def home(request,user):
         #return render(request, 'fastcookapp/index.html', {'xml': json.dumps(xmlData.XMLGraph),'title': member.title.all()})
 	return render(request, 'fastcookapp/index.html', {'xml': json.dumps(str(graph)), 'title':graphTitle})
 
+@loggedin
+def createNewGraph(request,user):
+    if request.method == 'POST':
+        graphTitle22 = request.POST['graphTitle22']
+        saveNewGraph = XMLGraph.objects.create(user=user, title=graphTitle22)
+        return redirect('home')
+        #return render(request, 'fastcookapp/index.html', {'titleOfGraph': graphTitle22})
 
+@loggedin
+def profile(request, user):
+    return render(request, 'fastcookapp/profile.html')
 
-
-
- 
 # Register view displays login when successful details have been passed
 def register(request):
      if request.method == "POST":

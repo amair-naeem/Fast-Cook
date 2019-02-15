@@ -1,0 +1,50 @@
+{% extends 'fastcookapp/base.html' %}
+{% load staticfiles %}
+{% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="{% static 'fastcookapp/newGraph.js' %}"></script> 
+<script type="text/javascript">
+    mxBasePath = "{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/src' %}";
+</script>
+<script src="{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/mxClient.js' %}"></script>
+<script src="{% static 'fastcookapp/ajax.js' %}"></script> 
+
+
+<html>
+    You can create a new graph by clicking <a class = "newGraph" href="" data-toggle="modal" data-target="#createNewGraph">here</a>
+</html>
+
+<div class="modal" id="createNewGraph">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Modal Heading</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+    <form action = "{% url 'create' %}" method="POST">
+    	{% csrf_token %}
+        <!-- Modal body -->
+        <div class="modal-body">
+           <input type="text" name="graphTitle22">
+          <button type="submit" class="btn btn-primary" name = "test123" id = "test123">Save</button>
+        </div>
+
+    </form> 
+        <!-- Modal footer -->
+        <div class="modal-footer">
+     
+	
+	       
+
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+
+        </div>
+        
+      </div>
+    </div>
+  </div>
+{% endblock %}

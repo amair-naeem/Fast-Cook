@@ -11,10 +11,13 @@ router.register(r'members', views.MemberViewSet)
 urlpatterns = [
 	#login
     path('', views.index, name='index'),
+    path('create/', views.createNewGraph, name='create'),
     #homepage
     url(r'^home/', views.home, name="home"),
     # register
     path('register/', views.register, name='register'),
+    #profile
+    path('profile/', views.profile, name='profile'),
     # login
     path('login/', views.login, name='login'),
     # saveData
