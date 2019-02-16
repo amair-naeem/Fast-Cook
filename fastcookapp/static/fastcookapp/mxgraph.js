@@ -29,6 +29,8 @@ function setCookie(name,value,days) {
 
 function main()
         {
+            mxConnectionHandler.prototype.connectImage = new mxImage('/images/connector.gif', 16, 16);
+
             
             // Defines an icon for creating new connections in the connection handler.
             // This will automatically disable the highlighting of the source vertex.
@@ -175,10 +177,12 @@ function main()
                 var graph = new mxGraph(container, model);
                 graph.dropEnabled = true;
 
+
+
                 //graph.setEnabled(false);
 
                 //connectors around the object
-                graph.getAllConnectionConstraints = function(terminal)
+                /*graph.getAllConnectionConstraints = function(terminal)
                 {
                     if (terminal != null && this.model.isVertex(terminal.cell))
                     {
@@ -193,7 +197,7 @@ function main()
                     }
 
                     return null;
-                };
+                };*/
                 
 
                 //save xml upon click
@@ -629,8 +633,7 @@ function main()
                 // Matches DnD inside the graph
                 mxDragSource.prototype.getDropTarget = function(graph, x, y)
                 {
-                    var cell = graph.getCellAt(x, y);
-                    
+                    var cell = graph.getCellAt(x, y);                    
                     if (!graph.isValidDropTarget(cell))
                     {
                         cell = null;
@@ -868,6 +871,8 @@ function main()
                     {
                         var vertex = new mxCell(null, new mxGeometry(0, 0, w, h), style);
 
+                        //graph.setConnectable(false)
+                        vertex.setConnectable(false)
                         vertex.value = value
                         vertex.setVertex(true);
 
@@ -993,18 +998,34 @@ function main()
                 success: function (data) {
                     //console.log(data["images"][i])
 
+                    
+
                     for (var i = 4; i >= 0; i--) {
                         style[i] = new Object();
                         style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
 
                         style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Bakery/'+ data["bakery"][i] + "/";
+                        //style[i][mxConstants.VERTEX_SELECTION_COLOR] =  '#00FF00'
+
                         console.log(data["bakery"][i])
                         //console.log(style[i][mxConstants.STYLE_IMAGE])
                         style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
                         style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
                         style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
                         graph.getStylesheet().putCellStyle('rounded' + i, style[i]);
+
+
                         console.log(style[i][mxConstants.STYLE_IMAGE])
+                    }
+
+                    for (var i = 3; i >= 0; i--) {
+                        style[i] = new Object();
+                        style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Berries/'+ data["berries"][i] + "/";
+                        style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                        style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                        style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                        graph.getStylesheet().putCellStyle('berries' + i, style[i]);
                     }
 
                     for (var i = 2; i >= 0; i--) {
@@ -1060,11 +1081,21 @@ function main()
                     for (var i = 4; i >= 0; i--) {
                         style[i] = new Object();
                         style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
-                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Seafood/'+ data["vegetables"][i] + "/";
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Seafood/'+ data["seafood"][i] + "/";
                         style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
                         style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
                         style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
                         graph.getStylesheet().putCellStyle('seafood' + i, style[i]);
+                    }
+
+                    for (var i = 13; i >= 0; i--) {
+                        style[i] = new Object();
+                        style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/other/'+ data["other"][i] + "/";
+                        style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                        style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                        style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                        graph.getStylesheet().putCellStyle('other' + i, style[i]);
                     }
 
                     //List all .png file names in the page
