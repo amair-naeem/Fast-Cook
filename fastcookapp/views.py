@@ -86,7 +86,11 @@ def home(request,user):
 def createNewGraph(request,user):
     if request.method == 'POST':
         graphTitle22 = request.POST['graphTitle22']
+        if XMLGraph.objects.filter(title=graphTitle22, user=user).exists():
+            return JsonResponse({"overwrite": True})
+        
         saveNewGraph = XMLGraph.objects.create(user=user, title=graphTitle22)
+        
         return redirect('home')
         #return render(request, 'fastcookapp/index.html', {'titleOfGraph': graphTitle22})
 

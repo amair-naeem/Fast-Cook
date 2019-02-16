@@ -27,11 +27,162 @@ function setCookie(name,value,days) {
 }
 
 
+        function mxIconSet(state)
+        {
+            this.images = [];
+            var graph = state.view.graph;
+            
+            // Icon1
+            var img = mxUtils.createImage('/images/copy.png');
+            img.setAttribute('title', 'Duplicate');
+            img.style.position = 'absolute';
+            img.style.cursor = 'pointer';
+            img.style.width = '16px';
+            img.style.height = '16px';
+            img.style.left = (state.x + state.width) + 'px';
+            img.style.top = (state.y + state.height) + 'px';
+            
+            mxEvent.addGestureListeners(img,
+                mxUtils.bind(this, function(evt)
+                {
+                    var s = graph.gridSize;
+                    graph.setSelectionCells(graph.moveCells([state.cell], s, s, true));
+                    mxEvent.consume(evt);
+                    this.destroy();
+                })
+            );
+            
+            state.view.graph.container.appendChild(img);
+            this.images.push(img);
+            
+            // Delete
+            var img = mxUtils.createImage('/images/delete2.png');
+            img.setAttribute('title', 'Delete');
+            img.style.position = 'absolute';
+            img.style.cursor = 'pointer';
+            img.style.width = '16px';
+            img.style.height = '16px';
+            img.style.left = (state.x + state.width) + 'px';
+            img.style.top = (state.y - 16) + 'px';
+            
+            mxEvent.addGestureListeners(img,
+                mxUtils.bind(this, function(evt)
+                {
+                    // Disables dragging the image
+                    mxEvent.consume(evt);
+                })
+            );
+            
+            mxEvent.addListener(img, 'click',
+                mxUtils.bind(this, function(evt)
+                {
+                    graph.removeCells([state.cell]);
+                    mxEvent.consume(evt);
+                    this.destroy();
+                })
+            );
+            
+            state.view.graph.container.appendChild(img);
+            this.images.push(img);
+        };
+
+        mxIconSet.prototype.destroy = function()
+        {
+            if (this.images != null)
+            {
+                for (var i = 0; i < this.images.length; i++)
+                {
+                    var img = this.images[i];
+                    img.parentNode.removeChild(img);
+                }
+            }
+            
+            this.images = null;
+        };
+
+
+
 function main()
         {
             mxConnectionHandler.prototype.connectImage = new mxImage('/images/connector.gif', 16, 16);
 
-            
+            // Creates the model and the graph inside the container
+                // using the fastest rendering available on the browser
+            var model = new mxGraphModel();
+            var editor = new mxEditor();
+            var graph = new mxGraph(container, model);
+            graph.dropEnabled = true;
+
+            var iconTolerance = 20;
+
+            graph.addMouseListener(
+                {
+                    currentState: null,
+                    currentIconSet: null,
+                    mouseDown: function(sender, me)
+                    {
+                        // Hides icons on mouse down
+                        if (this.currentState != null)
+                        {
+                            this.dragLeave(me.getEvent(), this.currentState);
+                            this.currentState = null;
+                        }
+                    },
+                    mouseMove: function(sender, me)
+                    {
+                        if (this.currentState != null && (me.getState() == this.currentState ||
+                            me.getState() == null))
+                        {
+                            var tol = iconTolerance;
+                            var tmp = new mxRectangle(me.getGraphX() - tol,
+                                me.getGraphY() - tol, 2 * tol, 2 * tol);
+
+                            if (mxUtils.intersects(tmp, this.currentState))
+                            {
+                                return;
+                            }
+                        }
+                        
+                        var tmp = graph.view.getState(me.getCell());
+                        
+                        // Ignores everything but vertices
+                        if (graph.isMouseDown || (tmp != null && !graph.getModel().isVertex(tmp.cell)))
+                        {
+                            tmp = null;
+                        }
+
+                        if (tmp != this.currentState)
+                        {
+                            if (this.currentState != null)
+                            {
+                                this.dragLeave(me.getEvent(), this.currentState);
+                            }
+                        
+                            this.currentState = tmp;
+                        
+                            if (this.currentState != null)
+                            {
+                                this.dragEnter(me.getEvent(), this.currentState);
+                            }
+                        }
+                    },
+                    mouseUp: function(sender, me) { },
+                    dragEnter: function(evt, state)
+                    {
+                        if (this.currentIconSet == null)
+                        {
+                            this.currentIconSet = new mxIconSet(state);
+                        }
+                    },
+                    dragLeave: function(evt, state)
+                    {
+                        if (this.currentIconSet != null)
+                        {
+                            this.currentIconSet.destroy();
+                            this.currentIconSet = null;
+                        }
+                    }
+                });
             // Defines an icon for creating new connections in the connection handler.
             // This will automatically disable the highlighting of the source vertex.
             //mxConnectionHandler.prototype.connectImage = new mxImage("/images/connector.gif", 16, 16);
@@ -170,13 +321,7 @@ function main()
                     new mxDivResizer(container);
                 }
     
-                // Creates the model and the graph inside the container
-                // using the fastest rendering available on the browser
-                var model = new mxGraphModel();
-                var editor = new mxEditor();
-                var graph = new mxGraph(container, model);
-                graph.dropEnabled = true;
-
+                
 
 
                 //graph.setEnabled(false);
@@ -775,56 +920,56 @@ function main()
                         //console.log(data["images"][i])
                             for (var i = 4; i >= 0; i--) {
                                 
-                                addVertex("300g",'/images/ingredients/Bakery/'+ data["bakery"][i] + "/", 120, 160, 'rounded'+i); 
+                                addVertex("300g",'/images/ingredients/Bakery/'+ data["bakery"][i] + "/", 60, 80, 'rounded'+i); 
 
                             }
 
                             for (var i = 3; i >= 0; i--) {
                                 
-                                addBerriesVertex("300g",'/images/ingredients/Berries/'+ data["berries"][i] + "/", 120, 160, 'berries'+i); 
+                                addBerriesVertex("300g",'/images/ingredients/Berries/'+ data["berries"][i] + "/", 60, 80, 'berries'+i); 
 
                             }
 
                             for (var i = 2; i >= 0; i--) {
                                 
-                                addDairiesVertex("300g",'/images/ingredients/Dairies/'+ data["dairies"][i] + "/", 120, 160, 'dairies'+i); 
+                                addDairiesVertex("300g",'/images/ingredients/Dairies/'+ data["dairies"][i] + "/", 60, 80, 'dairies'+i); 
 
                             }
 
                     
                             for (var i = 19; i >= 0; i--) {
                                 
-                                addFruitsVertex("300g",'/images/ingredients/Fruits/'+ data["fruits"][i] + "/", 120, 160, 'fruits'+i); 
+                                addFruitsVertex("300g",'/images/ingredients/Fruits/'+ data["fruits"][i] + "/", 60, 80, 'fruits'+i); 
 
                             }
 
                             for (var i = 8; i >= 0; i--) {
                                 
-                                addMeatVertex("300g",'/images/ingredients/Meat/'+ data["meat"][i] + "/", 120, 160, 'meat'+i); 
+                                addMeatVertex("300g",'/images/ingredients/Meat/'+ data["meat"][i] + "/", 60, 80, 'meat'+i); 
 
                             }
 
                             for (var i = 3; i >= 0; i--) {
                                 
-                                addNutVertex("300g",'/images/ingredients/Nut/'+ data["nut"][i] + "/", 120, 160, 'nut'+i); 
+                                addNutVertex("300g",'/images/ingredients/Nut/'+ data["nut"][i] + "/", 60, 80, 'nut'+i); 
 
                             }
 
                             for (var i = 13; i >= 0; i--) {
                                 
-                                addOtherVertex("300g",'/images/ingredients/other/'+ data["other"][i] + "/", 120, 160, 'other'+i); 
+                                addOtherVertex("300g",'/images/ingredients/other/'+ data["other"][i] + "/", 60, 80, 'other'+i); 
 
                             }
 
                             for (var i = 4; i >= 0; i--) {
                                 
-                                addSeafoodVertex("300g",'/images/ingredients/Seafood/'+ data["seafood"][i] + "/", 120, 160, 'seafood'+i); 
+                                addSeafoodVertex("300g",'/images/ingredients/Seafood/'+ data["seafood"][i] + "/", 60, 80, 'seafood'+i); 
 
                             }
 
                             for (var i = 26; i >= 0; i--) {
                                 
-                                addVegetablesVertex("300g",'/images/ingredients/Vegetables/'+ data["vegetables"][i] + "/", 120, 160, 'vegetables'+i); 
+                                addVegetablesVertex("300g",'/images/ingredients/Vegetables/'+ data["vegetables"][i] + "/", 60, 80, 'vegetables'+i); 
 
                             }
 
@@ -872,7 +1017,7 @@ function main()
                         var vertex = new mxCell(null, new mxGeometry(0, 0, w, h), style);
 
                         //graph.setConnectable(false)
-                        vertex.setConnectable(false)
+                        //vertex.setConnectable(false)
                         vertex.value = value
                         vertex.setVertex(true);
 
