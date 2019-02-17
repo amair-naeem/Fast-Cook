@@ -216,7 +216,8 @@ function main()
                 document.body.appendChild(tbContainer);
 
                 var content = document.getElementById('content')
-                var generalContent = document.getElementById('generalContent')
+                var equipment = document.getElementById('generalContent')
+                var measurement = document.getElementById('measurement')
                 var berries = document.getElementById('berries')
                 var dairies = document.getElementById('dairies')
                 var dessert = document.getElementById('dessert')
@@ -235,6 +236,9 @@ function main()
 
                 var generalToolbar = new mxToolbar(generalContent)
                 generalToolbar.enabled = false
+
+                var measurementToolbar = new mxToolbar(measurement);
+                measurementToolbar.enabled = false
 
                 var berriesToolbar = new mxToolbar(berries)
                 berriesToolbar.enabled = false
@@ -257,7 +261,7 @@ function main()
                 var vegetablesToolbar = new mxToolbar(vegetables)
                 vegetablesToolbar.enabled = false
 
-                 var seafoodToolbar = new mxToolbar(seafood)
+                var seafoodToolbar = new mxToolbar(seafood)
                 seafoodToolbar.enabled = false
 
                 var fastfoodToolbar = new mxToolbar(fastfood)
@@ -268,6 +272,9 @@ function main()
 
                 var dishesToolbar = new mxToolbar(dishes)
                 dishesToolbar.enabled = false
+
+                var equipmentToolbar = new mxToolbar(equipment)
+                equipmentToolbar.enabled = false
 
                 var coll = document.getElementsByClassName("collapsible");
 
@@ -818,6 +825,22 @@ function main()
                     addToolbarItem(graph, toolbar, vertex, icon);
                 };
 
+                var addMeasurementVertex = function(label, icon, w, h, style)
+                {
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                    vertex.setVertex(true);
+                
+                    addToolbarItem(graph, measurementToolbar, vertex, icon);
+                };
+
+                var addEquipmentVertex = function(label, icon, w, h, style)
+                {
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                    vertex.setVertex(true);
+                
+                    addToolbarItem(graph, equipmentToolbar, vertex, icon);
+                };
+
                 var addBerriesVertex = function(label, icon, w, h, style)
                 {
                     var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
@@ -918,6 +941,19 @@ function main()
                     url: "/loadIcons/",
                     success: function (data) {
                         //console.log(data["images"][i])
+                            addMeasurementVertex("1 tbsp", '/images/ingredients/measurement/tablespoon.png/', 60,80, 'measurement0')
+                            addMeasurementVertex("1 tsp", '/images/ingredients/measurement/teaspoon.png/', 60,80, 'measurement1')
+                            addMeasurementVertex("1 scoop", '/images/ingredients/measurement/scoop.png/', 60,80, 'measurement2')
+                            addMeasurementVertex("1 cup", '/images/ingredients/measurement/cup.png/', 60,80, 'measurement3')
+                            addMeasurementVertex("1 inch", '/images/ingredients/measurement/ruler.png/', 60,80, 'measurement4')
+
+
+                            for (var i = 3; i >= 0; i--) {
+                                
+                                addEquipmentVertex("60 Minutes",'/images/ingredients/Equipment/'+ data["equipment"][i] + "/", 60, 80, 'equipment'+i); 
+
+                            }
+
                             for (var i = 4; i >= 0; i--) {
                                 
                                 addVertex("300g",'/images/ingredients/Bakery/'+ data["bakery"][i] + "/", 60, 80, 'rounded'+i); 
@@ -986,6 +1022,7 @@ function main()
 
 
                 berriesToolbar.addLine();
+                measurementToolbar.addLine();
                 toolbar.addLine();
 
                 var addGeneralVertex = function(icon,w,h,style, value, arrow)
@@ -1135,6 +1172,7 @@ function main()
 
         function loadStyleSheet(graph) {
             var style = [];
+            var measurementStyle = [];
             var dir = "/loadIcons/";
             var fileextension = ".png";
             $.ajax({
@@ -1143,7 +1181,34 @@ function main()
                 success: function (data) {
                     //console.log(data["images"][i])
 
+                    for (var i = 3; i >= 0; i--) {
+                        style[i] = new Object();
+                        style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;    
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Equipment/'+ data["equipment"][i] + "/";
+                        style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                        style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                        style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                        graph.getStylesheet().putCellStyle('equipment' + i, style[i]);
+                    }
+
+                    for (var i = 4; i >= 0; i--) {
+                        measurementStyle[i] = new Object();
+                    }
                     
+                    measurementStyle[0][mxConstants.STYLE_IMAGE] = '/images/ingredients/Measurement/tablespoon.png/';
+                    measurementStyle[1][mxConstants.STYLE_IMAGE] = '/images/ingredients/Measurement/teaspoon.png/';
+                    measurementStyle[2][mxConstants.STYLE_IMAGE] = '/images/ingredients/Measurement/scoop.png/';
+                    measurementStyle[3][mxConstants.STYLE_IMAGE] = '/images/ingredients/Measurement/cup.png/';
+                    measurementStyle[4][mxConstants.STYLE_IMAGE] = '/images/ingredients/Measurement/ruler.png/';
+
+                    for (var i = 4; i >= 0; i--) {
+                        
+                        measurementStyle[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                        measurementStyle[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                        measurementStyle[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                        measurementStyle[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                        graph.getStylesheet().putCellStyle('measurement' + i, measurementStyle[i]);
+                    }
 
                     for (var i = 4; i >= 0; i--) {
                         style[i] = new Object();

@@ -406,6 +406,8 @@ def loadIcons(request):
     #print(str("1 " + os.listdir("fastcookapp/images/")))
     image_list = []
     path = "fastcookapp/images/ingredients/"
+    equipment =os.listdir(path+"equipment")
+    equipment = list(filter(lambda fname: os.path.basename(fname) != 'Thumbs.db', equipment))
     bakery =os.listdir(path+"Bakery") 
     bakery = list(filter(lambda fname: os.path.basename(fname) != 'Thumbs.db', bakery))
     berries = os.listdir(path+"Berries")
@@ -428,7 +430,7 @@ def loadIcons(request):
     other = list(filter(lambda fname: os.path.basename(fname) != 'Thumbs.db', other))
 
     #print(img_list) 
-    return JsonResponse({'bakery': bakery, 'berries': berries, 'dairies': dairies, 'fastfood': fastfood,
+    return JsonResponse({'equipment': equipment, 'bakery': bakery, 'berries': berries, 'dairies': dairies, 'fastfood': fastfood,
         'fruits': fruits, 'meat': meat, 'nut': nut, 'seafood': seafood, 'vegetables': vegetables, 'other': other})
     """print("1 "+str(glob.glob('fastcookapp/images/icons/*.png')))
     for filename in glob.glob('fastcookapp/images/icons/*.png'): 
