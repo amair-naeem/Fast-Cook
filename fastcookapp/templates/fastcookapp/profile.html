@@ -11,9 +11,21 @@
 <script src="{% static 'fastcookapp/ajax.js' %}"></script> 
 
 
-<html>
     You can create a new graph by clicking <a class = "newGraph" href="" data-toggle="modal" data-target="#createNewGraph">here</a>
-</html>
+
+    <div id = "loadAllTitles">
+          {% for titles in title %}
+          <table>
+          <tr> 
+            <form method="POST" action="{% url 'openGraphFromProfile' title=titles.id %}">
+              {% csrf_token %}
+              <td> <input type = "submit" class = "openGraph" value = "{{titles.title}}" id="{% url 'openGraphFromProfile' title=titles.id %}"> </td> 
+            </form>
+            <td> <input type = "button" class = "deleteGraph" value = "Delete" id="{% url 'deleteGraph' title=titles.id %}"> </td>
+          </tr>
+          </table>
+      {% endfor %}
+    </div>
 
 <div class="modal" id="createNewGraph">
     <div class="modal-dialog">
@@ -28,18 +40,21 @@
 
         <!-- Modal body -->
         <div class="modal-body">
+        <form method = "POST" action = "{% url 'create' %}">
            <input type="text" name="graphTitle22" id="graphTitle">
         </div>
-
      
         <!-- Modal footer -->
         <div class="modal-footer">
      
-	
-	       
-        <button type="button" class="btn btn-primary" name = "test123" id = "test123">Save</button>
+
+          {% csrf_token %}
+        
+        <button type="submit" class="btn btn-primary" name = "test123" id = "test123">Save</button>
 
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+
+        </form>
 
 
         </div>

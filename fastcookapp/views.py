@@ -70,9 +70,9 @@ def home(request,user):
 
 	graphTitle = XMLGraph.objects.filter(user=user).values('title','id')
 	graph  = XMLGraph.objects.filter(user=user).values('XMLGraph')
-	graphTitle = XMLGraph.objects.filter(user=user)
-	print(graph)
-	print(graphTitle)
+	#graphTitle = XMLGraph.objects.filter(user=user)
+    
+    #print(graphTitle)
 
     #member = Member.objects.get(username=user)
     #title = Title.objects.all()
@@ -90,13 +90,18 @@ def createNewGraph(request,user):
             return JsonResponse({"overwrite": True})
         
         saveNewGraph = XMLGraph.objects.create(user=user, title=graphTitle22)
-        
-        return redirect('home')
+
+        graphTitle = XMLGraph.objects.filter(user=user).values('title','id')
+        graph  = XMLGraph.objects.filter(user=user).values('XMLGraph')
+
+        return render(request, 'fastcookapp/index.html', {'xml': json.dumps(str(graph)), 'title':graphTitle, 'newGraphTitle': graphTitle22})
         #return render(request, 'fastcookapp/index.html', {'titleOfGraph': graphTitle22})
 
 @loggedin
 def profile(request, user):
-    return render(request, 'fastcookapp/profile.html')
+    graphTitle = XMLGraph.objects.filter(user=user).values('title','id')
+    graph  = XMLGraph.objects.filter(user=user).values('XMLGraph')
+    return render(request, 'fastcookapp/profile.html', {'xml': json.dumps(str(graph)), 'title':graphTitle})
 
 # Register view displays login when successful details have been passed
 def register(request):
@@ -156,7 +161,8 @@ def login(request):
                 if user.is_active:
                     request.session['username'] = username
                     request.session['password'] = password
-                    return render(request, 'fastcookapp/index.html')
+                    return redirect('profile')
+                    #return render(request, 'fastcookapp/profile.html')
                 else:
                     return render(request, 'fastcookapp/login.html')    
             else:
@@ -319,6 +325,12 @@ def openGraph(request, title):
         #return HttpResponse(str(xml));
         #return JsonResponse({'results': list(xml)})
         return HttpResponse(data, content_type="application/json")
+
+def openGraphFromProfile(request, title):
+    if 'username' in request.session:
+        username = request.session['username']
+        xml = XMLGraph.objects.filter(id = title).only('id', 'title', 'XMLGraph')
+        return render(request, 'fastcookapp/index.html', {"xmlData": xml})
 
 # Open Graph by title
 def deleteGraph(request, title):

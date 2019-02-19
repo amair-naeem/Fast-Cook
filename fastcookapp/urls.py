@@ -32,6 +32,8 @@ urlpatterns = [
     path('overwrite/', views.overwrite, name='overwrite'),
     # openGraph
     url(r'^openGraph/(?P<title>\d+)/$', views.openGraph, name='openGraph'),
+    #openGraphFromProfile
+    url(r'^openGraphFromProfile/(?P<title>\d+)/$', views.openGraphFromProfile, name='openGraphFromProfile'),
     # deleteGraph
     url(r'^deleteGraph/(?P<title>\d+)/$', views.deleteGraph, name='deleteGraph'),
     # shareGraph

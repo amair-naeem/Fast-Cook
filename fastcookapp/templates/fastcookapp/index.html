@@ -17,8 +17,11 @@
   var openXML = {{openXML | safe}}
 </script> -->
 
-<script src="{% static 'fastcookapp/mxgraph.js' %}"></script> 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="{% static 'fastcookapp/mxgraph.js' %}"></script> 
+<script src="{% static 'fastcookapp/newGraph.js' %}"></script> 
+
 
 <script type="text/javascript">
     mxBasePath = "{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/src' %}";
@@ -34,6 +37,7 @@ window.onload = function(){
 
 
 </head>
+
 
 <div id = "toolbar" style="overflow:scroll; left: 0px; top: 95px; width: 200px; bottom: 36px;">
 
@@ -100,6 +104,7 @@ window.onload = function(){
 
 </div>
 
+
 <div class = "diagramContainer diagramBackdrop" style="right: 10px; left: 200px; top: 60px; bottom: 0px; touch-action: none; overflow: auto;">
   <div id = "container" style="position:absolute;overflow:hidden;top:36px;left:60px;bottom:36px;right:0px;background-image:url('/images/grid.gif');cursor:default;overflow:scroll;">
   <!--border-width: 1px;
@@ -107,16 +112,25 @@ window.onload = function(){
   left: 0px;
   width: 70%;
   background: url(/images/grid.gif);">-->
+
+
   </div> 
 </div>
 
 <div id = "test">
   <form>
 
+{% for xml in xmlData %}
+  <input type="hidden" value="{{xml.id}}" id="openedGraphId">
+  <input type="hidden" value="{{xml}}" id="openedGraphxml">
+  <input type="hidden" value="{{xml.title}}" id="openedGraphTitle">
+{% endfor %}
+
+
 
 <input type = "hidden" id = "idOfGraph" name = "graphId" class="currentGraph">
-    
-    <input id = "currentTitle" type="text" name="currentTitle" value="{{currentTitle}}" data-toggle="modal" data-target="#saveTitleModal">
+    <!-- before the value was {{currentTitle}}-->
+    <input id = "currentTitle" type="text" name="currentTitle" value="{{newGraphTitle}}" data-toggle="modal" data-target="#saveTitleModal">
   </form>
 </div>
 

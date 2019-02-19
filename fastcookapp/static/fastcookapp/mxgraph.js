@@ -1069,16 +1069,14 @@ function main()
 
                 generalToolbar.addLine();
 
+
+
+
+
                 loadStyleSheet(graph);
             }
 
-            //localGraph = localStorage.getItem("mxGraph");
-            //if(localGraph) { 
-                /*console.log("xml from db " + xml)
-                var doc = mxUtils.parseXml(xml);
-                var codec = new mxCodec(doc);
-                codec.decode(doc.documentElement, graph.getModel());
-            //}*/
+            
 
             $.ajax({
                     
@@ -1086,7 +1084,7 @@ function main()
                         url: "/home/",
                         dataType: 'text',
                         success: function(data){
-                            console.log(xml22)
+                            console.log("test" + data["newTitle"])
                             //alert(xml22)
                             //alert("hi")
                             //console.log(graph)
@@ -1102,11 +1100,19 @@ function main()
                             //console.log("dec " + dec)
                             //console.log("graph model " + graph.getModel())
                             dec.decode(node, graph.getModel());
+                            
                             //graph.fit()
                         }
                     });
 
+
+            //opens graph
+            //alert($("#openedGraphxml").val())
+           
+
         }
+
+
 
         function addToolbarItem(graph, toolbar, prototype, image)
         {
@@ -1171,6 +1177,7 @@ function main()
         }
 
         function loadStyleSheet(graph) {
+            
             var style = [];
             var measurementStyle = [];
             var dir = "/loadIcons/";
@@ -1313,6 +1320,7 @@ function main()
                         var filename = this.href.replace(window.location.host, "").replace("http://", "");
                         $("body").append("<img src='" + dir + filename + "'>");
                     });*/
+                    openGraph(graph);
                 }
             });
 
@@ -1351,6 +1359,12 @@ function main()
                 graph.getStylesheet().putCellStyle('connector', style4);
         }
 
+        function openGraph(graph){
+            var xmlDoc1 = mxUtils.parseXml($("#openedGraphxml").val());
+            var node1 = xmlDoc1.documentElement;
+            var dec1 = new mxCodec(node1.ownerDocument);
+            dec1.decode(node1, graph.getModel());
+        }
 
 
 
