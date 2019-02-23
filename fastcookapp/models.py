@@ -33,7 +33,7 @@ class XMLGraph(models.Model):
         on_delete=models.SET_NULL)"""
 
     title = models.CharField(max_length=100, null=True, default='Untitled Graph')
-    XMLGraph = models.TextField(null=True)
+    XMLGraph = models.TextField(null=True, default='<mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/></root></mxGraphModel>')
     user = models.ForeignKey(to = Member, null=True, on_delete=models.SET_NULL)
     random_url = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     #sharedXMLGraph = models.TextField(null=True)

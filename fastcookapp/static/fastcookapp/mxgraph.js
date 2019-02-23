@@ -382,7 +382,6 @@ function main()
                         },
                         success: function(data){
                             var json = JSON.parse(data)
-
                             xmlGraph = json[0]['fields']['XMLGraph']
                             title = json[0]['fields']['title']
 
@@ -556,10 +555,11 @@ function main()
                         var csrftoken = getCookie('csrftoken');
                         var encoder = new mxCodec();
                         var node = encoder.encode(graph.getModel());
-                        //var xml = mxUtils.getPrettyXml(node); 
-                        xml = "";
+                        var xml = mxUtils.getXml(node);
+                        console.log(xml)
                         var csrftoken = getCookie('csrftoken');
                         var title = $('#openTitle').val()
+                        
                         $.ajax({
                             type: "POST",
                             url: "/saveTitle/",
