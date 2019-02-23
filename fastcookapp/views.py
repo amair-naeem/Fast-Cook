@@ -67,7 +67,6 @@ def home(request,user):
 		shareGraph.save()
 		return redirect('share', random_url=shareGraph.random_url, id=graphId)
 
-
 	graphTitle = XMLGraph.objects.filter(user=user).values('title','id')
 	graph  = XMLGraph.objects.filter(user=user).values('XMLGraph')
 	#graphTitle = XMLGraph.objects.filter(user=user)
@@ -80,7 +79,9 @@ def home(request,user):
     #return render(request, 'fastcookapp/index.html', {'xml': json.dumps(member.XMLGraph)})
     #for xmlData in member.XMLGraph.all():
         #return render(request, 'fastcookapp/index.html', {'xml': json.dumps(xmlData.XMLGraph),'title': member.title.all()})
-	return render(request, 'fastcookapp/index.html', {'xml': json.dumps(str(graph)), 'title':graphTitle})
+	title = json.dumps(list(graphTitle))
+	return JsonResponse({'title':title})
+	#return render(request, 'fastcookapp/index.html', {'xml': json.dumps(str(graph)), 'title':graphTitle})
 
 @loggedin
 def createNewGraph(request,user):
@@ -294,10 +295,9 @@ def loadTitles(request, user):
 	#member = Member.objects.get(username=user)
 	#print(member.XMLGraph)
 	#title = Title.objects.all()
-	title = XMLGraph.objects.filter(user=user)
-	data = serializers.serialize('json', title)
-	
-	return HttpResponse(data, content_type="application/json")
+    title = XMLGraph.objects.filter(user=user)
+    data = serializers.serialize('json', title)
+    return HttpResponse(data, content_type="application/json")
 
 
 
@@ -328,7 +328,7 @@ def openGraph(request, title):
 
 def openGraphFromProfile(request, title):
     if 'username' in request.session:
-        username = request.session['username']
+        username= request.session['username']
         xml = XMLGraph.objects.filter(id = title).only('id', 'title', 'XMLGraph')
         return render(request, 'fastcookapp/index.html', {"xmlData": xml})
 

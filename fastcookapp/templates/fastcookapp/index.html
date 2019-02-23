@@ -120,13 +120,13 @@ window.onload = function(){
 <div id = "test">
   <form>
 
+    {{title}}
+
 {% for xml in xmlData %}
   <input type="hidden" value="{{xml.id}}" id="openedGraphId">
   <input type="hidden" value="{{xml}}" id="openedGraphxml">
   <input type="hidden" value="{{xml.title}}" id="openedGraphTitle">
 {% endfor %}
-
-
 
 <input type = "hidden" id = "idOfGraph" name = "graphId" class="currentGraph">
     <!-- before the value was {{currentTitle}}-->
@@ -199,14 +199,16 @@ window.onload = function(){
         
         <!-- Modal body -->
         <div id = "loadAllTitles" class="modal-body">
-          {% for titles in title %}
+          <!-- this does nothing lol-->
+          <!--{% for titles in title %}
+
           <table>
-          <tr> 
+          <tr id = "graphButton"> 
             <td> <input type = "button" class = "openGraph" value = "{{titles.title}}" id="{% url 'openGraph' title=titles.id %}"> </td> 
             <td> <input type = "button" class = "deleteGraph" value = "Delete" id="{% url 'deleteGraph' title=titles.id %}"> </td>
           </tr>
           </table>
-          {% endfor %}
+          {% endfor %}-->
         </div>
         
         <!-- Modal footer -->

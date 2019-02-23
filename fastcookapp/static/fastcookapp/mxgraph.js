@@ -104,6 +104,7 @@ function setCookie(name,value,days) {
 
 function main()
         {
+            mxGraph.prototype.setAllowDanglingEdges(false)
             mxConnectionHandler.prototype.connectImage = new mxImage('/images/connector.gif', 16, 16);
 
             // Creates the model and the graph inside the container
@@ -111,6 +112,11 @@ function main()
             var model = new mxGraphModel();
             var editor = new mxEditor();
             var graph = new mxGraph(container, model);
+
+
+
+
+
             graph.dropEnabled = true;
 
             var iconTolerance = 20;
@@ -355,6 +361,7 @@ function main()
                 //save xml upon click
                 var model = new mxGraphModel();
 
+
                 $(document).ready(function(){
                     $('#loadAllTitles').on('click','.openGraph' ,function(event){
                         //alert("test")
@@ -574,6 +581,8 @@ function main()
                                     else{
                                         $("#idOfGraph").val(parseData["id"])
                                         graph.removeCells(graph.getChildVertices(graph.getDefaultParent()))
+                                        graph.selectChildCell();
+                                        graph.removeCells();
                                         $("#currentTitle").val(title)
                                     }
                                 },
@@ -1084,14 +1093,40 @@ function main()
                         url: "/home/",
                         dataType: 'text',
                         success: function(data){
-                            console.log("test" + data["newTitle"])
+                            var json = JSON.parse(data)
+                            var items = json["title"]
+                            var parseItems = JSON.parse(items)
+                            var length = parseItems.length
+                            
+
+                            console.log(length)
+
+                            for (var i = length - 1; i >= 0; i--) {
+
+                                var title = parseItems[i]["title"]
+                                var pkTitle = "/openGraph/" + parseItems[i]["id"]
+                                var pkDelete = "/deleteGraph/" + parseItems[i]["id"]
+
+
+                                var titleButton="<input type=\"button\" class = \"openGraph\" value=\""+title+"\" id="+pkTitle+"/\>";
+                                var deleteButton= "<input type=\"button\" class = \"deleteGraph\" value=\"Delete\" id="+pkDelete+"/\>";
+
+                                $("#loadAllTitles").append("<table> <tr> <td>" + titleButton + "</td> <td>" + "</td> <td>" + deleteButton + "</td> </tr> </table>")
+
+                                
+                                 //if ($("#loadAllTitles").find('#' + $.escapeSelector(pkTitle + '/')).length == 0)
+                                /*$("#graphButton").append("<td> <input type = button class = openGraph \
+                                    value =" + title + "id=" + id + "> </td> \
+                                    <td> <input type = button class = deleteGraph value = Delete id={% url 'deleteGraph' title=titles.id %}> </td>")*/
+                            }
+
                             //alert(xml22)
                             //alert("hi")
                             //console.log(graph)
                             //var xmlDoc = data[0]
 
                             //graph.getModel().beginUpdate();
-                            var xmlDoc = mxUtils.parseXml(xml22);
+                            /*var xmlDoc = mxUtils.parseXml(xml22);
                             //var xmlDoc = mxUtils.load("/saveData/").getXml();
                             //console.log("xmlDoc " + xmlDoc)
                             var node = xmlDoc.documentElement;
@@ -1101,7 +1136,7 @@ function main()
                             //console.log("graph model " + graph.getModel())
                             dec.decode(node, graph.getModel());
                             
-                            //graph.fit()
+                            //graph.fit()*/
                         }
                     });
 
