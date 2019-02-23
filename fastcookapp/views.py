@@ -88,14 +88,16 @@ def createNewGraph(request,user):
     if request.method == 'POST':
         graphTitle22 = request.POST['graphTitle22']
         if XMLGraph.objects.filter(title=graphTitle22, user=user).exists():
-            return JsonResponse({"overwrite": True})
+        	graphTitle = XMLGraph.objects.filter(user=user).values('title','id')
+        	graph  = XMLGraph.objects.filter(user=user).values('XMLGraph')
+        	return render(request, 'fastcookapp/profile.html', {'xml': json.dumps(str(graph)), 'title':graphTitle, 'overwrite': True})
         
         saveNewGraph = XMLGraph.objects.create(user=user, title=graphTitle22)
 
         graphTitle = XMLGraph.objects.filter(user=user).values('title','id')
         graph  = XMLGraph.objects.filter(user=user).values('XMLGraph')
 
-        return render(request, 'fastcookapp/index.html', {'xml': json.dumps(str(graph)), 'title':graphTitle, 'newGraphTitle': graphTitle22})
+        return render(request, 'fastcookapp/index.html', {'xml': json.dumps(str(graph)), 'title':graphTitle, 'newGraphTitle': graphTitle22, 'overwrite': True})
         #return render(request, 'fastcookapp/index.html', {'titleOfGraph': graphTitle22})
 
 @loggedin

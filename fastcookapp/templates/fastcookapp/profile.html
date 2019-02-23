@@ -14,18 +14,20 @@
     You can create a new graph by clicking <a class = "newGraph" href="" data-toggle="modal" data-target="#createNewGraph">here</a>
 
     <div id = "loadAllTitles">
-          {% for titles in title %}
+      {% for titles in title %}
           <table>
           <tr> 
             <form method="POST" action="{% url 'openGraphFromProfile' title=titles.id %}">
               {% csrf_token %}
               <td> <input type = "submit" class = "openGraph" value = "{{titles.title}}" id="{% url 'openGraphFromProfile' title=titles.id %}"> </td> 
             </form>
-            <td> <input type = "button" class = "deleteGraph" value = "Delete" id="{% url 'deleteGraph' title=titles.id %}"> </td>
+            <td> <input type = "button" class = "deleteButton" onclick="doFunction(this.id, this)" value = "Delete" id="{% url 'deleteGraph' title=titles.id %}"> </td>
           </tr>
           </table>
       {% endfor %}
     </div>
+
+
 
 <div class="modal" id="createNewGraph">
     <div class="modal-dialog">
@@ -61,5 +63,27 @@
         
       </div>
     </div>
-  </div>
+</div>
+    
+
+    {% if overwrite %}
+
+    <script type="text/javascript">
+
+      $(window).on('load',function(){
+          $('#createNewGraph').modal('show');
+        });
+
+      $("#test123").click(function (event){
+        //console.log($("#graphTitle").val())
+        alert($("#graphTitle").val() + " is already taken")
+
+
+      })
+        
+    </script>
+
+    {% endif %}
+
+
 {% endblock %}
