@@ -320,10 +320,7 @@ function main()
                 document.body.appendChild(menuBar)
 
 
-                if (!$("#currentTitle").val())
-                {
-                    $("#currentTitle").val("Untitled graph")
-                }
+
 
                 
                 // Workaround for Internet Explorer ignoring certain styles
@@ -604,6 +601,7 @@ function main()
                     //var xml = mxUtils.getPrettyXml(node); 
                     var xml = mxUtils.getXml(node);
                     var csrftoken = getCookie('csrftoken');
+                    console.log("test" + $("#idOfGraph").val())
 
                     $.ajax({
         
@@ -842,13 +840,7 @@ function main()
                     addToolbarItem(graph, measurementToolbar, vertex, icon);
                 };
 
-                var addEquipmentVertex = function(label, icon, w, h, style)
-                {
-                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
-                    vertex.setVertex(true);
                 
-                    addToolbarItem(graph, equipmentToolbar, vertex, icon);
-                };
 
                 var addBerriesVertex = function(label, icon, w, h, style)
                 {
@@ -956,6 +948,13 @@ function main()
                             addMeasurementVertex("1 cup", '/images/ingredients/measurement/cup.png/', 60,80, 'measurement3')
                             addMeasurementVertex("1 inch", '/images/ingredients/measurement/ruler.png/', 60,80, 'measurement4')
 
+                            var addEquipmentVertex = function(label, icon, w, h, style)
+                            {
+                                var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                                vertex.setVertex(true);
+                
+                                addToolbarItem(graph, equipmentToolbar, vertex, icon);
+                            };
 
                             for (var i = 3; i >= 0; i--) {
                                 
@@ -1110,6 +1109,17 @@ function main()
 
                                 var titleButton="<input type=\"button\" class = \"openGraph\" value=\""+title+"\" id="+pkTitle+"/\>";
                                 var deleteButton= "<input type=\"button\" class = \"deleteGraph\" value=\"Delete\" id="+pkDelete+"/\>";
+
+                                if(!$("#currentTitle").val())
+                                {
+                                    $("#currentTitle").val($("#openedGraphTitle").val())
+
+                                }
+
+                                /*if (!$("#currentTitle").val())
+                                {
+                                        $("#currentTitle").val("Untitled graph")
+                                }*/
 
                                 $("#loadAllTitles").append("<table> <tr> <td>" + titleButton + "</td> <td>" + "</td> <td>" + deleteButton + "</td> </tr> </table>")
 

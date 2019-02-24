@@ -121,14 +121,16 @@ window.onload = function(){
   <form>
 
 {% for xml in xmlData %}
-  <input type="hidden" value="{{xml.id}}" id="openedGraphId">
+  <input type = "hidden" id = "idOfGraph" value="{{xml.id}}" name = "graphId" class="currentGraph">
+
+  <!--<input type="hidden" value="{{xml.id}}" id="openedGraphId">-->
   <input type="hidden" value="{{xml}}" id="openedGraphxml">
   <input type="hidden" value="{{xml.title}}" id="openedGraphTitle">
 {% endfor %}
 
-<input type = "hidden" id = "idOfGraph" name = "graphId" class="currentGraph">
     <!-- before the value was {{currentTitle}}-->
     <input id = "currentTitle" type="text" name="currentTitle" value="{{newGraphTitle}}" data-toggle="modal" data-target="#saveTitleModal">
+    
   </form>
 </div>
 

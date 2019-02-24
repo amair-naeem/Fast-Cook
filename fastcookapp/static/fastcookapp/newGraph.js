@@ -15,23 +15,6 @@ function getCookie(name) {
     return cookieValue;
 }
 
-/*$('.deleteButton').on('click',function(event){
-    alert("hi")
-    /* csrftoken = getCookie('csrftoken');
-    event.preventDefault();
-    var id = $(this).attr('id');
-    var $tr = $(this).closest('tr');
-    $.ajax({
-        type: "DELETE",
-        url: id, 
-        headers:{
-                "X-CSRFToken": csrftoken
-                },
-        success: $($(this)).closest("tr").remove()
-
-    })
-                    
-});*/
 
 function doFunction(id,tr){
     csrftoken = getCookie('csrftoken');

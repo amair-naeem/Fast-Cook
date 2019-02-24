@@ -39,7 +39,7 @@ function main()
                 sharedGraph.setEnabled(false);
 
                 
-                var style = new Object();
+                /*var style = new Object();
 
                 style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
                 style[mxConstants.STYLE_IMAGE] = '/images/icons/flour.png';
@@ -47,7 +47,34 @@ function main()
                 style[mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
                 style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
 
-                sharedGraph.getStylesheet().putCellStyle('rounded2', style);
+                sharedGraph.getStylesheet().putCellStyle('rounded2', style);*/
+
+                 $.ajax({
+                //This will retrieve the contents of the folder if the folder is configured as 'browsable'
+                    
+                    url: "/loadIcons/",
+                    success: function (data) {
+                        //console.log(data["images"][i])
+
+                            var addEquipmentVertex = function(label, icon, w, h, style)
+                            {
+                                var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                                vertex.setVertex(true);
+                
+                                //addToolbarItem(sharedGraph, equipmentToolbar, vertex, icon);
+                            };
+
+                            for (var i = 3; i >= 0; i--) {
+                                
+                                addEquipmentVertex("60 Minutes",'/images/ingredients/Equipment/'+ data["equipment"][i] + "/", 60, 80, 'equipment'+i); 
+
+                            }
+
+                        }   
+                });
+
+
+                loadStyleSheet(sharedGraph)
 
                 var sharedDiagramContainerClass = document.getElementsByClassName("diagramContainer")
                 var sharedDiagramContainer = sharedDiagramContainerClass[0]
@@ -68,5 +95,207 @@ function main()
             }
 
             
+
+        }
+
+
+
+        function loadStyleSheet(graph) {
+            
+            var style = [];
+            var measurementStyle = [];
+            var dir = "/loadIcons/";
+            var fileextension = ".png";
+            $.ajax({
+                //This will retrieve the contents of the folder if the folder is configured as 'browsable'
+                url: dir,
+                success: function (data) {
+                    //console.log(data["images"][i])
+
+                    for (var i = 3; i >= 0; i--) {
+                        style[i] = new Object();
+                        style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;    
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Equipment/'+ data["equipment"][i] + "/";
+                        style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                        style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                        style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                        graph.getStylesheet().putCellStyle('equipment' + i, style[i]);
+                    }
+
+                    for (var i = 4; i >= 0; i--) {
+                        measurementStyle[i] = new Object();
+                    }
+                    
+                    measurementStyle[0][mxConstants.STYLE_IMAGE] = '/images/ingredients/Measurement/tablespoon.png/';
+                    measurementStyle[1][mxConstants.STYLE_IMAGE] = '/images/ingredients/Measurement/teaspoon.png/';
+                    measurementStyle[2][mxConstants.STYLE_IMAGE] = '/images/ingredients/Measurement/scoop.png/';
+                    measurementStyle[3][mxConstants.STYLE_IMAGE] = '/images/ingredients/Measurement/cup.png/';
+                    measurementStyle[4][mxConstants.STYLE_IMAGE] = '/images/ingredients/Measurement/ruler.png/';
+
+                    for (var i = 4; i >= 0; i--) {
+                        
+                        measurementStyle[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                        measurementStyle[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                        measurementStyle[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                        measurementStyle[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                        graph.getStylesheet().putCellStyle('measurement' + i, measurementStyle[i]);
+                    }
+
+                    for (var i = 4; i >= 0; i--) {
+                        style[i] = new Object();
+                        style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Bakery/'+ data["bakery"][i] + "/";
+                        //style[i][mxConstants.VERTEX_SELECTION_COLOR] =  '#00FF00'
+
+                        console.log(data["bakery"][i])
+                        //console.log(style[i][mxConstants.STYLE_IMAGE])
+                        style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                        style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                        style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                        graph.getStylesheet().putCellStyle('rounded' + i, style[i]);
+
+
+                        console.log(style[i][mxConstants.STYLE_IMAGE])
+                    }
+
+                    for (var i = 3; i >= 0; i--) {
+                        style[i] = new Object();
+                        style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Berries/'+ data["berries"][i] + "/";
+                        style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                        style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                        style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                        graph.getStylesheet().putCellStyle('berries' + i, style[i]);
+                    }
+
+                    for (var i = 2; i >= 0; i--) {
+                        style[i] = new Object();
+                        style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Dairies/'+ data["dairies"][i] + "/";
+                        style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                        style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                        style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                        graph.getStylesheet().putCellStyle('dairies' + i, style[i]);
+                    }
+
+                    for (var i = 19; i >= 0; i--) {
+                        style[i] = new Object();
+                        style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Fruits/'+ data["fruits"][i] + "/";
+                        style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                        style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                        style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                        graph.getStylesheet().putCellStyle('fruits' + i, style[i]);
+                    }
+
+                    for (var i = 8; i >= 0; i--) {
+                        style[i] = new Object();
+                        style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Meat/'+ data["meat"][i] + "/";
+                        style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                        style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                        style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                        graph.getStylesheet().putCellStyle('meat' + i, style[i]);
+                    }
+
+                    for (var i = 3; i >= 0; i--) {
+                        style[i] = new Object();
+                        style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Nut/'+ data["nut"][i] + "/";
+                        style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                        style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                        style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                        graph.getStylesheet().putCellStyle('nut' + i, style[i]);
+                    }
+
+                    for (var i = 26; i >= 0; i--) {
+                        style[i] = new Object();
+                        style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Vegetables/'+ data["vegetables"][i] + "/";
+                        style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                        style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                        style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                        graph.getStylesheet().putCellStyle('vegetables' + i, style[i]);
+                    }
+
+                    for (var i = 4; i >= 0; i--) {
+                        style[i] = new Object();
+                        style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Seafood/'+ data["seafood"][i] + "/";
+                        style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                        style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                        style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                        graph.getStylesheet().putCellStyle('seafood' + i, style[i]);
+                    }
+
+                    for (var i = 13; i >= 0; i--) {
+                        style[i] = new Object();
+                        style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/other/'+ data["other"][i] + "/";
+                        style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                        style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                        style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                        graph.getStylesheet().putCellStyle('other' + i, style[i]);
+                    }
+                }
+            });
+
+                /*var style = new Object();
+
+                style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                style[mxConstants.STYLE_IMAGE] = '/images/icons/flour.png';
+                style[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                style[mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;*/
+
+                var style2 = new Object();
+
+                style2[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                style2[mxConstants.STYLE_IMAGE] = '/images/icons/whisk.png';
+                style2[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;                
+
+                //graph.getStylesheet().putCellStyle('rounded2', style);
+
+                graph.getStylesheet().putCellStyle('rounded3', style2);
+
+                var style3 = new Object();
+
+                style3[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                style3[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+
+                graph.getStylesheet().putCellStyle('text', style3);
+
+                var style4 = new Object();
+
+                style4[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                style4[mxConstants.STYLE_IMAGE] = '/images/block_end.gif';
+
+                style4[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+
+                graph.getStylesheet().putCellStyle('connector', style4);
+        }
+
+        function addToolbarItem(graph, toolbar, prototype, image)
+        {
+            // Function that is executed when the image is dropped on
+            // the graph. The cell argument points to the cell under
+            // the mousepointer if there is one.
+            var funct = function(graph, evt, cell)
+            {
+                graph.stopEditing(false);
+
+                var pt = graph.getPointForEvent(evt);
+                var vertex = graph.getModel().cloneCell(prototype);
+                vertex.geometry.x = pt.x;
+                vertex.geometry.y = pt.y;
+                
+                graph.setSelectionCells(graph.importCells([vertex], 0, 0, cell));
+
+            }
+
+            // Creates the image which is used as the drag icon (preview)
+            var img = toolbar.addMode(null, image, funct);
+            mxUtils.makeDraggable(img, graph, funct);
 
         }

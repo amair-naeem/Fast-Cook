@@ -94,10 +94,12 @@ def createNewGraph(request,user):
         
         saveNewGraph = XMLGraph.objects.create(user=user, title=graphTitle22)
 
-        graphTitle = XMLGraph.objects.filter(user=user).values('title','id')
-        graph  = XMLGraph.objects.filter(user=user).values('XMLGraph')
+        #graphTitle = XMLGraph.objects.filter(user=user).values('title','id')
+        #graph  = XMLGraph.objects.filter(user=user).values('XMLGraph')
+        xml = XMLGraph.objects.filter(id = saveNewGraph.id).only('id', 'title', 'XMLGraph')
 
-        return render(request, 'fastcookapp/index.html', {'xml': json.dumps(str(graph)), 'title':graphTitle, 'newGraphTitle': graphTitle22, 'overwrite': True})
+
+        return render(request, 'fastcookapp/index.html', {'xmlData': xml, 'overwrite': True}) #'xml': json.dumps(str(graph)), 'title':graphTitle, 'newGraphTitle': graphTitle22, 'overwrite': True})
         #return render(request, 'fastcookapp/index.html', {'titleOfGraph': graphTitle22})
 
 @loggedin
@@ -251,7 +253,6 @@ def overwrite(request, user):
 		graphTitle = request.POST['title']
 		xmlData = request.POST['xml']
 		graphId = request.POST['graphId']
-
 
 		try:
 			exclude = XMLGraph.objects.exclude(id=graphId)
