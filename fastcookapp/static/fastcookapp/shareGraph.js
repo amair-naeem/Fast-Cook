@@ -12,7 +12,7 @@ function main()
 
             $('#share').on('click',function(event){
                 var encoder = new mxCodec();
-                var node = encoder.encode(graph.getModel());
+                var node = encoder.encode(sharedGraph.getModel());
                 xml = mxUtils.getXml(node)
                 post('/share/', {sharedXMLData:xml});
 
@@ -29,7 +29,7 @@ function main()
             else
             {
                 
-                // Creates the model and the graph inside the container
+                // Creates the model and the sharedGraph inside the container
                 // using the fastest rendering available on the browser
                 var sharedModel = new mxGraphModel();
                 var sharedEditor = new mxEditor();
@@ -38,43 +38,8 @@ function main()
 
                 sharedGraph.setEnabled(false);
 
-                
-                /*var style = new Object();
-
-                style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
-                style[mxConstants.STYLE_IMAGE] = '/images/icons/flour.png';
-                style[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
-                style[mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
-                style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
-
-                sharedGraph.getStylesheet().putCellStyle('rounded2', style);*/
-
-                 $.ajax({
-                //This will retrieve the contents of the folder if the folder is configured as 'browsable'
-                    
-                    url: "/loadIcons/",
-                    success: function (data) {
-                        //console.log(data["images"][i])
-
-                            var addEquipmentVertex = function(label, icon, w, h, style)
-                            {
-                                var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
-                                vertex.setVertex(true);
-                
-                                //addToolbarItem(sharedGraph, equipmentToolbar, vertex, icon);
-                            };
-
-                            for (var i = 3; i >= 0; i--) {
-                                
-                                addEquipmentVertex("60 Minutes",'/images/ingredients/Equipment/'+ data["equipment"][i] + "/", 60, 80, 'equipment'+i); 
-
-                            }
-
-                        }   
-                });
-
-
                 loadStyleSheet(sharedGraph)
+
 
                 var sharedDiagramContainerClass = document.getElementsByClassName("diagramContainer")
                 var sharedDiagramContainer = sharedDiagramContainerClass[0]
@@ -83,14 +48,6 @@ function main()
                 sharedContainer = document.getElementById('sharedContainer');
                 document.body.appendChild(sharedDiagramContainer);
                 sharedDiagramContainer.appendChild(sharedContainer)
-
-
-                var sharedXml = $("#sharedXMLData").val()
-                console.log("hellooo" + sharedXml)
-                var sharedXmlDoc = mxUtils.parseXml(sharedXml);
-                var sharedNode = sharedXmlDoc.documentElement;
-                var sharedDec = new mxCodec(sharedNode.ownerDocument);
-                sharedDec.decode(sharedNode, sharedGraph.getModel());
 
             }
 
@@ -102,17 +59,41 @@ function main()
 
         function loadStyleSheet(graph) {
             
+            var groupStyle = new Object();
+            groupStyle[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_SWIMLANE;
+            groupStyle[mxConstants.STYLE_PERIMETER] = mxPerimeter.RectanglePerimeter;
+            groupStyle[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_CENTER;
+            groupStyle[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+            groupStyle[mxConstants.STYLE_FILLCOLOR] = '#FF9103';
+            groupStyle[mxConstants.STYLE_GRADIENTCOLOR] = '#F8C48B';
+            groupStyle[mxConstants.STYLE_STROKECOLOR] = '#E86A00';
+            groupStyle[mxConstants.STYLE_FONTCOLOR] = '#000000';
+            groupStyle[mxConstants.STYLE_ROUNDED] = true;
+            groupStyle[mxConstants.STYLE_OPACITY] = '80';
+            groupStyle[mxConstants.STYLE_STARTSIZE] = '30';
+            groupStyle[mxConstants.STYLE_FONTSIZE] = '16';
+            groupStyle[mxConstants.STYLE_FONTSTYLE] = 1;
+            graph.getStylesheet().putCellStyle('group', groupStyle);
+
+            var edge = graph.getStylesheet().getDefaultEdgeStyle();
+            edge[mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = '#FFFFFF';
+            edge[mxConstants.STYLE_STROKEWIDTH] = '2';
+            edge[mxConstants.STYLE_ROUNDED] = true;
+            //edge[mxConstants.STYLE_EDGE] = mxEdgeStyle.OrthConnector;
+            
             var style = [];
+            var test = [];
             var measurementStyle = [];
             var dir = "/loadIcons/";
             var fileextension = ".png";
             $.ajax({
                 //This will retrieve the contents of the folder if the folder is configured as 'browsable'
+                type: "GET",
                 url: dir,
                 success: function (data) {
-                    //console.log(data["images"][i])
-
-                    for (var i = 3; i >= 0; i--) {
+                    alert("hey")
+                //var test = [];
+                for (var i = 3; i >= 0; i--) {
                         style[i] = new Object();
                         style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;    
                         style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Equipment/'+ data["equipment"][i] + "/";
@@ -238,16 +219,6 @@ function main()
                         style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
                         graph.getStylesheet().putCellStyle('other' + i, style[i]);
                     }
-                }
-            });
-
-                /*var style = new Object();
-
-                style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
-                style[mxConstants.STYLE_IMAGE] = '/images/icons/flour.png';
-                style[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
-                style[mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
-                style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;*/
 
                 var style2 = new Object();
 
@@ -274,28 +245,46 @@ function main()
                 style4[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
 
                 graph.getStylesheet().putCellStyle('connector', style4);
+
+                    openGraph(graph)
+
+                }
+            });
+
+        
+                
         }
 
-        function addToolbarItem(graph, toolbar, prototype, image)
+
+        function openGraph(sharedGraph){
+            var sharedXml = $("#sharedXMLData").val()
+                //console.log("hellooo" + sharedXml)
+                var sharedXmlDoc = mxUtils.parseXml(sharedXml);
+                var sharedNode = sharedXmlDoc.documentElement;
+                var sharedDec = new mxCodec(sharedNode.ownerDocument);
+                sharedDec.decode(sharedNode, sharedGraph.getModel());
+        }
+
+        function addToolbarItem(sharedGraph, toolbar, prototype, image)
         {
             // Function that is executed when the image is dropped on
-            // the graph. The cell argument points to the cell under
+            // the sharedGraph. The cell argument points to the cell under
             // the mousepointer if there is one.
-            var funct = function(graph, evt, cell)
+            var funct = function(sharedGraph, evt, cell)
             {
-                graph.stopEditing(false);
+                sharedGraph.stopEditing(false);
 
-                var pt = graph.getPointForEvent(evt);
-                var vertex = graph.getModel().cloneCell(prototype);
+                var pt = sharedGraph.getPointForEvent(evt);
+                var vertex = sharedGraph.getModel().cloneCell(prototype);
                 vertex.geometry.x = pt.x;
                 vertex.geometry.y = pt.y;
                 
-                graph.setSelectionCells(graph.importCells([vertex], 0, 0, cell));
+                sharedGraph.setSelectionCells(sharedGraph.importCells([vertex], 0, 0, cell));
 
             }
 
             // Creates the image which is used as the drag icon (preview)
             var img = toolbar.addMode(null, image, funct);
-            mxUtils.makeDraggable(img, graph, funct);
+            mxUtils.makeDraggable(img, sharedGraph, funct);
 
         }

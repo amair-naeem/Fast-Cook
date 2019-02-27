@@ -8,7 +8,6 @@
 {% extends 'fastcookapp/base.html' %}
 {% load staticfiles %}
 {% block content %}
-
 <html>
 <head>
 	<title>Ports example</title>
@@ -26,14 +25,13 @@
 
 	<!-- Sets the basepath for the library if not in same directory -->
 	<script type="text/javascript">
-		mxBasePath = '../src';
+    mxBasePath = "{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/src' %}";
 	</script>
 
 	<!-- Loads and initializes the library -->
-<script type="text/javascript">
-    mxBasePath = "{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/src' %}";
-</script>
-<script src="{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/mxClient.js' %}"></script>
+	<script src="{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/mxClient.js' %}"></script>
+
+
 	<!-- Example code -->
 	<script type="text/javascript">
 		// Program starts here. Creates a sample graph in the
@@ -41,6 +39,14 @@
 		// from the onLoad event handler of the document (see below).
 		function main(container, outline, toolbar, sidebar, status)
 		{
+			// Creates a wrapper editor with a graph inside the given container.
+				// The editor is used to create certain functionality for the
+				// graph, such as the rubberband selection, but most parts
+				// of the UI are custom in this example.
+				var editor = new mxEditor();
+				var graph = editor.graph;
+				var model = graph.getModel();
+
 			// Checks if the browser is supported
 			if (!mxClient.isBrowserSupported())
 			{
@@ -54,11 +60,11 @@
 				// new connections, the portion (100%) of the cell area to be used
 				// for triggering new connections, as well as some fading options for
 				// windows and the rubberband selection.
-				mxConstants.MIN_HOTSPOT_SIZE = 16;
+				/*mxConstants.MIN_HOTSPOT_SIZE = 16;
 				mxConstants.DEFAULT_HOTSPOT = 1;
 				
 				// Enables guides
-				/mxGraphHandler.prototype.guidesEnabled = true;
+				mxGraphHandler.prototype.guidesEnabled = true;
 
 			    // Alt disables guides
 			    mxGuide.prototype.isEnabledForEvent = function(evt)
@@ -67,7 +73,7 @@
 				};
 
 				// Enables snapping waypoints to terminals
-				mxEdgeHandler.prototype.snapToTerminals = true;
+				mxEdgeHandler.prototype.snapToTerminals = true;*/
 
 				// Workaround for Internet Explorer ignoring certain CSS directives
 				if (mxClient.IS_QUIRKS)
@@ -80,35 +86,28 @@
 					new mxDivResizer(status);
 				}
 				
-				// Creates a wrapper editor with a graph inside the given container.
-				// The editor is used to create certain functionality for the
-				// graph, such as the rubberband selection, but most parts
-				// of the UI are custom in this example.
-				var editor = new mxEditor();
-				var graph = editor.graph;
-				var model = graph.getModel();
-
+				
 				// Disable highlight of cells when dragging from toolbar
 				graph.setDropEnabled(false);
 
 				// Uses the port icon while connections are previewed
-				graph.connectionHandler.getConnectImage = function(state)
+				/*graph.connectionHandler.getConnectImage = function(state)
 				{
 					return new mxImage(state.style[mxConstants.STYLE_IMAGE], 16, 16);
-				};
+				};*/
 
 				// Centers the port icon on the target port
-				graph.connectionHandler.targetConnectImage = true;
+				//graph.connectionHandler.targetConnectImage = true;
 
 				// Does not allow dangling edges
 				graph.setAllowDanglingEdges(false);
 
 				// Sets the graph container and configures the editor
 				editor.setGraphContainer(container);
-				var config = mxUtils.load(
-					'editors/config/keyhandler-commons.xml').
-						getDocumentElement();
-				editor.configure(config);
+				//var config = mxUtils.load(
+				//	'editors/config/keyhandler-commons.xml').
+				//		getDocumentElement();
+				//editor.configure(config);
 				
 				// Defines the default group to be used for grouping. The
 				// default group is a field in the mxEditor instance that
@@ -141,7 +140,7 @@
 
 				// Returns a shorter label if the cell is collapsed and no
 				// label for expanded groups
-				/*graph.getLabel = function(cell)
+				graph.getLabel = function(cell)
 				{
 					var tmp = mxGraph.prototype.getLabel.apply(this, arguments); // "supercall"
 					
@@ -163,7 +162,7 @@
 					}
 					
 					return tmp;
-				}*/
+				}
 
 				// Disables HTML labels for swimlanes to avoid conflict
 				// for the event processing on the child cells. HTML
@@ -187,7 +186,7 @@
 				}*/
 
 				// Shows a "modal" window when double clicking a vertex.
-				graph.dblClick = function(evt, cell)
+				/*graph.dblClick = function(evt, cell)
 				{
 					// Do not fire a DOUBLE_CLICK event here as mxEditor will
 					// consume the event and start the in-place editor.
@@ -211,7 +210,7 @@
 
 					// Disables any default behaviour for the double click
 					mxEvent.consume(evt);
-				};
+				};*/
 
 				// Enables new connections
 				graph.setConnectable(true);
@@ -256,7 +255,7 @@
 					'images/icons48/server.png');
 
 				// Displays useful hints in a small semi-transparent box.
-				var hints = document.createElement('div');
+				/*var hints = document.createElement('div');
 				hints.style.position = 'absolute';
 				hints.style.overflow = 'hidden';
 				hints.style.width = '230px';
@@ -277,13 +276,15 @@
 				mxUtils.writeln(hints, '- Shift- or Rightclick and drag for panning');
 				mxUtils.writeln(hints, '- Move the mouse over a cell to see a tooltip');
 				mxUtils.writeln(hints, '- Click and drag a vertex to move and connect');
-				document.body.appendChild(hints);
+				document.body.appendChild(hints);*/
 				
 				// Creates a new DIV that is used as a toolbar and adds
 				// toolbar buttons.
 				var spacer = document.createElement('div');
 				spacer.style.display = 'inline';
 				spacer.style.padding = '8px';
+
+
 				
 				addToolbarButton(editor, toolbar, 'groupOrUngroup', '(Un)group', 'images/group.png');
 				
@@ -322,7 +323,7 @@
 				toolbar.appendChild(spacer.cloneNode(true));
 
 				// Defines a new export action
-				editor.addAction('export', function(editor, cell)
+				/*editor.addAction('export', function(editor, cell)
 				{
 					var textarea = document.createElement('textarea');
 					textarea.style.width = '400px';
@@ -333,13 +334,12 @@
 					showModalWindow(graph, 'XML', textarea, 410, 440);
 				});
 
-				addToolbarButton(editor, toolbar, 'export', 'Export', 'images/export1.png');
-
+				addToolbarButton(editor, toolbar, 'export', 'Export', 'images/export1.png');*/
 				// ---
 				
 				// Adds toolbar buttons into the status bar at the bottom
 				// of the window.
-				addToolbarButton(editor, status, 'collapseAll', 'Collapse All', 'images/navigate_minus.png', true);
+				/*addToolbarButton(editor, status, 'collapseAll', 'Collapse All', 'images/navigate_minus.png', true);
 				addToolbarButton(editor, status, 'expandAll', 'Expand All', 'images/navigate_plus.png', true);
 
 				status.appendChild(spacer.cloneNode(true));
@@ -352,7 +352,7 @@
 				addToolbarButton(editor, status, 'zoomIn', '', 'images/zoom_in.png', true);
 				addToolbarButton(editor, status, 'zoomOut', '', 'images/zoom_out.png', true);
 				addToolbarButton(editor, status, 'actualSize', '', 'images/view_1_1.png', true);
-				addToolbarButton(editor, status, 'fit', '', 'images/fit_to_size.png', true);
+				addToolbarButton(editor, status, 'fit', '', 'images/fit_to_size.png', true);*/
 				
 				// Creates the outline (navigator, overview) for moving
 				// around the graph in the top, right corner of the window.
@@ -403,6 +403,7 @@
 			}
 			mxEvent.addListener(button, 'click', function(evt)
 			{
+				console.log(editor)
 				editor.execute(action);
 			});
 			mxUtils.write(button, label);
@@ -450,7 +451,6 @@
 			// Function that is executed when the image is dropped on
 			// the graph. The cell argument points to the cell under
 			// the mousepointer if there is one.
-			console.log(label)
 			var funct = function(graph, evt, cell, x, y)
 			{
 				var parent = graph.getDefaultParent();
@@ -516,7 +516,7 @@
 		
 		function configureStylesheet(graph)
 		{
-			var style = new Object();
+			/*var style = new Object();
 			style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_RECTANGLE;
 			style[mxConstants.STYLE_PERIMETER] = mxPerimeter.RectanglePerimeter;
 			style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_CENTER;
@@ -531,7 +531,7 @@
 			style[mxConstants.STYLE_FONTSTYLE] = 0;
 			style[mxConstants.STYLE_IMAGE_WIDTH] = '48';
 			style[mxConstants.STYLE_IMAGE_HEIGHT] = '48';
-			graph.getStylesheet().putDefaultVertexStyle(style);
+			graph.getStylesheet().putDefaultVertexStyle(style);*/
 
 			// NOTE: Alternative vertex style for non-HTML labels should be as
 			// follows. This repaces the above style for HTML labels.
@@ -556,7 +556,7 @@
 			style[mxConstants.STYLE_OPACITY] = '80';
 			graph.getStylesheet().putDefaultVertexStyle(style);*/
 
-			style = new Object();
+			/*style = new Object();
 			style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_SWIMLANE;
 			style[mxConstants.STYLE_PERIMETER] = mxPerimeter.RectanglePerimeter;
 			style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_CENTER;
@@ -570,7 +570,7 @@
 			style[mxConstants.STYLE_STARTSIZE] = '30';
 			style[mxConstants.STYLE_FONTSIZE] = '16';
 			style[mxConstants.STYLE_FONTSTYLE] = 1;
-			graph.getStylesheet().putCellStyle('group', style);
+			graph.getStylesheet().putCellStyle('group', style);*/
 			
 			style = new Object();
 			style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;

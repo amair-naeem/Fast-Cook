@@ -455,3 +455,36 @@ def loadIcons(request):
         #print(str(im))
         return HttpResponse(filename);
     return HttpResponse("test22222");"""
+
+@loggedin
+def search(request, user):
+    name = request.POST['searchEngine']
+    path = 'fastcookapp/images/ingredients/'
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            if file.endswith('.png'):
+                if name == file:
+                    root = os.path.join(root)
+                    file_direc = str(root) + str("/"+name)
+                    return HttpResponse(file_direc)
+                #print(file)
+                """if name == file:
+                    print("yes")
+                else:
+                    print("no")"""
+                #print(os.path.join(root, file))
+    return HttpResponse("hey")
+
+def autocompleteModel(request):
+    if request.is_ajax():
+        q = request.GET.get('term', '').capitalize()
+        search_qs = MODEL.objects.filter(name__startswith=q)
+        results = []
+        print(q)
+        for r in search_qs:
+            results.append(r.FIELD)
+        data = json.dumps(results)
+    else:
+        data = 'fail'
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)

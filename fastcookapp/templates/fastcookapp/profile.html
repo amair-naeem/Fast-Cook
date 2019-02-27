@@ -17,8 +17,7 @@
       {% for titles in title %}
           <table>
           <tr> 
-            <form method="POST" action="{% url 'openGraphFromProfile' title=titles.id %}">
-              {% csrf_token %}
+            <form method="GET" action="{% url 'openGraphFromProfile' title=titles.id %}">
               <td> <input type = "submit" class = "openGraph" value = "{{titles.title}}" id="{% url 'openGraphFromProfile' title=titles.id %}"> </td> 
             </form>
             <td> <input type = "button" class = "deleteButton" onclick="doFunction(this.id, this)" value = "Delete" id="{% url 'deleteGraph' title=titles.id %}"> </td>

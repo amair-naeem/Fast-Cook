@@ -42,6 +42,8 @@ urlpatterns = [
     url(r'^share/(?P<id>\d+)/(?P<random_url>[-\w]+)/', views.share, name="share"),
     path('share/', views.share, name='share'),
     path('loadIcons/', views.loadIcons, name='loadIcons'),
+    path('search/', views.search, name='search'),
+    url(r'^ajax_calls/search/', views.autocompleteModel),
     #url(r'^(?P<slug>[\w-]+)/$',  views.share, name='share'),
     #path('<slug:slug>', views.share, name='share'),
     # API

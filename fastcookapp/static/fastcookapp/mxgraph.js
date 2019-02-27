@@ -26,6 +26,43 @@ function setCookie(name,value,days) {
     document.cookie = name + "=" + (value || "")  + expires + "; path=/";
 }
 
+    var csrftoken = getCookie('csrftoken');
+
+  
+
+  /*$(document).ready(function(){ 
+            $("#txtSearch").autocomplete({
+                source: "/ajax_calls/search/",
+                minLength: 2,
+                open: function(){
+                    setTimeout(function () {
+                        $('.ui-autocomplete').css('z-index', 99);
+                    }, 0);
+                }
+              });
+        });*/
+
+    function hideOnClk(id){
+        var cat = document.getElementById("byCategory");
+        var searchEngine = document.getElementById("search");
+
+         if(id == "searchImage"){
+           document.getElementById("categoryImage").style.display="block";
+           document.getElementById(id).style.display="none";
+           cat.style.display = "none";
+           searchEngine.style.display = "block";
+         }else{
+           document.getElementById("searchImage").style.display="block";
+           document.getElementById(id).style.display="none";
+           cat.style.display = "block";
+
+         }
+      }
+
+
+
+
+
 
         function mxIconSet(state)
         {
@@ -107,14 +144,21 @@ function main()
             mxGraph.prototype.setAllowDanglingEdges(false)
             mxConnectionHandler.prototype.connectImage = new mxImage('/images/connector.gif', 16, 16);
 
+            // Enables guides
+            mxGraphHandler.prototype.guidesEnabled = true;
+
+            // Alt disables guides
+            mxGuide.prototype.isEnabledForEvent = function(evt)
+            {
+                return !mxEvent.isAltDown(evt);
+            };
+
+
             // Creates the model and the graph inside the container
                 // using the fastest rendering available on the browser
-            var model = new mxGraphModel();
             var editor = new mxEditor();
-            var graph = new mxGraph(container, model);
-
-
-
+                var graph = editor.graph;
+                var model = graph.getModel();
 
 
             graph.dropEnabled = true;
@@ -217,9 +261,13 @@ function main()
             }
             else
             {
-                //Creates the div for the toolbar
-                var tbContainer = document.getElementById('toolbar');
-                document.body.appendChild(tbContainer);
+
+
+                var topToolbar = document.getElementById('toolbarContainer')
+
+                /*var toolbarContainer = document.getElementById('toolbarContainer')
+                var toolbarContainer = new mxToolbar(content);
+                toolbarContainer.enabled = false*/
 
                 var content = document.getElementById('content')
                 var equipment = document.getElementById('generalContent')
@@ -312,14 +360,28 @@ function main()
                 var diagramContainer = diagramContainerClass[0]
 
 
-                container = document.getElementById('container');
-                document.body.appendChild(diagramContainer);
-                diagramContainer.appendChild(container)
+                var container = document.getElementById('container');
+                //document.body.appendChild(diagramContainer);
+                //diagramContainer.appendChild(container)
 
                 menuBar = document.getElementById('menuBar')
                 document.body.appendChild(menuBar)
 
 
+                /*mxEdgeStyle.MyStyle = function(state, source, target, points, result)
+                {
+                  if (source != null && target != null)
+                  {
+                    var pt = new mxPoint(target.getCenterX(), source.getCenterY());
+
+                    if (mxUtils.contains(source, pt.x, pt.y))
+                    {
+                      pt.y = source.y + source.height;
+                    }
+
+                    result.push(pt);
+                  }
+                };*/
 
 
                 
@@ -330,8 +392,432 @@ function main()
                     new mxDivResizer(tbContainer);
                     new mxDivResizer(container);
                 }
+
+                //graph.setDropEnabled(false);
+
     
+                 var undoManager = new mxUndoManager();
                 
+                var listener = function(sender, evt)
+                {
+                    undoManager.undoableEditHappened(evt.getProperty('edit'));
+                };
+
+                graph.getModel().addListener(mxEvent.UNDO, listener);
+                
+                graph.getView().addListener(mxEvent.UNDO, listener);
+
+
+                graph.popupMenuHandler.factoryMethod = function(menu, cell, evt)
+                {
+
+
+                    menu.addItem('Undo', null, function()
+                    {
+                        undoManager.undo();
+                
+                    });
+                    
+                    menu.addItem('Redo', null, function()
+                    {
+                        undoManager.redo();
+                    });
+
+
+                    menu.addSeparator();
+                                        
+                    menu.addItem('Select vertices', null, function()
+                    {
+                        graph.selectVertices();
+                    });
+
+                    menu.addItem('Select all', null, function()
+                    {
+                        graph.selectAll();
+                    });
+
+                
+                };
+
+
+
+
+
+                //remove vertex when delete key is pressed
+                /*var keyHandler = new mxKeyHandler(graph);
+                keyHandler.bindKey(46, function(evt)
+                {
+                  if (graph.isEnabled())
+                  {
+                    graph.removeCells();
+                  }     
+
+                });
+
+                //remove vertex when backspace is pressed
+                keyHandler.bindKey(8, function(evt)
+                {
+                    if (graph.isEnabled())
+                    {
+                        graph.removeCells();
+                    }
+                });
+                
+                // Matches DnD inside the graph
+                mxDragSource.prototype.getDropTarget = function(graph, x, y)
+                {
+                    var cell = graph.getCellAt(x, y);                    
+                    if (!graph.isValidDropTarget(cell))
+                    {
+                        cell = null;
+                    }
+                    
+                    return cell;
+                };*/
+
+                /*var spacer = document.createElement('div');
+                spacer.style.display = 'inline';
+                spacer.style.padding = '8px';
+
+                // Enables new connections in the graph
+                graph.setConnectable(true);
+                graph.setMultigraph(false);
+                mxVertexHandler.prototype.rotationEnabled = true;
+
+
+                // Disables floating connections (only use with no connect image)
+                if (graph.connectionHandler.connectImage == null)
+                {
+                    graph.connectionHandler.isConnectableCell = function(cell)
+                    {
+                       return false;
+                    };
+                    mxEdgeHandler.prototype.isConnectableCell = function(cell)
+                    {
+                        return graph.connectionHandler.isConnectableCell(cell);
+                    };
+                }
+
+                // Stops editing on enter or escape keypress
+                var keyHandler = new mxKeyHandler(graph);
+                var rubberband = new mxRubberband(graph);*/
+
+                // Disable highlight of cells when dragging from toolbar
+
+
+                // Centers the port icon on the target port
+                //graph.connectionHandler.targetConnectImage = true;
+
+                // Disable highlight of cells when dragging from toolbar
+                graph.setDropEnabled(false);
+
+
+                // Does not allow dangling edges
+                graph.setAllowDanglingEdges(false);
+
+                // Sets the graph container and configures the editor
+                editor.setGraphContainer(container);
+                
+                // Defines the default group to be used for grouping. The
+                // default group is a field in the mxEditor instance that
+                // is supposed to be a cell which is cloned for new cells.
+                // The groupBorderSize is used to define the spacing between
+                // the children of a group and the group bounds.
+                var group = new mxCell('Group', new mxGeometry(), 'group');
+                group.setVertex(true);
+                group.setConnectable(false);
+                editor.defaultGroup = group;
+                editor.groupBorderSize = 20;
+
+                // Disables drag-and-drop into non-swimlanes.
+                /*graph.isValidDropTarget = function(cell, cells, evt)
+                {
+                    return this.isSwimlane(cell);
+                };
+                
+                // Disables drilling into non-swimlanes.
+                graph.isValidRoot = function(cell)
+                {
+                    return this.isValidDropTarget(cell);
+                }
+
+                // Does not allow selection of locked cells
+                graph.isCellSelectable = function(cell)
+                {
+                    return !this.isCellLocked(cell);
+                };
+
+                // Returns a shorter label if the cell is collapsed and no
+                // label for expanded groups
+                graph.getLabel = function(cell)
+                {
+                    var tmp = mxGraph.prototype.getLabel.apply(this, arguments); // "supercall"
+                    
+                    if (this.isCellLocked(cell))
+                    {
+                        // Returns an empty label but makes sure an HTML
+                        // element is created for the label (for event
+                        // processing wrt the parent label)
+                        return '';
+                    }
+                    else if (this.isCellCollapsed(cell))
+                    {
+                        var index = tmp.indexOf('</h1>');
+                        
+                        if (index > 0)
+                        {
+                            tmp = tmp.substring(0, index+5);
+                        }
+                    }
+                    
+                    return tmp;
+                }*/
+
+        
+                // To disable the folding icon, use the following code:
+                /*graph.isCellFoldable = function(cell)
+                {
+                    return false;
+                }*/
+
+                // Shows a "modal" window when double clicking a vertex.
+                /*graph.dblClick = function(evt, cell)
+                {
+                    // Do not fire a DOUBLE_CLICK event here as mxEditor will
+                    // consume the event and start the in-place editor.
+                    if (this.isEnabled() &&
+                        !mxEvent.isConsumed(evt) &&
+                        cell != null &&
+                        this.isCellEditable(cell))
+                    {
+                        if (this.model.isEdge(cell) ||
+                            !this.isHtmlLabel(cell))
+                        {
+                            this.startEditingAtCell(cell);
+                        }
+                        else
+                        {
+                            var content = document.createElement('div');
+                            content.innerHTML = this.convertValueToString(cell);
+                            showModalWindow(this, 'Properties', content, 400, 300);
+                        }
+                    }
+
+                    // Disables any default behaviour for the double click
+                    mxEvent.consume(evt);
+                };*/
+
+                // Enables new connections
+                graph.setConnectable(true);
+
+                loadStyleSheet(graph);
+
+                // Creates a new DIV that is used as a toolbar and adds
+                // toolbar buttons.
+                var spacer = document.createElement('div');
+                spacer.style.display = 'inline';
+                spacer.style.padding = '85px';
+                
+                topToolbar.appendChild(spacer.cloneNode(true));
+
+                addToolbarButton(editor, topToolbar, 'groupOrUngroup', '(Un)group', '/images/group.png');
+                
+                // Defines a new action for deleting or ungrouping
+                editor.addAction('groupOrUngroup', function(editor, cell)
+                {
+                    cell = cell || editor.graph.getSelectionCell();
+                    if (cell != null && editor.graph.isSwimlane(cell))
+                    {
+                        editor.execute('ungroup', cell);
+                    }
+                    else
+                    {
+                        editor.execute('group');
+                    }
+                });
+
+                addToolbarButton(editor, topToolbar, 'delete', 'Delete', '/images/delete2.png');
+                
+                spacer.style.padding = '8px';
+                topToolbar.appendChild(spacer.cloneNode(true));
+                
+                addToolbarButton(editor, topToolbar, 'cut', 'Cut', '/images/cut.png');
+                addToolbarButton(editor, topToolbar, 'copy', 'Copy', '/images/copy.png');
+                addToolbarButton(editor, topToolbar, 'paste', 'Paste', '/images/paste.png');
+
+                topToolbar.appendChild(spacer.cloneNode(true));
+                
+                addToolbarButton(editor, topToolbar, 'undo', '', '/images/undo.png');
+                addToolbarButton(editor, topToolbar, 'redo', '', '/images/redo.png');
+                
+                topToolbar.appendChild(spacer.cloneNode(true));
+
+                addToolbarButton(editor, topToolbar, 'zoomIn','', '/images/zoomin.gif')
+                addToolbarButton(editor, topToolbar, 'zoomOut','', '/images/zoomout.gif')
+
+                var addVertex = function(label, icon, w, h, style)
+                {
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                    vertex.setVertex(true);
+                
+                    addToolbarItem(graph, toolbar, vertex, icon);
+                };
+
+                var addMeasurementVertex = function(label, icon, w, h, style)
+                {
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                    vertex.setVertex(true);
+                
+                    addToolbarItem(graph, measurementToolbar, vertex, icon);
+                };
+
+                
+
+                var addBerriesVertex = function(label, icon, w, h, style)
+                {
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                    vertex.setVertex(true);
+                
+                    addToolbarItem(graph, berriesToolbar, vertex, icon);
+                };
+
+
+                var addDairiesVertex = function(label, icon, w, h, style)
+                {
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                    vertex.setVertex(true);
+                
+                    addToolbarItem(graph, dairiesToolbar, vertex, icon);
+                };
+
+                var addDessertsVertex = function(label, icon, w, h, style)
+                {
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                    vertex.setVertex(true);
+                
+                    addToolbarItem(graph, dessertToolbar, vertex, icon);
+                };
+
+                var addDishesVertex = function(label, icon, w, h, style)
+                {
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                    vertex.setVertex(true);
+                
+                    addToolbarItem(graph, dishesToolbar, vertex, icon);
+                };
+
+                var addFastFoodVertex = function(label, icon, w, h, style)
+                {
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                    vertex.setVertex(true);
+                
+                    addToolbarItem(graph, fastfoodToolbar, vertex, icon);
+                };
+
+                var addFruitsVertex = function(label, icon, w, h, style)
+                {
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                    vertex.setVertex(true);
+                
+                    addToolbarItem(graph, fruitsToolbar, vertex, icon);
+                };
+
+                var addMeatVertex = function(label, icon, w, h, style)
+                {
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                    vertex.setVertex(true);
+                
+                    addToolbarItem(graph, meatToolbar, vertex, icon);
+                };
+
+
+                var addNutVertex = function(label, icon, w, h, style)
+                {
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                    vertex.setVertex(true);
+                
+                    addToolbarItem(graph, nutToolbar, vertex, icon);
+                };
+
+                var addOtherVertex = function(label, icon, w, h, style)
+                {
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                    vertex.setVertex(true);
+                
+                    addToolbarItem(graph, otherToolbar, vertex, icon);
+                };
+
+                var addSeafoodVertex = function(label, icon, w, h, style)
+                {
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                    vertex.setVertex(true);
+                
+                    addToolbarItem(graph, seafoodToolbar, vertex, icon);
+                };
+
+                var addVegetablesVertex = function(label, icon, w, h, style)
+                {
+                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                    vertex.setVertex(true);
+                
+                    addToolbarItem(graph, vegetablesToolbar, vertex, icon);
+                };
+
+
+                berriesToolbar.addLine();
+                measurementToolbar.addLine();
+                toolbar.addLine();
+
+                var addGeneralVertex = function(icon,w,h,style, value, arrow)
+                {
+                    
+                    if(arrow == true)
+                    {
+                        
+                       
+                        var edge2 = new mxCell(null, new mxGeometry(0, 0, w, h), 'curved=1;endArrow=classic;html=1;');
+                        var sourceX = edge2.getGeometry();
+                        console.log(sourceX)
+                        //var sourceY = edge2.geometry.y;
+
+                        edge2.geometry.setTerminalPoint(new mxPoint(50, 150), true);
+                        edge2.geometry.setTerminalPoint(new mxPoint(150, 50), false);
+
+                        edge2.geometry.relative = true;
+                        edge2.edge = true;
+
+                        graph.fireEvent(new mxEventObject('cellsInserted', 'cells', [edge2]));
+                        addToolbarItem(graph, generalToolbar, edge2, icon);
+
+
+                    }
+
+                    else
+                    {
+                        var vertex = new mxCell(null, new mxGeometry(0, 0, w, h), style);
+
+                        //graph.setConnectable(false)
+                        //vertex.setConnectable(false)
+                        vertex.value = value
+                        vertex.setVertex(true);
+
+                        addToolbarItem(graph, generalToolbar, vertex, icon);
+
+                    }
+
+                }
+
+                addGeneralVertex('/images/rounded.gif', 100, 40, 'text', "Text", false);
+                addGeneralVertex('/images/block_end.gif', 100, 40, 'connector', null, true);
+
+                generalToolbar.addLine();
+                // To show the images in the outline, uncomment the following code
+                //outln.outline.labelsVisible = true;
+                //outln.outline.setHtmlLabels(true);
+
+
+                
+            }
 
 
                 //graph.setEnabled(false);
@@ -354,10 +840,6 @@ function main()
                     return null;
                 };*/
                 
-
-                //save xml upon click
-                var model = new mxGraphModel();
-
 
                 $(document).ready(function(){
                     $('#loadAllTitles').on('click','.openGraph' ,function(event){
@@ -718,220 +1200,7 @@ function main()
 
                 //creates an undoManager object that allows users to be able to undo and redo
 
-                var undoManager = new mxUndoManager();
-				
-				var listener = function(sender, evt)
-				{
-					undoManager.undoableEditHappened(evt.getProperty('edit'));
-				};
-
-				graph.getModel().addListener(mxEvent.UNDO, listener);
-				
-				graph.getView().addListener(mxEvent.UNDO, listener);
-
-
-                graph.popupMenuHandler.factoryMethod = function(menu, cell, evt)
-				{
-					window.oncontextmenu = function(event) {
-					    event.preventDefault();
-					    //event.stopPropagation();
-					    //return false;
-					};
-
-
-					menu.addItem('Undo', null, function()
-				    {
-						undoManager.undo();
-				
-				    });
-					
-					menu.addItem('Redo', null, function()
-				    {
-						undoManager.redo();
-				    });
-
-
-					menu.addSeparator();
-										
-					menu.addItem('Select vertices', null, function()
-				    {
-				    	graph.selectVertices();
-				    });
-
-					menu.addItem('Select all', null, function()
-				    {
-						graph.selectAll();
-				    });
-				
-				};
-
-
-
-
-
-                //remove vertex when delete key is pressed
-                var keyHandler = new mxKeyHandler(graph);
-				keyHandler.bindKey(46, function(evt)
-				{
-				  if (graph.isEnabled())
-				  {
-				    graph.removeCells();
-				  }		
-
-				});
-
-				//remove vertex when backspace is pressed
-				keyHandler.bindKey(8, function(evt)
-				{
-					if (graph.isEnabled())
-					{
-						graph.removeCells();
-					}
-				});
-                
-                // Matches DnD inside the graph
-                mxDragSource.prototype.getDropTarget = function(graph, x, y)
-                {
-                    var cell = graph.getCellAt(x, y);                    
-                    if (!graph.isValidDropTarget(cell))
-                    {
-                        cell = null;
-                    }
-                    
-                    return cell;
-                };
-
-                // Enables new connections in the graph
-                graph.setConnectable(true);
-                graph.setMultigraph(false);
-                mxVertexHandler.prototype.rotationEnabled = true;
-
-
-                // Disables floating connections (only use with no connect image)
-                if (graph.connectionHandler.connectImage == null)
-                {
-                    graph.connectionHandler.isConnectableCell = function(cell)
-                    {
-                       return false;
-                    };
-                    mxEdgeHandler.prototype.isConnectableCell = function(cell)
-                    {
-                        return graph.connectionHandler.isConnectableCell(cell);
-                    };
-                }
-
-                // Stops editing on enter or escape keypress
-                var keyHandler = new mxKeyHandler(graph);
-                var rubberband = new mxRubberband(graph);
-                
-                var addVertex = function(label, icon, w, h, style)
-                {
-                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
-                    vertex.setVertex(true);
-                
-                    addToolbarItem(graph, toolbar, vertex, icon);
-                };
-
-                var addMeasurementVertex = function(label, icon, w, h, style)
-                {
-                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
-                    vertex.setVertex(true);
-                
-                    addToolbarItem(graph, measurementToolbar, vertex, icon);
-                };
-
-                
-
-                var addBerriesVertex = function(label, icon, w, h, style)
-                {
-                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
-                    vertex.setVertex(true);
-                
-                    addToolbarItem(graph, berriesToolbar, vertex, icon);
-                };
-
-
-                var addDairiesVertex = function(label, icon, w, h, style)
-                {
-                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
-                    vertex.setVertex(true);
-                
-                    addToolbarItem(graph, dairiesToolbar, vertex, icon);
-                };
-
-                var addDessertsVertex = function(label, icon, w, h, style)
-                {
-                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
-                    vertex.setVertex(true);
-                
-                    addToolbarItem(graph, dessertToolbar, vertex, icon);
-                };
-
-                var addDishesVertex = function(label, icon, w, h, style)
-                {
-                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
-                    vertex.setVertex(true);
-                
-                    addToolbarItem(graph, dishesToolbar, vertex, icon);
-                };
-
-                var addFastFoodVertex = function(label, icon, w, h, style)
-                {
-                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
-                    vertex.setVertex(true);
-                
-                    addToolbarItem(graph, fastfoodToolbar, vertex, icon);
-                };
-
-                var addFruitsVertex = function(label, icon, w, h, style)
-                {
-                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
-                    vertex.setVertex(true);
-                
-                    addToolbarItem(graph, fruitsToolbar, vertex, icon);
-                };
-
-                var addMeatVertex = function(label, icon, w, h, style)
-                {
-                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
-                    vertex.setVertex(true);
-                
-                    addToolbarItem(graph, meatToolbar, vertex, icon);
-                };
-
-
-                var addNutVertex = function(label, icon, w, h, style)
-                {
-                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
-                    vertex.setVertex(true);
-                
-                    addToolbarItem(graph, nutToolbar, vertex, icon);
-                };
-
-                var addOtherVertex = function(label, icon, w, h, style)
-                {
-                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
-                    vertex.setVertex(true);
-                
-                    addToolbarItem(graph, otherToolbar, vertex, icon);
-                };
-
-                var addSeafoodVertex = function(label, icon, w, h, style)
-                {
-                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
-                    vertex.setVertex(true);
-                
-                    addToolbarItem(graph, seafoodToolbar, vertex, icon);
-                };
-
-                var addVegetablesVertex = function(label, icon, w, h, style)
-                {
-                    var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
-                    vertex.setVertex(true);
-                
-                    addToolbarItem(graph, vegetablesToolbar, vertex, icon);
-                };
-
+               
 
                 //addVertex("300g",'/images/icons/flour.png', 120, 160, 'rounded0');   
                 //addVertex(null,'/images/icons/whisk.png', 100, 40, 'rounded3');
@@ -1029,60 +1298,7 @@ function main()
                 //addVertex(null,'/images/actor.gif', 30, 40, 'shape=actor');
 
 
-                berriesToolbar.addLine();
-                measurementToolbar.addLine();
-                toolbar.addLine();
-
-                var addGeneralVertex = function(icon,w,h,style, value, arrow)
-                {
-                    
-                    if(arrow == true)
-                    {
-                        
-                       
-                        var edge2 = new mxCell(null, new mxGeometry(0, 0, w, h), 'curved=1;endArrow=classic;html=1;');
-                        var sourceX = edge2.getGeometry();
-                        console.log(sourceX)
-                        //var sourceY = edge2.geometry.y;
-
-                        edge2.geometry.setTerminalPoint(new mxPoint(50, 150), true);
-                        edge2.geometry.setTerminalPoint(new mxPoint(150, 50), false);
-
-                        edge2.geometry.relative = true;
-                        edge2.edge = true;
-
-                        graph.fireEvent(new mxEventObject('cellsInserted', 'cells', [edge2]));
-                        addToolbarItem(graph, generalToolbar, edge2, icon);
-
-
-                    }
-
-                    else
-                    {
-                        var vertex = new mxCell(null, new mxGeometry(0, 0, w, h), style);
-
-                        //graph.setConnectable(false)
-                        //vertex.setConnectable(false)
-                        vertex.value = value
-                        vertex.setVertex(true);
-
-                        addToolbarItem(graph, generalToolbar, vertex, icon);
-
-                    }
-
-                }
-
-                addGeneralVertex('/images/rounded.gif', 100, 40, 'text', "Text", false);
-                addGeneralVertex('/images/block_end.gif', 100, 40, 'connector', null, true);
-
-                generalToolbar.addLine();
-
-
-
-
-
-                loadStyleSheet(graph);
-            }
+                
 
             
 
@@ -1149,6 +1365,58 @@ function main()
                             //graph.fit()*/
                         }
                     });
+
+                        $(document).ready(function(){ 
+                        $('#searchSubmit').on('click',function(event){
+                            event.preventDefault();
+                            
+
+                           $.ajax({    
+                                    type: "POST",
+                                    url: /search/,
+                                    dataType: 'text',
+                                    headers:{
+                                        "X-CSRFToken": csrftoken
+                                    },
+                                    data:{
+                                        'searchEngine': $('#searchEngine').val()
+                                        },
+                                    success: function(data){
+                                            //alert("test")
+                                            var searchToolbar = document.getElementById("searchToolbar");
+
+                                            var toolbarsearchEngine = new mxToolbar(searchToolbar);
+                                            toolbarsearchEngine.enabled = false
+
+                                            var addSearchVertex = function(label, icon, w, h, style)
+                                            {
+                                                var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);
+                                                vertex.setVertex(true);
+                                            
+                                                addToolbarItem(graph, toolbarsearchEngine, vertex, icon);
+
+
+                                            };
+
+                                            var dir = data.replace(/fastcookapp/,'');
+                                            var cat = dir.split('/')[3]
+                                            var catLowerCase = cat.toLowerCase()
+
+                                            addSearchVertex("1 tbsp", dir, 60,80, catLowerCase+"0")
+
+
+
+                                    }
+                            });
+
+                            
+                        });
+
+
+                         
+                     });
+
+
 
 
             //opens graph
@@ -1223,6 +1491,31 @@ function main()
 
         function loadStyleSheet(graph) {
             
+            var groupStyle = new Object();
+            groupStyle[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_SWIMLANE;
+            groupStyle[mxConstants.STYLE_PERIMETER] = mxPerimeter.RectanglePerimeter;
+            groupStyle[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_CENTER;
+            groupStyle[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+            groupStyle[mxConstants.STYLE_FILLCOLOR] = '#FF9103';
+            groupStyle[mxConstants.STYLE_GRADIENTCOLOR] = '#F8C48B';
+            groupStyle[mxConstants.STYLE_STROKECOLOR] = '#E86A00';
+            groupStyle[mxConstants.STYLE_FONTCOLOR] = '#000000';
+            groupStyle[mxConstants.STYLE_ROUNDED] = true;
+            groupStyle[mxConstants.STYLE_OPACITY] = '80';
+            groupStyle[mxConstants.STYLE_STARTSIZE] = '30';
+            groupStyle[mxConstants.STYLE_FONTSIZE] = '16';
+            groupStyle[mxConstants.STYLE_FONTSTYLE] = 1;
+            graph.getStylesheet().putCellStyle('group', groupStyle);
+
+            var edge = graph.getStylesheet().getDefaultEdgeStyle();
+            edge[mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = '#FFFFFF';
+            edge[mxConstants.STYLE_STROKEWIDTH] = '2';
+            edge[mxConstants.STYLE_ROUNDED] = true;
+            //edge[mxConstants.STYLE_EDGE] = mxEdgeStyle.OrthConnector;
+
+            //edge[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+
+
             var style = [];
             var measurementStyle = [];
             var dir = "/loadIcons/";
@@ -1377,6 +1670,8 @@ function main()
                 style[mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
                 style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;*/
 
+
+
                 var style2 = new Object();
 
                 style2[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
@@ -1410,6 +1705,35 @@ function main()
             var dec1 = new mxCodec(node1.ownerDocument);
             dec1.decode(node1, graph.getModel());
         }
+
+        
+        function addToolbarButton(editor, topToolbar, action, label, image, isTransparent)
+        {
+            var button = document.createElement('button');
+            button.style.fontSize = '10';
+            if (image != null)
+            {
+                var img = document.createElement('img');
+                img.setAttribute('src', image);
+                img.style.width = '16px';
+                img.style.height = '16px';
+                img.style.verticalAlign = 'middle';
+                img.style.marginRight = '2px';
+                button.appendChild(img);
+            }
+            if (isTransparent)
+            {
+                button.style.background = 'transparent';
+                button.style.color = '#FFFFFF';
+                button.style.border = 'none';
+            }
+            mxEvent.addListener(button, 'click', function(evt)
+            {
+                editor.execute(action);
+            });
+            mxUtils.write(button, label);
+            topToolbar.appendChild(button);
+        };
 
 
 
