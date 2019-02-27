@@ -463,13 +463,20 @@ def search(request, user):
     for root, dirs, files in os.walk(path):
         for file in files:
             if file.endswith('.png'):
-                if name == file:
+                search = file.replace(".png","")
+                if name == search:
                     root = os.path.join(root)
-                    file_direc = str(root) + str("/"+name)
+                    file_direc = str(root) + str("/"+name) + ".png"
                     equipment = os.listdir(root)
                     equipment = list(filter(lambda fname: os.path.basename(fname) != 'Thumbs.db', equipment))
                     size = len(equipment)
-                    return JsonResponse({'length':size, 'file_direc': file_direc})
+                    count = 0
+                    for file in equipment:
+                        count+=1
+                        if search == name:
+                            print(count)
+                            return JsonResponse({'length':count-1, 'file_direc': file_direc, 'results': True})
+
                 #print(file)
                 """if name == file:
                     print("yes")

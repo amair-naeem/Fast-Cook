@@ -1383,17 +1383,20 @@ function main()
                                         },
                                     success: function(data){
 
+
                                             var json = JSON.parse(data)
                                             console.log(json)
-                                            length = json['length']
-                                            console.log(length)
-                                            directory = json['file_direc']
-                                            console.log(directory)
+                                            var length = json['length']
+                                            //console.log(length)
+                                            var directory = json['file_direc']
+                                            //console.log(directory)
                                             //alert("test")
                                             var searchToolbar = document.getElementById("searchToolbar");
 
                                             var toolbarsearchEngine = new mxToolbar(searchToolbar);
                                             toolbarsearchEngine.enabled = false
+
+
 
                                             var addSearchVertex = function(label, icon, w, h, style)
                                             {
@@ -1409,20 +1412,58 @@ function main()
 
                                             var dir = directory.replace(/fastcookapp/,'');
                                             var cat = dir.split('/')[3]
+                                            var ingredient = dir.split('/')[4]
+                                            ingredient = ingredient.replace('.png','')
                                             var catLowerCase = cat.toLowerCase()
 
-                                            addSearchVertex("1 tbsp", dir, 60,80, catLowerCase+"0")
+                                            
+                                            //addSearchVertex("1 tbsp", dir, 60,80, catLowerCase+"0")
 
-                                            //I NEED TO FIND WHERE CARROT ENDS AND THATS WHAT I IS!
+                                            //addSearchVertex("1 tbsp", dir, 60,80, catLowerCase+length)
 
-                                            for (var i = length - 1; i >= 0; i--) {
-                                                addSearchVertex("1 tbsp", dir, 60,80, catLowerCase+i)
+                                            //console.log(length)
+
+
+                                            if(catLowerCase == "equipment"){
+                                                clearToolbar(toolbarsearchEngine)
+                                                addSearchVertex("60 minutes", dir, 60,80, catLowerCase+length)
+
                                             }
-                                            //backend i need to get number of files in the directory 
-                                            //for loop to that number 
-                                            //catLowerCase+i
+                                                
+
+                                            else if(ingredient == "tablespoon"){
+                                                clearToolbar(toolbarsearchEngine)
+                                                addSearchVertex("1 tbsp", '/images/ingredients/measurement/tablespoon.png/', 60,80, 'measurement0')
+
+                                            }
 
 
+                                            else if(ingredient == "teaspoon"){
+                                                clearToolbar(toolbarsearchEngine)
+                                                addSearchVertex("1 tsp", '/images/ingredients/measurement/teaspoon.png/', 60,80, 'measurement1')
+                                            }
+
+                                            else if(ingredient == "cup"){
+                                                clearToolbar(toolbarsearchEngine)
+                                                addSearchVertex("1 cup", '/images/ingredients/measurement/scoop.png/', 60,80, 'measurement2')
+                                            }
+
+                                            else if(ingredient == "cup"){
+                                                clearToolbar(toolbarsearchEngine)
+                                                addSearchVertex("1 cup", '/images/ingredients/measurement/cup.png/', 60,80, 'measurement3')
+                                            }
+
+                                            else if(ingredient == "ruler"){
+                                                clearToolbar(toolbarsearchEngine)
+                                                addSearchVertex("1 inch", '/images/ingredients/measurement/ruler.png/', 60,80, 'measurement4')
+                                            }
+
+                                            else{
+                                                clearToolbar(toolbarsearchEngine)
+                                                addSearchVertex("300g", dir, 60,80, catLowerCase+length)
+                                            }
+
+                                            
                                     }
                             });
 
@@ -1751,6 +1792,16 @@ function main()
             mxUtils.write(button, label);
             topToolbar.appendChild(button);
         };
+
+        function clearToolbar(toolbar)
+        {
+            toolbar = new mxToolbar(searchToolbar);
+            toolbar.enabled = false
+            var mxToolbarModes = document.querySelectorAll('.mxToolbarMode');
+            Array.prototype.forEach.call( mxToolbarModes, function( node ) {
+                node.parentNode.removeChild( node );
+            });
+        }
 
 
 
