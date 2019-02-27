@@ -1382,6 +1382,13 @@ function main()
                                         'searchEngine': $('#searchEngine').val()
                                         },
                                     success: function(data){
+
+                                            var json = JSON.parse(data)
+                                            console.log(json)
+                                            length = json['length']
+                                            console.log(length)
+                                            directory = json['file_direc']
+                                            console.log(directory)
                                             //alert("test")
                                             var searchToolbar = document.getElementById("searchToolbar");
 
@@ -1398,12 +1405,22 @@ function main()
 
                                             };
 
-                                            var dir = data.replace(/fastcookapp/,'');
+
+
+                                            var dir = directory.replace(/fastcookapp/,'');
                                             var cat = dir.split('/')[3]
                                             var catLowerCase = cat.toLowerCase()
 
                                             addSearchVertex("1 tbsp", dir, 60,80, catLowerCase+"0")
 
+                                            //I NEED TO FIND WHERE CARROT ENDS AND THATS WHAT I IS!
+
+                                            for (var i = length - 1; i >= 0; i--) {
+                                                addSearchVertex("1 tbsp", dir, 60,80, catLowerCase+i)
+                                            }
+                                            //backend i need to get number of files in the directory 
+                                            //for loop to that number 
+                                            //catLowerCase+i
 
 
                                     }

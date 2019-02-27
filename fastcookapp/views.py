@@ -466,7 +466,10 @@ def search(request, user):
                 if name == file:
                     root = os.path.join(root)
                     file_direc = str(root) + str("/"+name)
-                    return HttpResponse(file_direc)
+                    equipment = os.listdir(root)
+                    equipment = list(filter(lambda fname: os.path.basename(fname) != 'Thumbs.db', equipment))
+                    size = len(equipment)
+                    return JsonResponse({'length':size, 'file_direc': file_direc})
                 #print(file)
                 """if name == file:
                     print("yes")
