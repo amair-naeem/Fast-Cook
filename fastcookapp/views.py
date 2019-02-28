@@ -483,7 +483,7 @@ def search(request, user):
                 else:
                     print("no")"""
                 #print(os.path.join(root, file))
-    return HttpResponse("hey")
+    return JsonResponse({'results': False})
 
 def autocompleteModel(request):
     if request.is_ajax():

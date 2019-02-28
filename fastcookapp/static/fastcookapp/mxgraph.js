@@ -1392,6 +1392,7 @@ function main()
                                             //console.log(directory)
                                             //alert("test")
                                             var searchToolbar = document.getElementById("searchToolbar");
+                                            var result = json['results']
 
                                             var toolbarsearchEngine = new mxToolbar(searchToolbar);
                                             toolbarsearchEngine.enabled = false
@@ -1408,60 +1409,71 @@ function main()
 
                                             };
 
+                                            if(result){
 
 
-                                            var dir = directory.replace(/fastcookapp/,'');
-                                            var cat = dir.split('/')[3]
-                                            var ingredient = dir.split('/')[4]
-                                            ingredient = ingredient.replace('.png','')
-                                            var catLowerCase = cat.toLowerCase()
+                                                document.getElementById("noResults").innerHTML = "";
+                                                var dir = directory.replace(/fastcookapp/,'');
+                                                var cat = dir.split('/')[3]
+                                                var ingredient = dir.split('/')[4]
+                                                ingredient = ingredient.replace('.png','')
+                                                var catLowerCase = cat.toLowerCase()
 
-                                            
-                                            //addSearchVertex("1 tbsp", dir, 60,80, catLowerCase+"0")
-
-                                            //addSearchVertex("1 tbsp", dir, 60,80, catLowerCase+length)
-
-                                            //console.log(length)
-
-
-                                            if(catLowerCase == "equipment"){
-                                                clearToolbar(toolbarsearchEngine)
-                                                addSearchVertex("60 minutes", dir, 60,80, catLowerCase+length)
-
-                                            }
                                                 
+                                                //addSearchVertex("1 tbsp", dir, 60,80, catLowerCase+"0")
 
-                                            else if(ingredient == "tablespoon"){
-                                                clearToolbar(toolbarsearchEngine)
-                                                addSearchVertex("1 tbsp", '/images/ingredients/measurement/tablespoon.png/', 60,80, 'measurement0')
+                                                //addSearchVertex("1 tbsp", dir, 60,80, catLowerCase+length)
 
-                                            }
+                                                //console.log(length)
 
 
-                                            else if(ingredient == "teaspoon"){
-                                                clearToolbar(toolbarsearchEngine)
-                                                addSearchVertex("1 tsp", '/images/ingredients/measurement/teaspoon.png/', 60,80, 'measurement1')
-                                            }
+                                                if(catLowerCase == "equipment"){
+                                                    clearToolbar(toolbarsearchEngine)
+                                                    addSearchVertex("60 minutes", dir, 60,80, catLowerCase+length)
 
-                                            else if(ingredient == "cup"){
-                                                clearToolbar(toolbarsearchEngine)
-                                                addSearchVertex("1 cup", '/images/ingredients/measurement/scoop.png/', 60,80, 'measurement2')
-                                            }
+                                                }
+                                                    
 
-                                            else if(ingredient == "cup"){
-                                                clearToolbar(toolbarsearchEngine)
-                                                addSearchVertex("1 cup", '/images/ingredients/measurement/cup.png/', 60,80, 'measurement3')
-                                            }
+                                                else if(ingredient == "tablespoon"){
+                                                    clearToolbar(toolbarsearchEngine)
+                                                    addSearchVertex("1 tbsp", '/images/ingredients/measurement/tablespoon.png/', 60,80, 'measurement0')
 
-                                            else if(ingredient == "ruler"){
-                                                clearToolbar(toolbarsearchEngine)
-                                                addSearchVertex("1 inch", '/images/ingredients/measurement/ruler.png/', 60,80, 'measurement4')
-                                            }
+                                                }
 
-                                            else{
-                                                clearToolbar(toolbarsearchEngine)
-                                                addSearchVertex("300g", dir, 60,80, catLowerCase+length)
-                                            }
+
+                                                else if(ingredient == "teaspoon"){
+                                                    clearToolbar(toolbarsearchEngine)
+                                                    addSearchVertex("1 tsp", '/images/ingredients/measurement/teaspoon.png/', 60,80, 'measurement1')
+                                                }
+
+                                                else if(ingredient == "cup"){
+                                                    clearToolbar(toolbarsearchEngine)
+                                                    addSearchVertex("1 cup", '/images/ingredients/measurement/scoop.png/', 60,80, 'measurement2')
+                                                }
+
+                                                else if(ingredient == "cup"){
+                                                    clearToolbar(toolbarsearchEngine)
+                                                    addSearchVertex("1 cup", '/images/ingredients/measurement/cup.png/', 60,80, 'measurement3')
+                                                }
+
+                                                else if(ingredient == "ruler"){
+                                                    clearToolbar(toolbarsearchEngine)
+                                                    addSearchVertex("1 inch", '/images/ingredients/measurement/ruler.png/', 60,80, 'measurement4')
+                                                }
+
+                                                else{
+                                                    clearToolbar(toolbarsearchEngine)
+                                                    addSearchVertex("300g", dir, 60,80, catLowerCase+length)
+                                                }
+                                        }
+
+                                        else{
+                                            //$("#noResults").empty()
+                                            clearToolbar(toolbarsearchEngine)
+                                            $("#noResults").append("</br> There are no results to be found ")
+                                            //$("#noResults").empty()
+
+                                        }
 
                                             
                                     }
