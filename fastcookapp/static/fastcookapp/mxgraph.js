@@ -28,6 +28,24 @@ function setCookie(name,value,days) {
 
     var csrftoken = getCookie('csrftoken');
 
+
+function hideOnClk(id){
+        var cat = document.getElementById("byCategory");
+        var searchEngine = document.getElementById("search");
+
+         if(id == "searchImage"){
+           document.getElementById("categoryImage").style.display="block";
+           document.getElementById(id).style.display="none";
+           cat.style.display = "none";
+           searchEngine.style.display = "block";
+
+         }else{
+           document.getElementById("searchImage").style.display="block";
+           document.getElementById(id).style.display="none";
+           cat.style.display = "block";
+           searchEngine.style.display = "none"
+         }
+      }
   
 
   /*$(document).ready(function(){ 
@@ -41,27 +59,6 @@ function setCookie(name,value,days) {
                 }
               });
         });*/
-
-    function hideOnClk(id){
-        var cat = document.getElementById("byCategory");
-        var searchEngine = document.getElementById("search");
-
-         if(id == "searchImage"){
-           document.getElementById("categoryImage").style.display="block";
-           document.getElementById(id).style.display="none";
-           cat.style.display = "none";
-           searchEngine.style.display = "block";
-         }else{
-           document.getElementById("searchImage").style.display="block";
-           document.getElementById(id).style.display="none";
-           cat.style.display = "block";
-
-         }
-      }
-
-
-
-
 
 
         function mxIconSet(state)
@@ -261,6 +258,11 @@ function main()
             }
             else
             {
+
+
+                var searchToolbar = document.getElementById("searchToolbar");
+                var toolbarsearchEngine = new mxToolbar(searchToolbar);
+                toolbarsearchEngine.enabled = false
 
 
                 var topToolbar = document.getElementById('toolbarContainer')
@@ -1382,22 +1384,23 @@ function main()
                                         'searchEngine': $('#searchEngine').val()
                                         },
                                     success: function(data){
+                                            
 
 
+                                            document.getElementById("noResults").innerHTML = "";
                                             var json = JSON.parse(data)
                                             console.log(json)
-                                            var length = json['length']
+                                            
                                             //console.log(length)
-                                            var directory = json['file_direc']
                                             //console.log(directory)
                                             //alert("test")
-                                            var searchToolbar = document.getElementById("searchToolbar");
-                                            var result = json['results']
-
-                                            var toolbarsearchEngine = new mxToolbar(searchToolbar);
-                                            toolbarsearchEngine.enabled = false
+                                            var result = json[0]['results']
+                                            console.log(result)
 
 
+                                            /*$( "#searchEngine" ).autocomplete({
+                                                    source: json
+                                                });*/
 
                                             var addSearchVertex = function(label, icon, w, h, style)
                                             {
@@ -1411,6 +1414,9 @@ function main()
 
                                             if(result){
 
+                                                var length = json[0]['length']
+                                                var directory = json[0]['file_direc']
+
 
                                                 document.getElementById("noResults").innerHTML = "";
                                                 var dir = directory.replace(/fastcookapp/,'');
@@ -1418,13 +1424,6 @@ function main()
                                                 var ingredient = dir.split('/')[4]
                                                 ingredient = ingredient.replace('.png','')
                                                 var catLowerCase = cat.toLowerCase()
-
-                                                
-                                                //addSearchVertex("1 tbsp", dir, 60,80, catLowerCase+"0")
-
-                                                //addSearchVertex("1 tbsp", dir, 60,80, catLowerCase+length)
-
-                                                //console.log(length)
 
 
                                                 if(catLowerCase == "equipment"){
@@ -1485,6 +1484,13 @@ function main()
 
                          
                      });
+
+                                $(document).ready(function()
+                                            {
+                                               $('#categoryImage').on('click',function(event){
+                                                        clearToolbar(toolbarsearchEngine)
+                                                }) 
+                                            })
 
 
 

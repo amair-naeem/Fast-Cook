@@ -464,7 +464,9 @@ def search(request, user):
         for file in files:
             if file.endswith('.png'):
                 search = file.replace(".png","")
-                if name == search:
+                lowercaseName = name.lower()
+                print(lowercaseName)
+                if lowercaseName == search:
                     root = os.path.join(root)
                     file_direc = str(root) + str("/"+name) + ".png"
                     equipment = os.listdir(root)
@@ -473,9 +475,9 @@ def search(request, user):
                     count = 0
                     for file in equipment:
                         count+=1
-                        if search == name:
+                        if search == lowercaseName:
                             print(count)
-                            return JsonResponse({'length':count-1, 'file_direc': file_direc, 'results': True})
+                            return JsonResponse([{'length':count-1, 'file_direc': file_direc, 'results': True}], safe = False)
 
                 #print(file)
                 """if name == file:
@@ -483,7 +485,7 @@ def search(request, user):
                 else:
                     print("no")"""
                 #print(os.path.join(root, file))
-    return JsonResponse({'results': False})
+    return JsonResponse([{'results': False}], safe = False)
 
 def autocompleteModel(request):
     if request.is_ajax():
