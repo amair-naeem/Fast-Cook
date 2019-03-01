@@ -46,6 +46,56 @@ function hideOnClk(id){
            searchEngine.style.display = "none"
          }
       }
+
+      var onStar = 0;
+
+      $(document).ready(function(){
+  
+          /* 1. Visualizing things on Hover - See next part for action on click */
+          $('#stars li').on('mouseover', function(){
+            var onStar = parseInt($(this).data('value'), 10); // The star currently mouse on
+           
+            // Now highlight all the stars that's not after the current hovered star
+            $(this).parent().children('li.star').each(function(e){
+              if (e < onStar) {
+                $(this).addClass('hover');
+              }
+              else {
+                $(this).removeClass('hover');
+              }
+            });
+            
+          }).on('mouseout', function(){
+            $(this).parent().children('li.star').each(function(e){
+              $(this).removeClass('hover');
+            });
+          });
+          
+          
+          /* 2. Action to perform on click */
+          $('#stars li').on('click', function(){
+            onStar = parseInt($(this).data('value'), 10); // The star currently selected
+            // pass onstar to value of share.
+            var stars = $(this).parent().children('li.star');
+            
+            for (i = 0; i < stars.length; i++) {
+              $(stars[i]).removeClass('selected');
+            }
+            
+            for (i = 0; i < onStar; i++) {
+              $(stars[i]).addClass('selected');
+            }
+            
+            
+          });
+  
+  
+    });
+
+
+
+
+
   
 
   /*$(document).ready(function(){ 
@@ -1417,6 +1467,7 @@ function main()
                                                 var length = json[0]['length']
                                                 var directory = json[0]['file_direc']
 
+                                                console.log(length)
 
                                                 document.getElementById("noResults").innerHTML = "";
                                                 var dir = directory.replace(/fastcookapp/,'');
@@ -1427,48 +1478,55 @@ function main()
 
 
                                                 if(catLowerCase == "equipment"){
-                                                    clearToolbar(toolbarsearchEngine)
+                                                    clearToolbar()
                                                     addSearchVertex("60 minutes", dir, 60,80, catLowerCase+length)
 
                                                 }
                                                     
 
                                                 else if(ingredient == "tablespoon"){
-                                                    clearToolbar(toolbarsearchEngine)
+                                                    clearToolbar()
                                                     addSearchVertex("1 tbsp", '/images/ingredients/measurement/tablespoon.png/', 60,80, 'measurement0')
 
                                                 }
 
 
                                                 else if(ingredient == "teaspoon"){
-                                                    clearToolbar(toolbarsearchEngine)
+                                                    clearToolbar()
                                                     addSearchVertex("1 tsp", '/images/ingredients/measurement/teaspoon.png/', 60,80, 'measurement1')
                                                 }
 
                                                 else if(ingredient == "cup"){
-                                                    clearToolbar(toolbarsearchEngine)
+                                                    clearToolbar()
                                                     addSearchVertex("1 cup", '/images/ingredients/measurement/scoop.png/', 60,80, 'measurement2')
                                                 }
 
                                                 else if(ingredient == "cup"){
-                                                    clearToolbar(toolbarsearchEngine)
+                                                    clearToolbar()
                                                     addSearchVertex("1 cup", '/images/ingredients/measurement/cup.png/', 60,80, 'measurement3')
                                                 }
 
                                                 else if(ingredient == "ruler"){
-                                                    clearToolbar(toolbarsearchEngine)
+                                                    clearToolbar()
                                                     addSearchVertex("1 inch", '/images/ingredients/measurement/ruler.png/', 60,80, 'measurement4')
                                                 }
 
                                                 else{
-                                                    clearToolbar(toolbarsearchEngine)
+                                                    //clearToolbar()
+                                                    /*toolbarsearchEngine = new mxToolbar(searchToolbar);
+                                                    toolbarsearchEngine.enabled = false*/
+                                                    console.log(catLowerCase+length)
+                                                    clearToolbar()
                                                     addSearchVertex("300g", dir, 60,80, catLowerCase+length)
+                                                    
+                                                    //toolbarsearchEngine.destroy()
                                                 }
                                         }
 
                                         else{
                                             //$("#noResults").empty()
-                                            clearToolbar(toolbarsearchEngine)
+                                            //clearToolbar(toolbarsearchEngine)
+                                            clearToolbar()
                                             $("#noResults").append("</br> There are no results to be found ")
                                             //$("#noResults").empty()
 
@@ -1488,7 +1546,9 @@ function main()
                                 $(document).ready(function()
                                             {
                                                $('#categoryImage').on('click',function(event){
-                                                        clearToolbar(toolbarsearchEngine)
+                                                        clearToolbar()
+
+
                                                 }) 
                                             })
 
@@ -1549,12 +1609,18 @@ function main()
             hiddenId.setAttribute("value", $("#idOfGraph").val());
             form.appendChild(hiddenId)
 
+            var rating = document.createElement("input")
+            rating.setAttribute("type", "hidden")
+            rating.setAttribute("name", "rating")
+            rating.setAttribute("value", onStar)
+            form.appendChild(rating)
+
             for(var key in params) {
                 if(params.hasOwnProperty(key)) {
                     var hiddenField = document.createElement("input");
                     hiddenField.setAttribute("type", "hidden");
                     hiddenField.setAttribute("name", key);
-                    console.log(key)
+                    //console.log(key)
                     hiddenField.setAttribute("value", params[key]);
 
                     form.appendChild(hiddenField);
@@ -1811,14 +1877,36 @@ function main()
             topToolbar.appendChild(button);
         };
 
-        function clearToolbar(toolbar)
+        function clearToolbar()
         {
-            toolbar = new mxToolbar(searchToolbar);
-            toolbar.enabled = false
-            var mxToolbarModes = document.querySelectorAll('.mxToolbarMode');
+            //
+            //toolbar = new mxToolbar(searchToolbar);
+            //toolbar.enabled = false
+
+
+
+            //toolbarsearchEngine = new mxToolbar(searchToolbar);
+            //toolbarsearchEngine.enabled = false
+            var mxToolbarModes = $('#searchToolbar').find('.mxToolbarMode')
             Array.prototype.forEach.call( mxToolbarModes, function( node ) {
-                node.parentNode.removeChild( node );
+                
+                    //console.log(mxToolbarModes[0])
+                    node.parentNode.removeChild( node );
+                
+                //node.parentNode.removeChild( node );
+                //mxToolbarModes[0].parentNode.removeChild(mxToolbarModes[0]);
+
+                //
             });
+
+
+
+
+            /*var nodes = document.querySelectorAll('.mxToolbarMode');
+            var first = nodes[0];
+            var last = nodes[nodes.length- 1];
+            last.parentNode.removeChild( last );
+            console.log(nodes.length)*/
         }
 
 

@@ -56,19 +56,19 @@ def loggedin(view):
 # Homepage
 @loggedin
 def home(request,user):
-
-	if request.method == 'POST':
-		xmlData = request.POST['sharedXMLData']
-		graphId = request.POST['currentGraphId']
-		shareGraph = XMLGraph.objects.get(id=graphId)
+    if request.method == 'POST':
+        xmlData = request.POST['sharedXMLData']
+        graphId = request.POST['currentGraphId']
+        rating = request.POST['rating']
+        shareGraph = XMLGraph.objects.get(id=graphId)
 		#request.session['sharedXMLGraph'] = xmlData
 		#messages.add_message(request, messages.INFO, xmlData)
-		shareGraph.XMLGraph = xmlData
-		shareGraph.save()
-		return redirect('share', random_url=shareGraph.random_url, id=graphId)
+        shareGraph.XMLGraph = xmlData
+        shareGraph.save()
+        return redirect('share', random_url=shareGraph.random_url, id=graphId, rating = rating)
 
-	graphTitle = XMLGraph.objects.filter(user=user).values('title','id')
-	graph  = XMLGraph.objects.filter(user=user).values('XMLGraph')
+    graphTitle = XMLGraph.objects.filter(user=user).values('title','id')
+    graph  = XMLGraph.objects.filter(user=user).values('XMLGraph')
 	#graphTitle = XMLGraph.objects.filter(user=user)
     
     #print(graphTitle)
@@ -79,8 +79,8 @@ def home(request,user):
     #return render(request, 'fastcookapp/index.html', {'xml': json.dumps(member.XMLGraph)})
     #for xmlData in member.XMLGraph.all():
         #return render(request, 'fastcookapp/index.html', {'xml': json.dumps(xmlData.XMLGraph),'title': member.title.all()})
-	title = json.dumps(list(graphTitle))
-	return JsonResponse({'title':title})
+    title = json.dumps(list(graphTitle))
+    return JsonResponse({'title':title})
 	#return render(request, 'fastcookapp/index.html', {'xml': json.dumps(str(graph)), 'title':graphTitle})
 
 @loggedin
@@ -403,14 +403,15 @@ def shareGraph(request, user):
 
 	return render(request, 'fastcookapp/index.html')"""
 
-def share(request, random_url, id):
+def share(request, random_url, id, rating):
 	#xmlData = request.POST['sharedXMLData']
 	#print(str(request.POST['sharedXMLData']))
 	xmlGraph = XMLGraph.objects.get(id=id)
-	print("test" + str(xmlGraph.XMLGraph))
+	#print("test" + str(xmlGraph.XMLGraph))
 	context = {
         "article": get_list_or_404(XMLGraph, random_url=random_url),
-        "graph": xmlGraph.XMLGraph
+        "graph": xmlGraph,
+        "rating": rating
         #'xmlData': xmlData,
     }
 
@@ -465,19 +466,23 @@ def search(request, user):
             if file.endswith('.png'):
                 search = file.replace(".png","")
                 lowercaseName = name.lower()
-                print(lowercaseName)
+                #print(lowercaseName)
                 if lowercaseName == search:
                     root = os.path.join(root)
                     file_direc = str(root) + str("/"+name) + ".png"
                     equipment = os.listdir(root)
                     equipment = list(filter(lambda fname: os.path.basename(fname) != 'Thumbs.db', equipment))
                     size = len(equipment)
-                    count = 0
-                    for file in equipment:
-                        count+=1
-                        if search == lowercaseName:
-                            print(count)
-                            return JsonResponse([{'length':count-1, 'file_direc': file_direc, 'results': True}], safe = False)
+                    #count = 0
+                    #print(file)
+                    count = equipment.index(file)
+                    return JsonResponse([{'length':count, 'file_direc': file_direc, 'results': True}], safe = False)
+
+                    """for file in equipment:
+                        #print(file)
+                        count= count + 1
+                        if search == lowercaseName: """                          
+                            #print(count)
 
                 #print(file)
                 """if name == file:
@@ -486,17 +491,3 @@ def search(request, user):
                     print("no")"""
                 #print(os.path.join(root, file))
     return JsonResponse([{'results': False}], safe = False)
-
-def autocompleteModel(request):
-    if request.is_ajax():
-        q = request.GET.get('term', '').capitalize()
-        search_qs = MODEL.objects.filter(name__startswith=q)
-        results = []
-        print(q)
-        for r in search_qs:
-            results.append(r.FIELD)
-        data = json.dumps(results)
-    else:
-        data = 'fail'
-    mimetype = 'application/json'
-    return HttpResponse(data, mimetype)

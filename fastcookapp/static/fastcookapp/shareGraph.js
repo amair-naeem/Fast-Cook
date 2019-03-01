@@ -1,4 +1,5 @@
 
+
 function main()
         {            
             // Defines an icon for creating new connections in the connection handler.
@@ -9,6 +10,26 @@ function main()
 
             //mxPopupMenu.prototype.addItem = function(</td><td class=PParameter nowrap>title,</td></tr><tr><td></td><td class=PParameter nowrap>image,</td></tr><tr><td></td><td class=PParameter nowrap>funct,</td></tr><tr><td></td><td class=PParameter nowrap>parent,</td></tr><tr><td></td><td class=PParameter nowrap>iconCls,</td></tr><tr><td></td><td class=PParameter nowrap>enabled</td><td class=PAfterParameters nowrap>)
             //console.log(mxPopupMenu.prototype.itemCount)
+
+            $(document).ready(function(){
+  
+          
+          /* 2. Action to perform on click */
+          
+            onStar = parseInt($(this).data('value'), 10); // The star currently selected
+            // pass onstar to value of share.
+
+            var stars = $('#stars li').parent().children('li.star');
+            
+            
+            
+            for (i = 0; i < $("#rating").val(); i++) {
+              $(stars[i]).addClass('selected');
+            }
+            
+            
+          });
+
 
             $('#share').on('click',function(event){
                 var encoder = new mxCodec();
@@ -91,7 +112,7 @@ function main()
                 type: "GET",
                 url: dir,
                 success: function (data) {
-                    alert("hey")
+                    //alert("hey")
                 //var test = [];
                 for (var i = 3; i >= 0; i--) {
                         style[i] = new Object();
