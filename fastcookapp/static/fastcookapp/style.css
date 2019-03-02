@@ -1,3 +1,25 @@
+
+
+input#currentTitle {
+    margin: 0;
+    padding: 0;
+    font-size: 30px;
+    background: none;
+    border: none;
+    text-overflow: ellipsis;
+    text-align: center;
+
+}
+
+input#currentTitle:focus {
+  outline: none;
+  background: white;
+}
+
+input#currentTitle:hover {
+  background:#F5F5F5;
+}
+
 #square{
 	width: 156px;
     height: 25vw;

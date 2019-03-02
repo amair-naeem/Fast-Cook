@@ -90,7 +90,8 @@ def createNewGraph(request,user):
         if XMLGraph.objects.filter(title=graphTitle22, user=user).exists():
         	graphTitle = XMLGraph.objects.filter(user=user).values('title','id')
         	graph  = XMLGraph.objects.filter(user=user).values('XMLGraph')
-        	return render(request, 'fastcookapp/profile.html', {'xml': json.dumps(str(graph)), 'title':graphTitle, 'overwrite': True})
+        	return render(request, 'fastcookapp/profile.html', {'xml': json.dumps(str(graph)), 'title':graphTitle, 
+                'error': str(graphTitle22) + ' already exists, please use another title'})
         
         saveNewGraph = XMLGraph.objects.create(user=user, title=graphTitle22)
 
@@ -99,7 +100,7 @@ def createNewGraph(request,user):
         xml = XMLGraph.objects.filter(id = saveNewGraph.id).only('id', 'title', 'XMLGraph')
 
 
-        return render(request, 'fastcookapp/index.html', {'xmlData': xml, 'overwrite': True}) #'xml': json.dumps(str(graph)), 'title':graphTitle, 'newGraphTitle': graphTitle22, 'overwrite': True})
+        return render(request, 'fastcookapp/index.html', {'xmlData': xml, 'overwrite': False}) #'xml': json.dumps(str(graph)), 'title':graphTitle, 'newGraphTitle': graphTitle22, 'overwrite': True})
         #return render(request, 'fastcookapp/index.html', {'titleOfGraph': graphTitle22})
 
 @loggedin

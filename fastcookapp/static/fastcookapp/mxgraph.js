@@ -94,23 +94,6 @@ function hideOnClk(id){
 
 
 
-
-
-  
-
-  /*$(document).ready(function(){ 
-            $("#txtSearch").autocomplete({
-                source: "/ajax_calls/search/",
-                minLength: 2,
-                open: function(){
-                    setTimeout(function () {
-                        $('.ui-autocomplete').css('z-index', 99);
-                    }, 0);
-                }
-              });
-        });*/
-
-
         function mxIconSet(state)
         {
             this.images = [];
@@ -315,7 +298,7 @@ function main()
                 toolbarsearchEngine.enabled = false
 
 
-                var topToolbar = document.getElementById('toolbarContainer')
+                var topToolbar = document.getElementById('toptoolbar')
 
                 /*var toolbarContainer = document.getElementById('toolbarContainer')
                 var toolbarContainer = new mxToolbar(content);
@@ -668,7 +651,7 @@ function main()
                 // toolbar buttons.
                 var spacer = document.createElement('div');
                 spacer.style.display = 'inline';
-                spacer.style.padding = '85px';
+                spacer.style.paddingRight = '160px';
                 
                 topToolbar.appendChild(spacer.cloneNode(true));
 
@@ -922,7 +905,7 @@ function main()
                             dec.decode(node, graph.getModel());
 
                             //$("#test").append(title)
-                            $("#currentTitle").val(title)
+                            $("#currentTitle").attr('value',title)
 
                             var id = parseInt(openUrl.match(/\d+/),10)
                             $("#idOfGraph").val(id)
@@ -1114,7 +1097,7 @@ function main()
                                         graph.removeCells(graph.getChildVertices(graph.getDefaultParent()))
                                         graph.selectChildCell();
                                         graph.removeCells();
-                                        $("#currentTitle").val(title)
+                                        $("#currentTitle").attr('value',title)
                                     }
                                 },
                         });
@@ -1238,7 +1221,7 @@ function main()
 
                             else
                             {
-                                $("#currentTitle").val(title)
+                                $("#currentTitle").attr('value', title)
                                 $("#idOfGraph").val(parseData["id"])
                             }
                         }
@@ -1380,7 +1363,7 @@ function main()
 
                                 if(!$("#currentTitle").val())
                                 {
-                                    $("#currentTitle").val($("#openedGraphTitle").val())
+                                    $("#currentTitle").attr('value', $("#openedGraphTitle").val())
 
                                 }
 
@@ -1448,9 +1431,7 @@ function main()
                                             console.log(result)
 
 
-                                            /*$( "#searchEngine" ).autocomplete({
-                                                    source: json
-                                                });*/
+                                           
 
                                             var addSearchVertex = function(label, icon, w, h, style)
                                             {

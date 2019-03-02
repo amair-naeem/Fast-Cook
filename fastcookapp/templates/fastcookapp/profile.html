@@ -42,7 +42,8 @@
         <!-- Modal body -->
         <div class="modal-body">
         <form method = "POST" action = "{% url 'create' %}">
-           <input type="text" name="graphTitle22" id="graphTitle">
+           <input type="text" name="graphTitle22" id="graphTitle" maxlength = "50">
+           <p id = "error" style="color: red"> {{error}} </p>
         </div>
      
           <!-- Modal footer -->
@@ -65,24 +66,28 @@
 </div>
     
 
-    {% if overwrite %}
 
-    <script type="text/javascript">
+<script type="text/javascript">
 
-      $(window).on('load',function(){
-          $('#createNewGraph').modal('show');
-        });
+  $(window).on('load',function(){
+      $('#createNewGraph').modal('show');
 
-      $("#test123").click(function (event){
-        //console.log($("#graphTitle").val())
-        alert($("#graphTitle").val() + " is already taken")
+    });
 
+  $(".newGraph").click(function (event){
+      document.getElementById('error').innerHTML = "";
 
-      })
-        
-    </script>
+  })
 
-    {% endif %}
+  $(document).on("keydown","#graphTitle" ,function(evt){
+     var firstChar = $("#graphTitle").val()
+     if(evt.keyCode == 32 && firstChar == ""){
+      return false;
+     }
+});
+    
+</script>
+
 
 
 {% endblock %}

@@ -14,7 +14,9 @@
   var openXML = {{openXML | safe}}
 </script> -->
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+ 
 
 <script src="{% static 'fastcookapp/mxgraph.js' %}"></script> 
 <script src="{% static 'fastcookapp/newGraph.js' %}"></script> 
@@ -34,6 +36,26 @@ window.onload = function(){
 
 
 </head>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Navbar</a>
+  <ul class="navbar-nav mr-auto">
+    <li class="nav-item">
+      <input class = "nav-link" type='button' id = "currentTitle" maxlength = "50" type="text" name="currentTitle" value="{{newGraphTitle}}" data-toggle="modal" data-target="#saveTitleModal" readonly >
+    </li>
+  </ul>
+  <ul class="navbar-nav ml-auto">
+    <li class="nav-item">
+      <a class="nav-link"href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#"><span class="glyphicon glyphicon-log-in"></span> Help</a></li>
+    </li>
+  </ul>
+</nav>
 
 
 <div id = "toolbar" style="overflow:scroll; left: 0px; top: 95px; width: 200px; bottom: 36px;">
@@ -125,9 +147,9 @@ window.onload = function(){
   </div>-->
 
 
-<div id="toolbarContainer"
+<!--<div id="toolbarContainer"
     style="position:absolute;white-space:nowrap;overflow:hidden;top:65px;left:74px;max-height:24px;height:36px;right:0px;padding:6px;">
-</div>
+</div>-->
 
 
 <!--<div class = "diagramContainer diagramBackdrop" style="right: 10px; left: 200px; top: 60px; bottom: 0px; touch-action: none; overflow: auto;">-->
@@ -142,24 +164,26 @@ window.onload = function(){
   </div> 
 <!--</div>-->
 
-<div id = "test">
+<div id = "changeTitle">
   <form>
 
-{% for xml in xmlData %}
-  <input type = "hidden" id = "idOfGraph" value="{{xml.id}}" name = "graphId" class="currentGraph">
-  <input type="hidden" value="{{xml}}" id="openedGraphxml">
-  <input type="hidden" value="{{xml.title}}" id="openedGraphTitle">
-{% endfor %}
+  {% for xml in xmlData %}
+    <input type = "hidden" id = "idOfGraph" value="{{xml.id}}" name = "graphId" class="currentGraph">
+    <input type="hidden" value="{{xml}}" id="openedGraphxml">
+    <input type="hidden" value="{{xml.title}}" id="openedGraphTitle">
+  {% endfor %}
     
-    <!-- before the value was {{currentTitle}}-->
-    <input id = "currentTitle" type="text" name="currentTitle" value="{{newGraphTitle}}" data-toggle="modal" data-target="#saveTitleModal">
+    
+    <!--<button id = "currentTitle" type="text" name="currentTitle" data-toggle="modal" data-target="#saveTitleModal" > {{newGraphTitle}} </button>-->
 
   </form>
 </div>
 
 <div id = menuBar class="topnav" id="myTopnav">
 
-  <div class="dropdown" id ="toptoolbar">
+  
+
+  <div class = "dropdown" id = "toptoolbar">
   <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     File
   </button>
@@ -175,7 +199,9 @@ window.onload = function(){
     <button class="dropdown-item" type="button" id = "saveButton">Save</button>
     <button class="dropdown-item" type="button" data-toggle="modal" data-target="#saveAsModal">Save as</button>
   </div>
+  
   </div>
+
 
 </div>
 
@@ -289,7 +315,7 @@ window.onload = function(){
         
         <!-- Modal body -->
         <div class="modal-body">
-          <input id = "newTitle" type="text" placeholder="Name" name="newTitle">
+          <input id = "newTitle" type="text" placeholder="Name" name="newTitle" maxlength = "50">
 
         </div>
         

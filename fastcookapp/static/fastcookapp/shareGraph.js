@@ -54,6 +54,8 @@ function main()
                 // using the fastest rendering available on the browser
                 var sharedModel = new mxGraphModel();
                 var sharedEditor = new mxEditor();
+
+                sharedContainer = document.getElementById('sharedContainer');
                 var sharedGraph = new mxGraph(sharedContainer, sharedModel);
                 sharedGraph.dropEnabled = true;
 
@@ -66,7 +68,6 @@ function main()
                 var sharedDiagramContainer = sharedDiagramContainerClass[0]
 
 
-                sharedContainer = document.getElementById('sharedContainer');
                 document.body.appendChild(sharedDiagramContainer);
                 sharedDiagramContainer.appendChild(sharedContainer)
 
