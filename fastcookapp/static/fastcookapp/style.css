@@ -1,4 +1,6 @@
-
+.glyphicon {
+    font-size: 25px;
+}
 
 input#currentTitle {
     margin: 0;
