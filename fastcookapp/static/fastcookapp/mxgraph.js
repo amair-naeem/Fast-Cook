@@ -651,7 +651,7 @@ function main()
                 // toolbar buttons.
                 var spacer = document.createElement('div');
                 spacer.style.display = 'inline';
-                spacer.style.paddingRight = '120px';
+                spacer.style.paddingRight = '115px';
                 spacer.style.borderRight = '2px solid #e0e0e0';
                 spacer.style.borderLeft = '2px solid #e0e0e0';
                 spacer.setAttribute('class', 'verticalDivider');
