@@ -40,7 +40,7 @@ window.onload = function(){
 
 
 <nav class="navbar navbar-expand navbar-light bg-light">
-  <a class="navbar-brand" href="#">Navbar</a>
+  <a class="navbar-brand" href="#"></a>
   <ul class="navbar-nav mx-auto">
     <li class="nav-item"   style="">
       <input class = "nav-link" type='button' id = "currentTitle" maxlength = "50" type="text" name="currentTitle" value="{{newGraphTitle}}" data-toggle="modal" data-target="#saveTitleModal" readonly > 
@@ -77,7 +77,7 @@ window.onload = function(){
   </form>-->
 
 <div id = "searchToolbar">
-<form style = "display: none" id="search" method="POST" action="{% url 'search' %}">
+<form class = "search-container" style = "display: none" id="search" method="POST" action="{% url 'search' %}">
   
   {% csrf_token %}
 
@@ -87,48 +87,69 @@ window.onload = function(){
 </form>
 </div>
 
+
   <div id = "byCategory">
-  <button class="collapsible ">Equipment</button>
+  <button class="collapsible ">Equipment  
+    <img class = "buttonIcons" src="/images/ingredients/Equipment/microwave.png" height="40px" width="40px"> </button>
 
   <div id = "generalContent"></div>
 
-  <button class="collapsible">Measurement</button>
+  <button class="collapsible">Measurement 
+    <img class = "buttonIcons" src="/images/ingredients/Measurement/tablespoon.png" height="40px" width="40px"> </button>
 
   <div id = "measurement"></div>
 
-  <button class="collapsible">Bakery</button>
+  <button class="collapsible">Bakery
+     <img class = "buttonIcons" src="/images/ingredients/Bakery/naan.png" height="40px" width="40px">
+  </button>
 
   <div id = "content"></div>
 
-  <button class = "collapsible"> Berries </button>
+  <button class = "collapsible"> Berries 
+    <img class = "buttonIcons" src="/images/ingredients/Berries/grapes.png" height="40px" width="40px">
+  </button>
 
   <div id = "berries"></div>
 
-  <button class = "collapsible"> Dairies </button>
+  <button class = "collapsible"> Dairies 
+    <img class = "buttonIcons" src="/images/ingredients/Dairies/milk.png" height="40px" width="40px">
+  </button>
 
   <div id = "dairies"></div>
 
-  <button class = "collapsible"> Fruits </button>
+  <button class = "collapsible"> Fruits 
+    <img class = "buttonIcons" src="/images/ingredients/Fruits/orange.png" height="40px" width="40px">
+  </button>
 
   <div id = "fruits"></div>
 
-  <button class = "collapsible"> Meat </button>
+  <button class = "collapsible"> Meat 
+    <img class = "buttonIcons" src="/images/ingredients/Meat/jamon.png" height="40px" width="40px">
+  </button>
 
   <div id = "meat"></div>
 
-  <button class = "collapsible"> Nut </button>
+  <button class = "collapsible"> Nut 
+    <img class = "buttonIcons" src="/images/ingredients/Nut/peanuts.png" height="40px" width="40px">
+  </button>
 
   <div id = "nut"></div>
 
-  <button class = "collapsible"> Vegetables </button>
+  <button class = "collapsible"> Vegetables 
+    <img class = "buttonIcons" src="/images/ingredients/Vegetables/beet.png" height="40px" width="40px">
+  </button>
 
   <div id = "vegetables"></div>
 
-  <button class = "collapsible"> Seafood </button>
+  <button class = "collapsible"> Seafood 
+    <img class = "buttonIcons" src="/images/ingredients/Seafood/octopus.png" height="40px" width="40px">
+  </button>
 
   <div id = "seafood"></div>
 
-  <button class = "collapsible"> Other </button>
+  <button class = "collapsible"> Other 
+    <img class = "buttonIcons" src="/images/ingredients/Other/eggs.png" height="40px" width="40px">
+  </button>
 
   <div id = "other"></div>
 
@@ -190,7 +211,7 @@ window.onload = function(){
       File
     </button>
 
-    <button id = "share" data-toggle="modal" data-target="#shareModal">Share</button>
+    <button id = "shareButton" data-toggle="modal" data-target="#shareModal">Share</button>
     <!--<form action="{% url 'share' %}">
         <button id = share type="submit">Share</button>
 

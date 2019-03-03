@@ -651,7 +651,7 @@ function main()
                 // toolbar buttons.
                 var spacer = document.createElement('div');
                 spacer.style.display = 'inline';
-                spacer.style.paddingRight = '115px';
+                spacer.style.paddingRight = '168px';
                 spacer.style.borderRight = '2px solid #e0e0e0';
                 spacer.style.borderLeft = '2px solid #e0e0e0';
                 spacer.setAttribute('class', 'verticalDivider');
@@ -813,32 +813,10 @@ function main()
                 measurementToolbar.addLine();
                 toolbar.addLine();
 
-                var addGeneralVertex = function(icon,w,h,style, value, arrow)
+                var addGeneralVertex = function(icon,w,h,style, value)
                 {
                     
-                    if(arrow == true)
-                    {
-                        
-                       
-                        var edge2 = new mxCell(null, new mxGeometry(0, 0, w, h), 'curved=1;endArrow=classic;html=1;');
-                        var sourceX = edge2.getGeometry();
-                        console.log(sourceX)
-                        //var sourceY = edge2.geometry.y;
-
-                        edge2.geometry.setTerminalPoint(new mxPoint(50, 150), true);
-                        edge2.geometry.setTerminalPoint(new mxPoint(150, 50), false);
-
-                        edge2.geometry.relative = true;
-                        edge2.edge = true;
-
-                        graph.fireEvent(new mxEventObject('cellsInserted', 'cells', [edge2]));
-                        addToolbarItem(graph, generalToolbar, edge2, icon);
-
-
-                    }
-
-                    else
-                    {
+                    
                         var vertex = new mxCell(null, new mxGeometry(0, 0, w, h), style);
 
                         //graph.setConnectable(false)
@@ -848,13 +826,11 @@ function main()
 
                         addToolbarItem(graph, generalToolbar, vertex, icon);
 
-                    }
+                    
 
                 }
 
-                addGeneralVertex('/images/rounded.gif', 100, 40, 'text', "Text", false);
-                addGeneralVertex('/images/block_end.gif', 100, 40, 'connector', null, true);
-
+                addGeneralVertex('/images/text.png', 100, 40, 'text', "Text");
                 generalToolbar.addLine();
                 // To show the images in the outline, uncomment the following code
                 //outln.outline.labelsVisible = true;
