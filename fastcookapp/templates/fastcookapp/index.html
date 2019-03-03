@@ -37,7 +37,9 @@ window.onload = function(){
 
 </head>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+
+<nav class="navbar navbar-expand navbar-light bg-light">
   <a class="navbar-brand" href="#">Navbar</a>
   <ul class="navbar-nav mr-auto">
     <li class="nav-item">
@@ -58,7 +60,7 @@ window.onload = function(){
 </nav>
 
 
-<div id = "toolbar" style="overflow:scroll; left: 0px; top: 95px; width: 200px; bottom: 36px;">
+<div id = "toolbar" style="overflow:scroll; left: 0px; top: 100px; width: 200px; bottom: 36px;">
 
   How would you like to search for ingredients?
   </br>
@@ -85,7 +87,7 @@ window.onload = function(){
 </div>
 
   <div id = "byCategory">
-  <button class="collapsible">Equipment</button>
+  <button class="collapsible ">Equipment</button>
 
   <div id = "generalContent"></div>
 
@@ -153,7 +155,7 @@ window.onload = function(){
 
 
 <!--<div class = "diagramContainer diagramBackdrop" style="right: 10px; left: 200px; top: 60px; bottom: 0px; touch-action: none; overflow: auto;">-->
-  <div id = "container" style="position:absolute;overflow:hidden;top:95px;left:250px;bottom:36px;right:0px;background-image:url('/images/grid.gif');cursor:default;overflow:scroll;">
+  <div id = "container" style="position:absolute;overflow:hidden;top:100px;left:207px;bottom:36px;right:0px;background-image:url('/images/grid.gif');cursor:default;overflow:scroll;">
   <!--border-width: 1px;
   overflow: hidden;
   left: 0px;
@@ -181,26 +183,24 @@ window.onload = function(){
 
 <div id = menuBar class="topnav" id="myTopnav">
 
-  
 
-  <div class = "dropdown" id = "toptoolbar">
-  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    File
-  </button>
+    <div class = "dropdown" id = "toptoolbar" style="top: -13">
+    <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      File
+    </button>
 
-  <button data-toggle="modal" data-target="#shareModal">Share</button>
-  <!--<form action="{% url 'share' %}">
-      <button id = share type="submit">Share</button>
+    <button id = "share" data-toggle="modal" data-target="#shareModal">Share</button>
+    <!--<form action="{% url 'share' %}">
+        <button id = share type="submit">Share</button>
 
-  </form>-->
-  <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-    <button class="dropdown-item" type="button" data-toggle="modal" data-target="#newModal">New</button>
-    <button id = "openXML" class="dropdown-item" type="button" data-toggle="modal" data-target="#openModal">Open</button>
-    <button class="dropdown-item" type="button" id = "saveButton">Save</button>
-    <button class="dropdown-item" type="button" data-toggle="modal" data-target="#saveAsModal">Save as</button>
-  </div>
-  
-  </div>
+    </form>-->
+    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+      <button class="dropdown-item" type="button" data-toggle="modal" data-target="#newModal">New</button>
+      <button id = "openXML" class="dropdown-item" type="button" data-toggle="modal" data-target="#openModal">Open</button>
+      <button class="dropdown-item" type="button" id = "saveButton">Save</button>
+      <button class="dropdown-item" type="button" data-toggle="modal" data-target="#saveAsModal">Save as</button>
+    </div>
+    </div>
 
 
 </div>
@@ -390,8 +390,6 @@ window.onload = function(){
       </div>
     </div>
   </div>
-
-
     
 </html>
 {% endblock %}

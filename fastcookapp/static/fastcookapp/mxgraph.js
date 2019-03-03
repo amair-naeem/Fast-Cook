@@ -651,9 +651,18 @@ function main()
                 // toolbar buttons.
                 var spacer = document.createElement('div');
                 spacer.style.display = 'inline';
-                spacer.style.paddingRight = '160px';
+                spacer.style.paddingRight = '120px';
+                spacer.style.borderRight = '2px solid #e0e0e0';
+                spacer.style.borderLeft = '2px solid #e0e0e0';
+                spacer.setAttribute('class', 'verticalDivider');
+
+
+
                 
                 topToolbar.appendChild(spacer.cloneNode(true));
+
+
+
 
                 addToolbarButton(editor, topToolbar, 'groupOrUngroup', '(Un)group', '/images/group.png');
                 
@@ -673,8 +682,9 @@ function main()
 
                 addToolbarButton(editor, topToolbar, 'delete', 'Delete', '/images/delete2.png');
                 
-                spacer.style.padding = '8px';
+                spacer.style.paddingRight = '40px';
                 topToolbar.appendChild(spacer.cloneNode(true));
+
                 
                 addToolbarButton(editor, topToolbar, 'cut', 'Cut', '/images/cut.png');
                 addToolbarButton(editor, topToolbar, 'copy', 'Copy', '/images/copy.png');
@@ -1833,6 +1843,9 @@ function main()
         function addToolbarButton(editor, topToolbar, action, label, image, isTransparent)
         {
             var button = document.createElement('button');
+
+            button.setAttribute('class', 'toolbarButton');
+
             button.style.fontSize = '10';
             if (image != null)
             {

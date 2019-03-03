@@ -2,6 +2,54 @@
     font-size: 25px;
 }
 
+
+body#mainBody {
+    BACKGROUND-COLOR: whitesmoke;
+}
+
+div#container {
+    background-color: white;
+}
+
+
+div#toptoolbar  {
+    background-color: white;
+    border-bottom: 1px solid #e0e0e0;
+    border-top:  1px solid #e0e0e0;
+}
+
+button#dropdownMenu2 {
+    background: white;
+    
+}
+
+#dropdownMenu2:hover  {
+    background-color: lightgrey
+}
+
+#share:hover  {
+    background-color: lightgrey
+}
+
+#share {
+  height: 20.5;
+  width: 43.27;
+  border-radius: 2px;
+}
+
+.bg-light{
+  background-color: whitesmoke!important;
+}
+
+.toolbarButton, #share {
+  background-color: white; /* Green */
+  border: 2px;
+  color: black;
+  text-align: center;
+  text-decoration: none;
+  font-size: 10px;
+}
+
 input#currentTitle {
     margin: 0;
     padding: 0;
@@ -33,8 +81,8 @@ input#currentTitle:hover {
 }
 
 .collapsible {
-  background-color: #777;
-  color: white;
+  background-color: white;
+  color: black;
   cursor: pointer;
   padding: 18px;
   width: 100%;
@@ -45,7 +93,7 @@ input#currentTitle:hover {
 }
 
 .collapsible:hover {
-  background-color: #555;
+  background-color: #A2A0A0;
 }
 
 #content, #generalContent, #measurement, #berries, 
