@@ -973,8 +973,6 @@ function main()
 
                 //Delete
                 $('#loadAllTitles').on('click','.deleteGraph' ,function(event){
-                    if(confirm("Are you sure you want to delete?"))
-                    {
                         var csrftoken = getCookie('csrftoken');
                         event.preventDefault();
                         var id = $(this).attr('id');
@@ -988,7 +986,6 @@ function main()
                             success: $($(this)).closest("tr").remove()
 
                         })
-                    }
                     
                 }); 
 
