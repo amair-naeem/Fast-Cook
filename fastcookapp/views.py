@@ -105,7 +105,7 @@ def createNewGraph(request,user):
 
 @loggedin
 def profile(request, user):
-    graphTitle = XMLGraph.objects.filter(user=user).values('title','id')
+    graphTitle = XMLGraph.objects.filter(user=user).values('title','id', 'created_at')
     graph  = XMLGraph.objects.filter(user=user).values('XMLGraph')
     return render(request, 'fastcookapp/profile.html', {'xml': json.dumps(str(graph)), 'title':graphTitle})
 

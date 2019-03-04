@@ -36,12 +36,14 @@ class XMLGraph(models.Model):
     XMLGraph = models.TextField(null=True, default='<mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/></root></mxGraphModel>')
     user = models.ForeignKey(to = Member, null=True, on_delete=models.SET_NULL)
     random_url = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    created_at = models.DateTimeField(auto_now_add = True)
+
     #sharedXMLGraph = models.TextField(null=True)
     #slug = models.SlugField(null = True,unique=True,blank=True) 
     #urlhash = models.CharField(max_length=6, null=True, blank=True, unique=True)
 
     def __str__(self):
-        return str(self.XMLGraph)
+        return str(self.title)
 
     #Generate unique slugfield which is overriding djangos method 
     """def save(self, **kwargs):

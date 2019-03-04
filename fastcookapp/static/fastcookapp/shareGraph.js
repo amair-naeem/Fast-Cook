@@ -64,12 +64,15 @@ function main()
                 loadStyleSheet(sharedGraph)
 
 
-                var sharedDiagramContainerClass = document.getElementsByClassName("diagramContainer")
+                /*var sharedDiagramContainerClass = document.getElementsByClassName("diagramContainer")
                 var sharedDiagramContainer = sharedDiagramContainerClass[0]
 
 
                 document.body.appendChild(sharedDiagramContainer);
-                sharedDiagramContainer.appendChild(sharedContainer)
+                sharedDiagramContainer.appendChild(sharedContainer)*/
+
+                
+
 
             }
 

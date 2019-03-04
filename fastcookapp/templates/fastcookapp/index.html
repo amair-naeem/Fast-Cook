@@ -16,7 +16,8 @@
 
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
- 
+    <script src="https://rawgit.com/RickStrahl/jquery-resizable/master/src/jquery-resizable.js"></script>
+
 
 <script src="{% static 'fastcookapp/mxgraph.js' %}"></script> 
 <script src="{% static 'fastcookapp/newGraph.js' %}"></script> 
@@ -33,6 +34,8 @@ window.onload = function(){
 }
 
 </script> 
+
+
 
 
 </head>
@@ -82,6 +85,7 @@ window.onload = function(){
   {% csrf_token %}
 
   <input  type="text" name = "searchEngine" id="searchEngine" placeholder="Type your ingredient here">
+  <button type="submit" id = "searchSubmit" style="display: none;"></button>
   <p id = "noResults"></p>
 
 </form>
@@ -89,7 +93,7 @@ window.onload = function(){
 
 
   <div id = "byCategory">
-  <button class="collapsible ">Equipment  
+  <button class="collapsible " style="border-top: 2px solid #D8D8D8;">Equipment  
     <img class = "buttonIcons" src="/images/ingredients/Equipment/microwave.png" height="40px" width="40px"> </button>
 
   <div id = "generalContent"></div>
@@ -234,7 +238,7 @@ window.onload = function(){
       
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Modal Heading</h4>
+          <h4 class="modal-title">Save as</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         
@@ -265,7 +269,7 @@ window.onload = function(){
       
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Modal Heading</h4>
+          <h4 class="modal-title">Open Graph</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         
@@ -301,7 +305,7 @@ window.onload = function(){
       
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Modal Heading</h4>
+          <h4 class="modal-title">New Graph</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         
@@ -331,7 +335,7 @@ window.onload = function(){
       
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Modal Heading</h4>
+          <h4 class="modal-title">Save Graph</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         
@@ -362,32 +366,33 @@ window.onload = function(){
       
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Modal Heading</h4>
+          <h4 class="modal-title">Share Graph</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         
         <!-- Modal body -->
         <div class="modal-body">
 
+            <h2 style="text-align: center;  font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif; font-size: 20px; "> Recipe difficulty level: </h2>
 
             <section class='rating-widget'>
               
               <!-- Rating Stars Box -->
               <div class='rating-stars text-center'>
                 <ul id='stars'>
-                  <li class='star' title='Poor' data-value='1'>
+                  <li class='star' title='Easy' data-value='1'>
                     <i class='fa fa-star fa-fw'></i>
                   </li>
-                  <li class='star' title='Fair' data-value='2'>
+                  <li class='star' title='Moderate' data-value='2'>
                     <i class='fa fa-star fa-fw'></i>
                   </li>
-                  <li class='star' title='Good' data-value='3'>
+                  <li class='star' title='Hard' data-value='3'>
                     <i class='fa fa-star fa-fw'></i>
                   </li>
-                  <li class='star' title='Excellent' data-value='4'>
+                  <li class='star' title='Challenging' data-value='4'>
                     <i class='fa fa-star fa-fw'></i>
                   </li>
-                  <li class='star' title='WOW!!!' data-value='5'>
+                  <li class='star' title='Professional' data-value='5'>
                     <i class='fa fa-star fa-fw'></i>
                   </li>
                 </ul>

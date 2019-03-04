@@ -18,6 +18,11 @@
 
 }
 
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}
+
 
 input#searchEngine{
 margin: 0 auto;
@@ -89,6 +94,7 @@ margin: 0 auto;
 
 
 
+
 body#mainBody {
     BACKGROUND-COLOR: whitesmoke;
 }
@@ -137,7 +143,7 @@ button#dropdownMenu2 {
   font-size: 10px;
 }
 
-input#currentTitle {
+input#currentTitle, #sharedTitle {
     margin: 0;
     padding: 0;
     font-size: 30px;
@@ -177,6 +183,9 @@ input#currentTitle:hover {
   text-align: left;
   outline: none;
   font-size: 15px;
+  border-bottom: 2px solid #D8D8D8;
+
+
 }
 
 .collapsible:hover {
@@ -267,3 +276,5 @@ input[type="text"] {
 .rating-stars ul > li.star.selected > i.fa {
   color:#FF912C;
 }
+
+

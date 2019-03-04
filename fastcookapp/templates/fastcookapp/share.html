@@ -21,7 +21,7 @@
 	</script> 
 </head>
 
-<p> {{graph.title}} </p>
+<p id = "sharedTitle"> {{graph.title}} </p>
 
 <section class='rating-widget'>
               
@@ -54,15 +54,9 @@
 
 <input type="hidden" name = "xmlData" id = "sharedXMLData" value="{{ graph.XMLGraph }}">
 	
+<div id = "sharedContainer" style="position:absolute;overflow:hidden;top:100px;left:260px;bottom:36px;right:0px;cursor:default;overflow:scroll;"> </div>
 
-<div class = "diagramContainer diagramBackdrop" style="right: 0px; left: 219.25px; top: 95px; bottom: 30px; touch-action: none; overflow: auto;">
-  <div id = "sharedContainer" style="position: absolute;
-  border-width: 1px;
-  overflow: hidden;
-  left: 0px;
-  width: 70%;">
-  </div> 
-</div>
+
 
 </html>
 {% endblock %}
