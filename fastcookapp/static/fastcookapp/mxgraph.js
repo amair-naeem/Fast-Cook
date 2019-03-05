@@ -325,7 +325,7 @@ function main()
                 var measurement = document.getElementById('measurement')
                 var berries = document.getElementById('berries')
                 var dairies = document.getElementById('dairies')
-                var dessert = document.getElementById('dessert')
+                var dessert = document.getElementById('desserts')
                 var dishes = document.getElementById('dishes')
                 var fruits = document.getElementById('fruits')
                 var meat = document.getElementById('meat')
@@ -1342,6 +1342,18 @@ function main()
 
                             }
 
+                           for (var i = 18; i >= 0; i--) {
+                                
+                                addDishesVertex("300g",'/images/ingredients/Dishes/'+ data["dishes"][i] + "/", 60, 80, 'dishes'+i); 
+
+                            }
+
+                           for (var i = 17; i >= 0; i--) {
+                                
+                                addDessertsVertex("300g",'/images/ingredients/Desserts/'+ data["desserts"][i] + "/", 60, 80, 'desserts'+i); 
+
+                            }
+
                         }   
                 });
 
@@ -1796,6 +1808,28 @@ function main()
                         style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
                         graph.getStylesheet().putCellStyle('other' + i, style[i]);
                     }
+
+                    for (var i = 17; i >= 0; i--) {
+                        style[i] = new Object();
+                        style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Desserts/'+ data["desserts"][i] + "/";
+                        style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                        style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                        style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                        graph.getStylesheet().putCellStyle('desserts' + i, style[i]);
+                    }
+
+                    for (var i = 18; i >= 0; i--) {
+                        style[i] = new Object();
+                        style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Dishes/'+ data["dishes"][i] + "/";
+                        style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                        style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                        style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                        graph.getStylesheet().putCellStyle('dishes' + i, style[i]);
+                    }
+
+
 
                     //List all .png file names in the page
                     /*$(data).find("a:contains(" + fileextension + ")").each(function () {

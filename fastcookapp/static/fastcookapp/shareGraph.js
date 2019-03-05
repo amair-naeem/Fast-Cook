@@ -235,6 +235,26 @@ function main()
                         graph.getStylesheet().putCellStyle('seafood' + i, style[i]);
                     }
 
+                    for (var i = 18; i >= 0; i--) {
+                        style[i] = new Object();
+                        style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/dishes/'+ data["dishes"][i] + "/";
+                        style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                        style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                        style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                        graph.getStylesheet().putCellStyle('dishes' + i, style[i]);
+                    }
+
+                    for (var i = 17; i >= 0; i--) {
+                        style[i] = new Object();
+                        style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                        style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/desserts/'+ data["desserts"][i] + "/";
+                        style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                        style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
+                        style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
+                        graph.getStylesheet().putCellStyle('desserts' + i, style[i]);
+                    }
+
                     for (var i = 13; i >= 0; i--) {
                         style[i] = new Object();
                         style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;

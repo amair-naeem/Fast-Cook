@@ -195,7 +195,7 @@ input#currentTitle:hover {
 
 #content, #generalContent, #measurement, #berries, 
 #dairies, #fruits, #meat, #nut, #vegetables,
-#seafood, #fastfood, #other
+#seafood, #fastfood, #other, #dishes, #desserts
 {
   padding: 0 18px;
   display: none;

@@ -453,8 +453,10 @@ def loadIcons(request, user):
     berries = list(filter(lambda fname: os.path.basename(fname) != 'Thumbs.db', berries))
     dairies = os.listdir(path+"Dairies")
     dairies = list(filter(lambda fname: os.path.basename(fname) != 'Thumbs.db', dairies))
-    fastfood = os.listdir(path+"FastFood")
-    fastfood = list(filter(lambda fname: os.path.basename(fname) != 'Thumbs.db', fastfood))
+    desserts = os.listdir(path+"Desserts")
+    desserts = list(filter(lambda fname: os.path.basename(fname) != 'Thumbs.db', desserts))
+    dishes = os.listdir(path+"Dishes")
+    dishes = list(filter(lambda fname: os.path.basename(fname) != 'Thumbs.db', dishes))
     fruits = os.listdir(path+"fruits")
     fruits = list(filter(lambda fname: os.path.basename(fname) != 'Thumbs.db', fruits))
     meat = os.listdir(path+"Meat")
@@ -475,8 +477,8 @@ def loadIcons(request, user):
                 search.append(ingredients)
 
     #print(img_list) 
-    return JsonResponse({'equipment': equipment, 'bakery': bakery, 'berries': berries, 'dairies': dairies, 'fastfood': fastfood,
-        'fruits': fruits, 'meat': meat, 'nut': nut, 'seafood': seafood, 'vegetables': vegetables, 'other': other, 'allFiles': search})
+    return JsonResponse({'equipment': equipment, 'bakery': bakery, 'berries': berries, 'dairies': dairies, 'desserts': desserts,
+        'fruits': fruits, 'meat': meat, 'nut': nut, 'seafood': seafood, 'vegetables': vegetables, 'other': other, 'dishes': dishes, 'allFiles': search})
     """print("1 "+str(glob.glob('fastcookapp/images/icons/*.png')))
     for filename in glob.glob('fastcookapp/images/icons/*.png'): 
         print(filename)
