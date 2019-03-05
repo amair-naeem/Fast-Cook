@@ -170,16 +170,14 @@ function hideOnClk(id){
         };
 
 
- window.onbeforeunload = function() {
-    return "Data will be lost if you leave the page, are you sure?";
-};
+    window.onbeforeunload = function() {
+        return "Data will be lost if you leave the page, are you sure?";
+    };
     
 
-  if (performance.navigation.type == 1) {
-    window.location.href = "/profile/";
-
-    
-  } 
+    if (performance.navigation.type == 1) {
+        window.location.href = "/profile/";
+    } 
 
 
 
