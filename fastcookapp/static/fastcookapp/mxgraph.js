@@ -170,16 +170,20 @@ function hideOnClk(id){
         };
 
 
-    window.onbeforeunload = function() {
-        return "Data will be lost if you leave the page, are you sure?";
-    };
-    
+    var myEvent = window.attachEvent || window.addEventListener;
+    var chkevent = window.attachEvent ? 'onbeforeunload' : 'beforeunload';
 
-    if (performance.navigation.type == 1) {
-        window.location.href = "/profile/";
-    } 
+    myEvent(chkevent, function(e) { 
+        var confirmationMessage = 'Changes that you made may not be saved.';
+        (e || window.event).returnValue = confirmationMessage;
+        return confirmationMessage;
+    });
 
-
+    if (window.performance) {
+      if (performance.navigation.type == 1) {
+        window.location.href = "/profile/"
+      } 
+    }
 
 function main()
         {
