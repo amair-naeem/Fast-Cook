@@ -170,6 +170,18 @@ function hideOnClk(id){
         };
 
 
+ window.onbeforeunload = function() {
+    return "Data will be lost if you leave the page, are you sure?";
+};
+    
+
+  if (performance.navigation.type == 1) {
+    window.location.href = "/profile/";
+
+    
+  } 
+
+
 
 function main()
         {
@@ -897,6 +909,8 @@ function main()
 
                             var id = parseInt(openUrl.match(/\d+/),10)
                             $("#idOfGraph").val(id)
+
+
                             
                         }
                     });
@@ -973,25 +987,25 @@ function main()
 
                 //Delete
 
+
                 $('#loadAllTitles').on('click','.deleteGraph' ,function(event){
-                    event.preventDefault();
-                         
-                    
-               
-                        var csrftoken = getCookie('csrftoken');
-                        event.preventDefault();
-                        var id = $(this).attr('id');
-                        var $tr = $(this).closest('tr');
 
-                        $.ajax({
-                            type: "DELETE",
-                            url: id, 
-                            headers:{
-                                    "X-CSRFToken": csrftoken
-                                    },
-                            success: $($(this)).closest("tr").remove()
+                        if (confirm("Are you sure ?")) {
+                            var csrftoken = getCookie('csrftoken');
+                            event.preventDefault();
+                            var id = $(this).attr('id');
+                            var $tr = $(this).closest('tr');
 
-                        })
+                            $.ajax({
+                                type: "DELETE",
+                                url: id, 
+                                headers:{
+                                        "X-CSRFToken": csrftoken
+                                        },
+                                success: $($(this)).closest("tr").remove()
+
+                            })
+                        }
                     
                 });
 
@@ -1335,71 +1349,71 @@ function main()
 
             
 
-            $.ajax({
-                    
-                        type: "GET",
-                        url: "/home/",
-                        dataType: 'text',
-                        success: function(data){
-                            var json = JSON.parse(data)
-                            var items = json["title"]
-                            var parseItems = JSON.parse(items)
-                            var length = parseItems.length
-                            
+                $.ajax({
+                        
+                            type: "GET",
+                            url: "/home/",
+                            dataType: 'text',
+                            success: function(data){
+                                var json = JSON.parse(data)
+                                var items = json["title"]
+                                var parseItems = JSON.parse(items)
+                                var length = parseItems.length
+                                
 
-                            console.log(length)
+                                console.log(length)
 
-                            for (var i = length - 1; i >= 0; i--) {
+                                for (var i = length - 1; i >= 0; i--) {
 
-                                var title = parseItems[i]["title"]
-                                var pkTitle = "/openGraph/" + parseItems[i]["id"]
-                                var pkDelete = "/deleteGraph/" + parseItems[i]["id"]
-
-
-                                var titleButton="<input type=\"button\" class = \"openGraph btn btn-success btn-lg \" value=\""+title+"\" id="+pkTitle+"/\>";
+                                    var title = parseItems[i]["title"]
+                                    var pkTitle = "/openGraph/" + parseItems[i]["id"]
+                                    var pkDelete = "/deleteGraph/" + parseItems[i]["id"]
 
 
-                                var deleteButton= "<input type=\"button\" class = \"deleteGraph btn btn-danger btn-lg \" value=\"Delete\" onclick=\"confirm()\" id="+pkDelete+"/\>";
+                                    var titleButton="<input type=\"button\" class = \"openGraph btn btn-success btn-lg \" value=\""+title+"\" id="+pkTitle+"/\>";
 
-                                if(!$("#currentTitle").val())
-                                {
-                                    $("#currentTitle").attr('value', $("#openedGraphTitle").val())
 
+                                    var deleteButton= "<input type=\"button\" class = \"deleteGraph btn btn-danger btn-lg \" value=\"Delete\" onclick=\"confirm()\" id="+pkDelete+"/\>";
+
+                                    if(!$("#currentTitle").val())
+                                    {
+                                        $("#currentTitle").attr('value', $("#openedGraphTitle").val())
+
+                                    }
+
+                                    /*if (!$("#currentTitle").val())
+                                    {
+                                            $("#currentTitle").val("Untitled graph")
+                                    }*/
+
+                                    $("#graphList").append("<tr> <td>" + titleButton + "</td> <td>" + "</td> <td>" + deleteButton + "</td> </tr>")
+
+                                    
+                                     //if ($("#loadAllTitles").find('#' + $.escapeSelector(pkTitle + '/')).length == 0)
+                                    /*$("#graphButton").append("<td> <input type = button class = openGraph \
+                                        value =" + title + "id=" + id + "> </td> \
+                                        <td> <input type = button class = deleteGraph value = Delete id={% url 'deleteGraph' title=titles.id %}> </td>")*/
                                 }
 
-                                /*if (!$("#currentTitle").val())
-                                {
-                                        $("#currentTitle").val("Untitled graph")
-                                }*/
+                                //alert(xml22)
+                                //alert("hi")
+                                //console.log(graph)
+                                //var xmlDoc = data[0]
 
-                                $("#graphList").append("<tr> <td>" + titleButton + "</td> <td>" + "</td> <td>" + deleteButton + "</td> </tr>")
-
+                                //graph.getModel().beginUpdate();
+                                /*var xmlDoc = mxUtils.parseXml(xml22);
+                                //var xmlDoc = mxUtils.load("/saveData/").getXml();
+                                //console.log("xmlDoc " + xmlDoc)
+                                var node = xmlDoc.documentElement;
+                                //console.log("node " + node)
+                                var dec = new mxCodec(node.ownerDocument);
+                                //console.log("dec " + dec)
+                                //console.log("graph model " + graph.getModel())
+                                dec.decode(node, graph.getModel());
                                 
-                                 //if ($("#loadAllTitles").find('#' + $.escapeSelector(pkTitle + '/')).length == 0)
-                                /*$("#graphButton").append("<td> <input type = button class = openGraph \
-                                    value =" + title + "id=" + id + "> </td> \
-                                    <td> <input type = button class = deleteGraph value = Delete id={% url 'deleteGraph' title=titles.id %}> </td>")*/
+                                //graph.fit()*/
                             }
-
-                            //alert(xml22)
-                            //alert("hi")
-                            //console.log(graph)
-                            //var xmlDoc = data[0]
-
-                            //graph.getModel().beginUpdate();
-                            /*var xmlDoc = mxUtils.parseXml(xml22);
-                            //var xmlDoc = mxUtils.load("/saveData/").getXml();
-                            //console.log("xmlDoc " + xmlDoc)
-                            var node = xmlDoc.documentElement;
-                            //console.log("node " + node)
-                            var dec = new mxCodec(node.ownerDocument);
-                            //console.log("dec " + dec)
-                            //console.log("graph model " + graph.getModel())
-                            dec.decode(node, graph.getModel());
-                            
-                            //graph.fit()*/
-                        }
-                    });
+                        });
 
                         $(document).ready(function(){ 
                         $('#searchSubmit').on('click',function(event){
