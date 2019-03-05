@@ -85,7 +85,7 @@ def logout(request,user):
     request.session.flush()
     return redirect("/")
 
-@loggedin
+"""@loggedin
 def createNewGraph(request,user):
     if request.method == 'POST':
         graphTitle22 = request.POST['graphTitle22']
@@ -103,13 +103,33 @@ def createNewGraph(request,user):
 
 
         return render(request, 'fastcookapp/index.html', {'xmlData': xml, 'overwrite': False}) #'xml': json.dumps(str(graph)), 'title':graphTitle, 'newGraphTitle': graphTitle22, 'overwrite': True})
-        #return render(request, 'fastcookapp/index.html', {'titleOfGraph': graphTitle22})
+        #return render(request, 'fastcookapp/index.html', {'titleOfGraph': graphTitle22})"""
 
 @loggedin
 def profile(request, user):
+    if request.method == 'POST':
+        
+        graphTitle22 = request.POST['graphTitle22']
+        
+        if XMLGraph.objects.filter(title=graphTitle22, user=user).exists():
+            graphTitle = XMLGraph.objects.filter(user=user).values('title','id', 'created_at')
+            graph  = XMLGraph.objects.filter(user=user).values('XMLGraph')
+            messages.add_message(request, messages.INFO, str(graphTitle22) + ' already exists, please use another title')
+
+            return render(request, 'fastcookapp/profile.html', {'xml': json.dumps(str(graph)), 'title':graphTitle, 
+                'error': str(graphTitle22) + ' already exists, please use another title', 'overwrite': True})
+        
+        saveNewGraph = XMLGraph.objects.create(user=user, title=graphTitle22)
+
+        #graphTitle = XMLGraph.objects.filter(user=user).values('title','id')
+        #graph  = XMLGraph.objects.filter(user=user).values('XMLGraph')
+        xml = XMLGraph.objects.filter(id = saveNewGraph.id).only('id', 'title', 'XMLGraph')
+        return render(request, 'fastcookapp/index.html', {'xmlData': xml, 'overwrite': False})
+    
     graphTitle = XMLGraph.objects.filter(user=user).values('title','id', 'created_at')
     graph  = XMLGraph.objects.filter(user=user).values('XMLGraph')
-    return render(request, 'fastcookapp/profile.html', {'xml': json.dumps(str(graph)), 'title':graphTitle})
+    
+    return render(request, 'fastcookapp/profile.html', {'xml': json.dumps(str(graph)), 'title':graphTitle,  'overwrite': False})
 
 # Register view displays login when successful details have been passed
 def register(request):
@@ -423,7 +443,7 @@ def share(request, random_url, id, rating):
 @loggedin
 def loadIcons(request, user):
     #print(str("1 " + os.listdir("fastcookapp/images/")))
-    image_list = []
+    search = []
     path = "fastcookapp/images/ingredients/"
     equipment =os.listdir(path+"equipment")
     equipment = list(filter(lambda fname: os.path.basename(fname) != 'Thumbs.db', equipment))
@@ -448,9 +468,15 @@ def loadIcons(request, user):
     other = os.listdir(path+"other")
     other = list(filter(lambda fname: os.path.basename(fname) != 'Thumbs.db', other))
 
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            if file.endswith('.png'):
+                ingredients = file.replace(".png","")
+                search.append(ingredients)
+
     #print(img_list) 
     return JsonResponse({'equipment': equipment, 'bakery': bakery, 'berries': berries, 'dairies': dairies, 'fastfood': fastfood,
-        'fruits': fruits, 'meat': meat, 'nut': nut, 'seafood': seafood, 'vegetables': vegetables, 'other': other})
+        'fruits': fruits, 'meat': meat, 'nut': nut, 'seafood': seafood, 'vegetables': vegetables, 'other': other, 'allFiles': search})
     """print("1 "+str(glob.glob('fastcookapp/images/icons/*.png')))
     for filename in glob.glob('fastcookapp/images/icons/*.png'): 
         print(filename)

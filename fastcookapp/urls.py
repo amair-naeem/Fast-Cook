@@ -10,7 +10,7 @@ router.register(r'members', views.MemberViewSet)
 
 urlpatterns = [
     
-    path('create/', views.createNewGraph, name='create'),
+    #path('create/', views.createNewGraph, name='create'),
     #homepage
     url(r'^home/', views.home, name="home"),
     # register

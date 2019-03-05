@@ -1266,6 +1266,13 @@ function main()
                             addMeasurementVertex("1 cup", '/images/ingredients/measurement/cup.png/', 60,80, 'measurement3')
                             addMeasurementVertex("1 inch", '/images/ingredients/measurement/ruler.png/', 60,80, 'measurement4')
 
+                            
+
+                            $( "#searchEngine" ).autocomplete({
+                                  source: data["allFiles"]
+                                });
+  
+
                             var addEquipmentVertex = function(label, icon, w, h, style)
                             {
                                 var vertex = new mxCell(label, new mxGeometry(0, 0, w, h), style);

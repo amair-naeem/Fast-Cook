@@ -46,6 +46,7 @@
                 <div class="row">
                     <div class="col-sm-8">
                       <h4> &nbsp; You can create a new graph by clicking <a class = "newGraph" href="" data-toggle="modal" data-target="#createNewGraph">here</a> </h4>
+
                     </div>
                   
                 </div>
@@ -96,9 +97,12 @@
 
         <!-- Modal body -->
         <div class="modal-body">
-        <form method = "POST" action = "{% url 'create' %}">
+        <form method = "POST" action = "{% url 'profile' %}">
            <input type="text" placeholder= "Enter Title" name="graphTitle22" id="graphTitle" maxlength = "50">
-           <p id = "error" style="color: red"> {{error}} </p>
+            </br>
+           {% for message in messages %}
+              <p id = "error" style="color: red; text-align: center;"> {{message}} </p>
+           {%endfor%}
         </div>
      
           <!-- Modal footer -->
@@ -110,6 +114,7 @@
           <button type="submit" class="btn btn-primary" name = "test123" id = "test123">Save</button>
 
           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+
 
 
 
@@ -127,7 +132,8 @@
 <script type="text/javascript">
 
   $(window).on('load',function(){
-      //$('#createNewGraph').modal('show');
+    //$("#error").empty();
+    $('#createNewGraph').modal('show');
 
     });
 
