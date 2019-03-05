@@ -972,11 +972,16 @@ function main()
                 });
 
                 //Delete
+
                 $('#loadAllTitles').on('click','.deleteGraph' ,function(event){
+                         if (confirm("yo")) {
+                    
+               
                         var csrftoken = getCookie('csrftoken');
                         event.preventDefault();
                         var id = $(this).attr('id');
                         var $tr = $(this).closest('tr');
+
                         $.ajax({
                             type: "DELETE",
                             url: id, 
@@ -986,7 +991,7 @@ function main()
                             success: $($(this)).closest("tr").remove()
 
                         })
-                    
+                     }
                 }); 
 
 
@@ -1028,11 +1033,11 @@ function main()
                                 var pkDelete = "/deleteGraph/" + json[length-1]['pk']
 
                                 var titleButton="<input type=\"button\" class = \"openGraph\" value=\""+title+"\" id="+pkTitle+"/\>";
-                                var deleteButton= "<input type=\"button\" class = \"deleteGraph\" value=\"Delete\" id="+pkDelete+"/\>";
+                                var deleteButton= "<input type=\"button\" class = \"deleteGraph trashIcon\" value=\"Delete\" id="+pkDelete+"/\>";
 
                                 
                                  if ($("#loadAllTitles").find('#' + $.escapeSelector(pkTitle + '/')).length == 0)
-                                    $("#loadAllTitles").append("<table> <tr> <td>" + titleButton + "</td> <td>" + deleteButton + "</td> </tr> </table>")
+                                    $("#graphList").append("<tr> <td>" + titleButton + "</td> <td>" + deleteButton + "</td> </tr>")
 
                             }
                         });
@@ -1346,10 +1351,10 @@ function main()
                                 var pkDelete = "/deleteGraph/" + parseItems[i]["id"]
 
 
-                                var titleButton="<input type=\"button\" class = \"openGraph btn btn-success btn-lg\" value=\""+title+"\" id="+pkTitle+"/\>";
+                                var titleButton="<input type=\"button\" class = \"openGraph btn btn-success btn-lg \" value=\""+title+"\" id="+pkTitle+"/\>";
 
 
-                                var deleteButton= "<input type=\"button\" class = \"deleteGraph btn btn-danger btn-lg\" value=\"Delete\" id="+pkDelete+"/\>";
+                                var deleteButton= "<input type=\"button\" class = \"deleteGraph btn btn-danger btn-lg \" value=\"Delete\" id="+pkDelete+"/\>";
 
                                 if(!$("#currentTitle").val())
                                 {
@@ -1362,7 +1367,7 @@ function main()
                                         $("#currentTitle").val("Untitled graph")
                                 }*/
 
-                                $("#loadAllTitles").append("<table> <tr> <td>" + titleButton + "</td> <td>" + "</td> <td>" + deleteButton + "</td> </tr> </table>")
+                                $("#graphList").append("<tr> <td>" + titleButton + "</td> <td>" + "</td> <td>" + deleteButton + "</td> </tr>")
 
                                 
                                  //if ($("#loadAllTitles").find('#' + $.escapeSelector(pkTitle + '/')).length == 0)
