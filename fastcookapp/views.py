@@ -37,9 +37,6 @@ class MemberViewSet(viewsets.ModelViewSet):
     serializer_class = MemberSerializer
         
 
-def index(request):
-    return render(request, 'fastcookapp/ports.html')
-
 # Decorator to test if user logs in
 def loggedin(view):
     def mod_view(request):
@@ -49,7 +46,7 @@ def loggedin(view):
             except Member.DoesNotExist: raise Http404('Member does not exist')
             return view(request, user)
         else:
-            return render(request, 'fastcookapp/index.html')
+            return render(request, 'fastcookapp/login.html')
     return mod_view
 
 
@@ -82,6 +79,11 @@ def home(request,user):
     title = json.dumps(list(graphTitle))
     return JsonResponse({'title':title})
 	#return render(request, 'fastcookapp/index.html', {'xml': json.dumps(str(graph)), 'title':graphTitle})
+
+@loggedin
+def logout(request,user):
+    request.session.flush()
+    return redirect("/")
 
 @loggedin
 def createNewGraph(request,user):
@@ -418,8 +420,8 @@ def share(request, random_url, id, rating):
 
 	return render(request, 'fastcookapp/share.html', context)
 
-
-def loadIcons(request):
+@loggedin
+def loadIcons(request, user):
     #print(str("1 " + os.listdir("fastcookapp/images/")))
     image_list = []
     path = "fastcookapp/images/ingredients/"

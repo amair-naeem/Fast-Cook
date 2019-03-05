@@ -51,13 +51,13 @@ window.onload = function(){
   </ul>
   <ul class="navbar-nav ml-auto">
     <li class="nav-item">
-      <a class="nav-link"href="{% url 'profile' %}"><span class="glyphicon glyphicon-user"></span></a></li>
+      <a class="nav-link" href="{% url 'profile' %}" data-toggle="tooltip" title="Profile"><span class="glyphicon glyphicon-user"></span></a></li>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#"><span class="glyphicon glyphicon-log-out"></span></a></li>
+      <a class="nav-link" href="{% url 'logout' %}" data-toggle="tooltip" title="Logout"><span class="glyphicon glyphicon-log-out"></span></a></li>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#"><span class="glyphicon glyphicon-question-sign "></span> </a></li>
+      <a class="nav-link"  data-toggle="modal" data-target="#help" style="cursor: pointer;"><span class="glyphicon glyphicon-question-sign "></span> </a></li>
     </li>
   </ul>
 </nav>
@@ -441,6 +441,64 @@ window.onload = function(){
             </div>
         </div>
     </div>
+
+
+    <!-- The Modal -->
+  <div class="modal" id="help">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Help</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <h4> What is Fastcook? </h4>
+          Fastcook is a web application which allows users to interact with the system to create a graphical flowchart that illustrates the instructions of preparing a certain meal. This application will contain images that will represent the different events for those instructions. The images will be connected to each other by arrows to show the sets of instructions as a graph.
+          </br>
+          </br>
+          <h4> What does each functionality represent? </h4>
+          <img src="/images/group.png"> (Un) Group - Select the ingredients (nodes), by holding ctrl or by selecting all the elements.
+          </br>
+          <img src="/images/delete2.png"> Delete - Select the nodes and press the button to delete
+          </br>
+          <img src="/images/cut.png"> Cut - Select the node and press the button to cut which can be used to paste after
+          </br>
+          <img src="/images/copy.png"> Copy - Select the node and press the button to copy which can be used to paste after
+          </br>
+          <img src="/images/paste.png"> Paste - Paste the node you had cut/copied
+          </br>
+          <img src="/images/undo.png"> Undo - Press this button to undo
+          </br>
+          <img src="/images/redo.png"> Redo - Press this button to redo
+          </br>
+          <img src="/images/zoomin.gif"> Zoom in - Press this button to zoom in
+          </br>
+          <img src="/images/zoomout.gif"> Zoom out - Press this button to zoom out
+          </br>
+          </br>
+          <h4> Who created Fastcook? </h4>
+          Fastcook was created by Amair Naeem
+
+
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+        
+        <button type="button" class="btn btn-primary" id = saveNewTitle>Save</button>
+         
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+
+
+        </div>
+        
+      </div>
+    </div>
+  </div>
     
 </html>
 {% endblock %}

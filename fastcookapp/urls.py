@@ -9,8 +9,7 @@ router = DefaultRouter()
 router.register(r'members', views.MemberViewSet)
 
 urlpatterns = [
-	#login
-    path('', views.index, name='index'),
+    
     path('create/', views.createNewGraph, name='create'),
     #homepage
     url(r'^home/', views.home, name="home"),
@@ -20,6 +19,8 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     # login
     path('login/', views.login, name='login'),
+    # logout
+    path('logout/', views.login, name='logout'),
     # saveData
     path('saveData/', views.saveData, name='saveData'),
     # saveTitle
