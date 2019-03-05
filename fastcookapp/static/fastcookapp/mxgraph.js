@@ -974,7 +974,8 @@ function main()
                 //Delete
 
                 $('#loadAllTitles').on('click','.deleteGraph' ,function(event){
-                         if (confirm("yo")) {
+                    event.preventDefault();
+                         
                     
                
                         var csrftoken = getCookie('csrftoken');
@@ -991,8 +992,8 @@ function main()
                             success: $($(this)).closest("tr").remove()
 
                         })
-                     }
-                }); 
+                    
+                });
 
 
                
@@ -1032,12 +1033,16 @@ function main()
 
                                 var pkDelete = "/deleteGraph/" + json[length-1]['pk']
 
-                                var titleButton="<input type=\"button\" class = \"openGraph\" value=\""+title+"\" id="+pkTitle+"/\>";
-                                var deleteButton= "<input type=\"button\" class = \"deleteGraph trashIcon\" value=\"Delete\" id="+pkDelete+"/\>";
+                                var titleButton="<input type=\"button\" class = \"openGraph btn btn-success btn-lg\" value=\""+title+"\" id="+pkTitle+"/\>";
+                                var deleteButton= "<input type=\"button\" class = \"deleteGraph btn btn-danger btn-lg\" value=\"Delete\" onclick=\"confirm()\" id="+pkDelete+"/\>";
+
+
 
                                 
                                  if ($("#loadAllTitles").find('#' + $.escapeSelector(pkTitle + '/')).length == 0)
-                                    $("#graphList").append("<tr> <td>" + titleButton + "</td> <td>" + deleteButton + "</td> </tr>")
+                                    $("#graphList").append("<tr> <td>" + titleButton + "</td> <td>" + "</td> <td>" + deleteButton + "</td> </tr>")
+
+                                    //$("#graphList").append("<tr> <td>" + titleButton + "</td> <td>" + deleteButton + "</td> </tr>")
 
                             }
                         });
@@ -1354,7 +1359,7 @@ function main()
                                 var titleButton="<input type=\"button\" class = \"openGraph btn btn-success btn-lg \" value=\""+title+"\" id="+pkTitle+"/\>";
 
 
-                                var deleteButton= "<input type=\"button\" class = \"deleteGraph btn btn-danger btn-lg \" value=\"Delete\" id="+pkDelete+"/\>";
+                                var deleteButton= "<input type=\"button\" class = \"deleteGraph btn btn-danger btn-lg \" value=\"Delete\" onclick=\"confirm()\" id="+pkDelete+"/\>";
 
                                 if(!$("#currentTitle").val())
                                 {
