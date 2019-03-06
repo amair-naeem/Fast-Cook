@@ -367,12 +367,12 @@ def openGraphFromProfile(request, title):
 def deleteGraph(request, title):
     if 'username' in request.session:
         username = request.session['username']
+        if request.method == "DELETE":
+            xml = XMLGraph.objects.get(id = title)
+            xml.delete()
+        #titleName.delete()
         #titleName = Title.objects.get(id = title)
         #xml = XMLGraph.objects.get(title = titleName)
-        xml = XMLGraph.objects.get(id = title)
-        xml.delete()
-        #titleName.delete()
-        
 
 
         #member = Member.objects.get(username = username, XMLGraph = xml)

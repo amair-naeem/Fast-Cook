@@ -990,6 +990,7 @@ function main()
                 //Delete
 
                
+                                        //$('#confirmDelete').click(function () {
 
                     $('#loadAllTitles').on('click','.deleteGraph' ,function(event){
 
@@ -999,20 +1000,34 @@ function main()
                                 var id = $(this).attr('id');
                                 var tr = $(this).closest('tr');
 
-                        $('#confirmDelete').click(function () {
-                                
+                                console.log(id)
+                                console.log(tr)
                                 $.ajax({
                                     type: "DELETE",
                                     url: id, 
                                     headers:{
                                             "X-CSRFToken": csrftoken
                                             },
-                                    success: tr.remove()
+                                    success: 
+
+                                    function(data){
+
+                                        tr.remove()
+                                        var table = document.getElementById("graphList")
+                                        if(table.rows.length==0)
+                                        {
+                                            $(window).off('beforeunload');
+                                            window.location.href="/profile/"
+                                            
+                                        }
+
+                                    }
+
 
                                 })
                             
                         
-                    });
+                    //});
 
                 });
 
@@ -1054,14 +1069,14 @@ function main()
 
                                 var pkDelete = "/deleteGraph/" + json[length-1]['pk']
 
-                                var titleButton="<input type=\"button\" class = \"openGraph btn btn-success\" value=\""+title+"\" id="+pkTitle+"/\>";
-                                var deleteButton= "<input type=\"button\" data-toggle=\"modal\" data-target=\"#myModal\" class = \"deleteGraph btn btn-danger\" value=\"Delete\" id="+pkDelete+"/\>";
+                                var titleButton="<input type=\"button\" data-dismiss=\"modal\" class = \"openGraph btn btn-success\" value=\""+title+"\" id="+pkTitle+"/\>";
+                                //var deleteButton= "<input type=\"button\" data-toggle=\"modal\" data-target=\"#myModal\" class = \"deleteGraph btn btn-danger\" value=\"Delete\" id="+pkDelete+"/\>";
 
 
 
                                 
                                  if ($("#loadAllTitles").find('#' + $.escapeSelector(pkTitle + '/')).length == 0)
-                                    $("#graphList").append("<tr> <td>" + titleButton + "</td> <td>" + "</td> <td>" + deleteButton + "</td> </tr>")
+                                    $("#graphList").append("<tr> <td>" + titleButton + "</td> </tr>") //<td>" + "</td> <td>" + deleteButton + "</td> </tr>")
 
                                     //$("#graphList").append("<tr> <td>" + titleButton + "</td> <td>" + deleteButton + "</td> </tr>")
 
@@ -1395,10 +1410,9 @@ function main()
                                     var pkTitle = "/openGraph/" + parseItems[i]["id"]
                                     var pkDelete = "/deleteGraph/" + parseItems[i]["id"]
 
+                                    var titleButton="<input type=\"button\" data-dismiss=\"modal\" class = \"openGraph btn btn-success\" value=\""+title+"\" id="+pkTitle+"/\>";
 
-                                    var titleButton="<input type=\"button\" class = \"openGraph btn btn-success\" value=\""+title+"\" id="+pkTitle+"/\>";
-
-                                    var deleteButton= "<input type=\"button\" data-toggle=\"modal\" data-target=\"#myModal\"  type=\"button\" class = \"deleteGraph btn btn-danger\" value=\"Delete\" id="+pkDelete+"/\>";
+                                    //var deleteButton= "<input type=\"button\" data-toggle=\"modal\" data-target=\"#myModal\"  type=\"button\" class = \"deleteGraph btn btn-danger\" value=\"Delete\" id="+pkDelete+"/\>";
 
                                     if(!$("#currentTitle").val())
                                     {
@@ -1411,7 +1425,7 @@ function main()
                                             $("#currentTitle").val("Untitled graph")
                                     }*/
 
-                                    $("#graphList").append("<tr> <td>" + titleButton + "</td> <td>" + "</td> <td>" + deleteButton + "</td> </tr>")
+                                    $("#graphList").append("<tr> <td>" + titleButton + "</td> </tr>")// + "</td> <td>" + deleteButton + "</td> </tr>")
 
                                     
                                      //if ($("#loadAllTitles").find('#' + $.escapeSelector(pkTitle + '/')).length == 0)
