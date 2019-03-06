@@ -989,7 +989,7 @@ function main()
 
                 //Delete
 
-                $('#confirmDelete').click(function () {
+               
 
                     $('#loadAllTitles').on('click','.deleteGraph' ,function(event){
 
@@ -997,20 +997,23 @@ function main()
                                 var csrftoken = getCookie('csrftoken');
                                 event.preventDefault();
                                 var id = $(this).attr('id');
-                                var $tr = $(this).closest('tr');
+                                var tr = $(this).closest('tr');
 
+                        $('#confirmDelete').click(function () {
+                                
                                 $.ajax({
                                     type: "DELETE",
                                     url: id, 
                                     headers:{
                                             "X-CSRFToken": csrftoken
                                             },
-                                    success: $($(this)).closest("tr").remove()
+                                    success: tr.remove()
 
                                 })
                             
                         
                     });
+
                 });
 
 
