@@ -158,6 +158,8 @@ def register(request):
                     user.save()
                     
                 except IntegrityError:
+                    messages.add_message(request, messages.INFO, 'Username '+ str(user) +' is already taken. Usernames must be unique')
+
                     context = {
                         'errorM':'Username '+ str(user) +' is already taken. Usernames must be unique'
                         }
@@ -168,6 +170,7 @@ def register(request):
             
         else:
             #returns an error if either of both password fields have not being populated
+            messages.add_message(request, messages.INFO, 'Enter a value in both password fields')
             context = {
             'errorPassword':'Enter a value in both password fields'
             }
@@ -192,6 +195,7 @@ def login(request):
                     return redirect('profile')
                     #return render(request, 'fastcookapp/profile.html')
                 else:
+                    messages.add_message(request, messages.INFO, 'The username is not active, please register')
                     return render(request, 'fastcookapp/login.html')    
             else:
                 return render(request, 'fastcookapp/login.html')

@@ -10,6 +10,21 @@ body#mainBody{
   background-color: white;
 }
 
+.input-container {
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.icon {
+  padding: 10px;
+  background: #28a745;
+  color: white;
+  min-width: 50px;
+  text-align: center;
+}
+
 </style>
 
 </head>
@@ -30,8 +45,12 @@ body#mainBody{
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                        <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-user"></i></div>
+                    <div class="input-group mb-2 mr-sm-2 mb-sm-0 input-container">
+                        <!--<div class="input-group-addon" style="width: 2.6rem">
+                            <i class="fa fa-repeat"></i>
+                        </div>-->
+                                                    <i class="fa fa-user icon"></i>
+                        <!--<div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-user"></i></div>-->
                         <input type="text" id="usrname" name="usrname" required class="form-control">
                     </div>
                 </div>
@@ -71,9 +90,12 @@ body#mainBody{
             </div>
             <div class="col-md-6">
                 <div class="form-group has-danger">
-                    <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                        <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
-                         <input type="password" class="form-control" onfocus = "validationP()" id="psw" name="psw" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"  required>
+                    <div class="input-group mb-2 mr-sm-2 mb-sm-0 input-container">
+                      <i class="fa fa-key icon"></i>
+                        <!--<div class="input-group-addon" style="width: 2.6rem">
+                            <i class="fa fa-repeat"></i>
+                        </div>-->
+                         <input type="password" class="form-control" id="psw" name="psw" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"  required> 
                     </div>
                 </div>
             </div>
@@ -92,11 +114,13 @@ body#mainBody{
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                        <div class="input-group-addon" style="width: 2.6rem">
+                    <div class="input-group mb-2 mr-sm-2 mb-sm-0 input-container">
+                        <!--<div class="input-group-addon" style="width: 2.6rem">
                             <i class="fa fa-repeat"></i>
-                        </div>
-                            <input type="password" onfocus = "checkPasswordMatch()" placeholder="Repeat Password" id="psw-repeat" name="psw-repeat" required class="form-control">
+                        </div>-->
+                                                    <i class="fa fa-repeat icon"></i>
+
+                            <input type="password" placeholder="Repeat Password" id="psw-repeat" name="psw-repeat" required class="form-control">
 
                        
                     </div>
@@ -110,6 +134,10 @@ body#mainBody{
               <button type="reset" class="btn btn-primary">Reset <i class="fa fa-undo"></i></button><br><br>
 
               <p>Already have an account? <a href="{% url 'login' %}">Click here</a>.</p>
+              {% for message in messages %}
+              <p style="text-align: center;" id='message'></p>
+              <p id = "errorRegister" style="color: red; text-align: center;"> {{message}} </p>
+              {%endfor%}
             </div>
         </div>
     </form>
@@ -139,10 +167,10 @@ body#mainBody{
 </div>-->
 
                 
-<!--<script src="{% static 'fastcookapp/scripts.js' %}"></script>
+<script src="{% static 'fastcookapp/scripts.js' %}"></script>
 
 
-</script>-->
+</script>
 
 </html>
 {% endblock %}

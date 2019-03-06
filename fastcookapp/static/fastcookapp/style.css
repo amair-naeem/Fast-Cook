@@ -116,26 +116,28 @@ button#dropdownMenu2 {
     
 }
 
-#dropdownMenu2:hover  {
+#dropdownMenu2:hover, #shareButton:hover  {
     background-color: lightgrey
 }
 
-#shareButton:hover  {
-    background-color: lightgrey
+#shareButton  {
+    background-color: white
 }
 
-#shareButton {
+
+
+/*#shareButton {
   height: 20.5;
   width: 43.27;
   border-radius: 2px;
 
-}
+}*/
 
 .bg-light{
   background-color: whitesmoke!important;
 }
 
-.toolbarButton, #shareButton {
+.toolbarButton {
   background-color: white; /* Green */
   border: 2px;
   color: black;
