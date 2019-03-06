@@ -195,9 +195,10 @@ def login(request):
                     return redirect('profile')
                     #return render(request, 'fastcookapp/profile.html')
                 else:
-                    messages.add_message(request, messages.INFO, 'The username is not active, please register')
+                    messages.add_message(request, messages.INFO, 'The username or password is incorrect')
                     return render(request, 'fastcookapp/login.html')    
             else:
+                messages.add_message(request, messages.INFO, 'The username or password is incorrect')
                 return render(request, 'fastcookapp/login.html')
 
     return render(request, 'fastcookapp/login.html')

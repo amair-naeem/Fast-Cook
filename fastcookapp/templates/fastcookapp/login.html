@@ -17,12 +17,6 @@ body#mainBody{
 <!--<button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>-->
 
 <!--<div id="id01" class="modal">-->
-
-    <div class="text-center">
-      <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalLoginForm">Launch
-        Modal Login Form</a>
-    </div>
-  
   
     <!--<div class="imgcontainer">
       <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
@@ -46,7 +40,7 @@ body#mainBody{
       <span class="psw">Forgot <a href="#">password?</a></span>
     </div>-->
 
-    <div class="modal" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <!--<div class="modal" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header text-center">
@@ -69,6 +63,12 @@ body#mainBody{
 
           </div>
           <div class="modal-footer d-flex justify-content-center">
+
+            {% for message in messages %}
+              <p style="text-align: center;" id='message'></p>
+              <p id = "errorLogin" style="color: red; text-align: center;"> {{message}} </p>
+            {%endfor%}
+
             <button class="btn btn-default">Login</button>
             </form>
             <a href = "{%url 'register'%}" class="btn btn-default">Register</a>
@@ -77,7 +77,47 @@ body#mainBody{
           
         </div>
       </div>
+    </div>-->
+
+            
+
+    <div class="container">
+    <div class="row">
+      <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <div class="card card-signin my-5">
+          <div class="card-body">
+            <h5 class="card-title text-center">Sign In</h5>
+              <form action="{%url 'login'%}" method="POST"> {% csrf_token %}
+              <div class="form-label-group">
+                <label for="uname"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" name="uname" required class="form-control validate">
+              </div>
+
+              <div class="form-label-group">
+                <label for="psw"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="psw" required class="form-control validate">
+              </div>
+
+              <div class="text-center">
+                <hr class="my-4">
+                <button class="btn btn-success">Login</button>
+                </form>
+
+                <a href = "{%url 'register'%}" class="btn btn-primary">Register</a>
+              </div>
+              <hr class="my-4">
+              <div>
+                {% for message in messages %}
+                  <p id = "errorLogin" style="color: red; text-align: center;"> {{message}} </p>
+                {%endfor%}
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+
   
 
 

@@ -989,26 +989,28 @@ function main()
 
                 //Delete
 
+                $('#confirmDelete').click(function () {
 
-                $('#loadAllTitles').on('click','.deleteGraph' ,function(event){
+                    $('#loadAllTitles').on('click','.deleteGraph' ,function(event){
 
-                        if (confirm("Are you sure ?")) {
-                            var csrftoken = getCookie('csrftoken');
-                            event.preventDefault();
-                            var id = $(this).attr('id');
-                            var $tr = $(this).closest('tr');
+                            
+                                var csrftoken = getCookie('csrftoken');
+                                event.preventDefault();
+                                var id = $(this).attr('id');
+                                var $tr = $(this).closest('tr');
 
-                            $.ajax({
-                                type: "DELETE",
-                                url: id, 
-                                headers:{
-                                        "X-CSRFToken": csrftoken
-                                        },
-                                success: $($(this)).closest("tr").remove()
+                                $.ajax({
+                                    type: "DELETE",
+                                    url: id, 
+                                    headers:{
+                                            "X-CSRFToken": csrftoken
+                                            },
+                                    success: $($(this)).closest("tr").remove()
 
-                            })
-                        }
-                    
+                                })
+                            
+                        
+                    });
                 });
 
 
@@ -1049,8 +1051,8 @@ function main()
 
                                 var pkDelete = "/deleteGraph/" + json[length-1]['pk']
 
-                                var titleButton="<input type=\"button\" class = \"openGraph btn btn-success btn-lg\" value=\""+title+"\" id="+pkTitle+"/\>";
-                                var deleteButton= "<input type=\"button\" class = \"deleteGraph btn btn-danger btn-lg\" value=\"Delete\" onclick=\"confirm()\" id="+pkDelete+"/\>";
+                                var titleButton="<input type=\"button\" class = \"openGraph btn btn-success\" value=\""+title+"\" id="+pkTitle+"/\>";
+                                var deleteButton= "<input type=\"button\" data-toggle=\"modal\" data-target=\"#myModal\" class = \"deleteGraph btn btn-danger\" value=\"Delete\" id="+pkDelete+"/\>";
 
 
 
@@ -1391,10 +1393,9 @@ function main()
                                     var pkDelete = "/deleteGraph/" + parseItems[i]["id"]
 
 
-                                    var titleButton="<input type=\"button\" class = \"openGraph btn btn-success btn-lg \" value=\""+title+"\" id="+pkTitle+"/\>";
+                                    var titleButton="<input type=\"button\" class = \"openGraph btn btn-success\" value=\""+title+"\" id="+pkTitle+"/\>";
 
-
-                                    var deleteButton= "<input type=\"button\" class = \"deleteGraph btn btn-danger btn-lg \" value=\"Delete\" onclick=\"confirm()\" id="+pkDelete+"/\>";
+                                    var deleteButton= "<input type=\"button\" data-toggle=\"modal\" data-target=\"#myModal\"  type=\"button\" class = \"deleteGraph btn btn-danger\" value=\"Delete\" id="+pkDelete+"/\>";
 
                                     if(!$("#currentTitle").val())
                                     {
