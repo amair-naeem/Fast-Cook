@@ -209,7 +209,7 @@ window.onload = function(){
 
   {% for xml in xmlData %}
     <input type = "hidden" id = "idOfGraph" value="{{xml.id}}" name = "graphId" class="currentGraph">
-    <input type="hidden" value="{{xml}}" id="openedGraphxml">
+    <input type="hidden" value="{{xml.XMLGraph}}" id="openedGraphxml">
     <input type="hidden" value="{{xml.title}}" id="openedGraphTitle">
   {% endfor %}
     
