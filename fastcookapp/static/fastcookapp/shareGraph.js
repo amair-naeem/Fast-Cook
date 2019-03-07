@@ -118,9 +118,11 @@ function main()
                 success: function (data) {
                     //alert("hey")
                 //var test = [];
+                console.log(data)
                 for (var i = 3; i >= 0; i--) {
                         style[i] = new Object();
                         style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;    
+
                         style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Equipment/'+ data["equipment"][i] + "/";
                         style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
                         style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
@@ -265,7 +267,7 @@ function main()
                         graph.getStylesheet().putCellStyle('other' + i, style[i]);
                     }
 
-                var style2 = new Object();
+                /*var style2 = new Object();
 
                 style2[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
                 style2[mxConstants.STYLE_IMAGE] = '/images/icons/whisk.png';
@@ -273,7 +275,7 @@ function main()
 
                 //graph.getStylesheet().putCellStyle('rounded2', style);
 
-                graph.getStylesheet().putCellStyle('rounded3', style2);
+                graph.getStylesheet().putCellStyle('rounded3', style2);*/
 
                 var style3 = new Object();
 

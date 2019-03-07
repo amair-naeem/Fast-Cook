@@ -97,7 +97,7 @@
 
         <!-- Modal body -->
         <div class="modal-body">
-        <form method = "POST" action = "{% url 'profile' %}">
+        <form id= "formNewGraph" method = "POST" action = "{% url 'profile' %}">
            <input type="text" placeholder= "Enter Title" name="graphTitle22" id="graphTitle" maxlength = "50">
             </br>
            {% for message in messages %}

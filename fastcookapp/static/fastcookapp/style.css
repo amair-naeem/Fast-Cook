@@ -144,6 +144,7 @@ button#dropdownMenu2 {
   text-align: center;
   text-decoration: none;
   font-size: 10px;
+  cursor: pointer;
 }
 
 input#currentTitle, #sharedTitle {

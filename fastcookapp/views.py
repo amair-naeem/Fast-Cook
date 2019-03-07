@@ -445,8 +445,7 @@ def share(request, random_url, id, rating):
 
 	return render(request, 'fastcookapp/share.html', context)
 
-@loggedin
-def loadIcons(request, user):
+def loadIcons(request):
     #print(str("1 " + os.listdir("fastcookapp/images/")))
     search = []
     path = "fastcookapp/images/ingredients/"
