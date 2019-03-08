@@ -31,6 +31,7 @@ function setCookie(name,value,days) {
 
 
 
+
 function hideOnClk(id){
         var cat = document.getElementById("byCategory");
         var searchEngine = document.getElementById("search");

@@ -147,7 +147,7 @@ button#dropdownMenu2 {
   cursor: pointer;
 }
 
-input#currentTitle, #sharedTitle {
+input#currentTitle, .shareInfo {
     margin: 0;
     padding: 0;
     font-size: 30px;

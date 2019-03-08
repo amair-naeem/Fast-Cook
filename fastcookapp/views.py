@@ -87,23 +87,12 @@ def logout(request,user):
 
 """@loggedin
 def createNewGraph(request,user):
-    if request.method == 'POST':
-        graphTitle22 = request.POST['graphTitle22']
-        if XMLGraph.objects.filter(title=graphTitle22, user=user).exists():
-        	graphTitle = XMLGraph.objects.filter(user=user).values('title','id')
-        	graph  = XMLGraph.objects.filter(user=user).values('XMLGraph')
-        	return render(request, 'fastcookapp/profile.html', {'xml': json.dumps(str(graph)), 'title':graphTitle, 
-                'error': str(graphTitle22) + ' already exists, please use another title'})
-        
         saveNewGraph = XMLGraph.objects.create(user=user, title=graphTitle22)
 
         #graphTitle = XMLGraph.objects.filter(user=user).values('title','id')
         #graph  = XMLGraph.objects.filter(user=user).values('XMLGraph')
         xml = XMLGraph.objects.filter(id = saveNewGraph.id).only('id', 'title', 'XMLGraph')
-
-
-        return render(request, 'fastcookapp/index.html', {'xmlData': xml, 'overwrite': False}) #'xml': json.dumps(str(graph)), 'title':graphTitle, 'newGraphTitle': graphTitle22, 'overwrite': True})
-        #return render(request, 'fastcookapp/index.html', {'titleOfGraph': graphTitle22})"""
+        return render(request, 'fastcookapp/index.html', {'xmlData': xml, 'overwrite': False})"""
 
 @loggedin
 def profile(request, user):
@@ -435,12 +424,12 @@ def share(request, random_url, id, rating):
 	#xmlData = request.POST['sharedXMLData']
 	#print(str(request.POST['sharedXMLData']))
 	xmlGraph = XMLGraph.objects.get(id=id)
-	#print("test" + str(xmlGraph.XMLGraph))
+	user = xmlGraph.user
 	context = {
         "article": get_list_or_404(XMLGraph, random_url=random_url),
         "graph": xmlGraph,
-        "rating": rating
-        #'xmlData': xmlData,
+        "rating": rating,
+        "user": user
     }
 
 	return render(request, 'fastcookapp/share.html', context)

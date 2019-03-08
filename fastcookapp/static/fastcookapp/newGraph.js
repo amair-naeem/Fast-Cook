@@ -15,6 +15,19 @@ function getCookie(name) {
     return cookieValue;
 }
 
+/*$( document ).ready(function() {
+
+    /*$("#formNewGraph").submit(function (evt) {
+        evt.preventDefault();
+        window.history.back();
+        
+    });
+    header('Location: http://www.example.com/form.php');
+
+
+});*/
+
+
 
 function doFunction(id,tr){
 
