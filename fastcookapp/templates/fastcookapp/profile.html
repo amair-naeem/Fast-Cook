@@ -1,14 +1,6 @@
 {% extends 'fastcookapp/base.html' %}
 {% load staticfiles %}
 {% block content %}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-<script src="{% static 'fastcookapp/newGraph.js' %}"></script> 
-<script type="text/javascript">
-    mxBasePath = "{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/src' %}";
-</script>
-<script src="{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/mxClient.js' %}"></script>
-<script src="{% static 'fastcookapp/ajax.js' %}"></script> 
 
 <style type="text/css">
   body#mainBody {
@@ -17,24 +9,9 @@
 </style>
 
 
-    <!--<div id = "loadAllTitles">
-      {% for titles in title %}
-          <table>
-          <tr> 
-            <form method="GET" action="{% url 'openGraphFromProfile' title=titles.id %}">
-              <td> <input type = "submit" class = "openGraph" value = "{{titles.title}}" id="{% url 'openGraphFromProfile' title=titles.id %}"> </td> 
-            </form>
-            <td> <input type = "button" class = "deleteButton" onclick="doFunction(this.id, this)" value = "Delete" id="{% url 'deleteGraph' title=titles.id %}"> </td>
-            <td> {{titles.created_at}} </td>
-
-          </tr>
-          </table>
-      {% endfor %}
-    </div>-->
-
 <div class="container">
   <div class="text-center">
-    <h2> <b>Add, Edit & Delete Graphs.</b></h2>
+    <h2> <b>Add, Edit & Delete Recipes.</b></h2>
   </div>
         <div class="table-wrapper">
             <div class="table-title">
@@ -45,7 +22,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-8">
-                      <h6> &nbsp; You can create a new graph by clicking <a class = "newGraph" href="" data-toggle="modal" data-target="#createNewGraph">here</a> </h6>
+                      <h6> &nbsp; You can create a new recipe by clicking <a class = "newGraph" href="" data-toggle="modal" data-target="#createNewGraph">here</a> </h6>
 
                     </div>
                   
@@ -90,7 +67,7 @@
       
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Create New Graph</h4>
+          <h4 class="modal-title">Create New Recipe</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         
@@ -126,9 +103,15 @@
       </div>
     </div>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="{% static 'fastcookapp/newGraph.js' %}"></script> 
+<script type="text/javascript">
+    mxBasePath = "{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/src' %}";
+</script>
+<script src="{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/mxClient.js' %}"></script>
     
-
-
 <script type="text/javascript">
 
   $(window).on('load',function(){
@@ -150,7 +133,6 @@
 });
     
 </script>
-
 
 
 {% endblock %}

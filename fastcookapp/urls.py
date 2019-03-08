@@ -20,7 +20,7 @@ urlpatterns = [
     # login
     path('', views.login, name='login'),
     # logout
-    path('logout/', views.login, name='logout'),
+    path('logout/', views.logout, name='logout'),
     # saveData
     path('saveData/', views.saveData, name='saveData'),
     # saveTitle

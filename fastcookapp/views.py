@@ -1,6 +1,8 @@
 import json
 import os
 import requests
+from django.contrib.auth import logout
+from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from django.db.models import Count
 from django.http import HttpResponse, Http404
@@ -80,9 +82,12 @@ def home(request,user):
     return JsonResponse({'title':title})
 	#return render(request, 'fastcookapp/index.html', {'xml': json.dumps(str(graph)), 'title':graphTitle})
 
-@loggedin
-def logout(request,user):
-    request.session.flush()
+
+def logout(request,*args, **kwargs):
+    """request.session.flush()
+    return redirect("/")"""
+    print("test")
+    logout(request, *args, **kwargs)
     return redirect("/")
 
 """@loggedin
@@ -110,10 +115,12 @@ def profile(request, user):
         
         saveNewGraph = XMLGraph.objects.create(user=user, title=graphTitle22)
 
+        return redirect('openGraphFromProfile', saveNewGraph.id)
+
         #graphTitle = XMLGraph.objects.filter(user=user).values('title','id')
         #graph  = XMLGraph.objects.filter(user=user).values('XMLGraph')
-        xml = XMLGraph.objects.filter(id = saveNewGraph.id).only('id', 'title', 'XMLGraph')
-        return render(request, 'fastcookapp/index.html', {'xmlData': xml, 'overwrite': False})
+        """xml = XMLGraph.objects.filter(id = saveNewGraph.id).only('id', 'title', 'XMLGraph')
+        return render(request, 'fastcookapp/index.html', {'xmlData': xml, 'overwrite': False})"""
     
     graphTitle = XMLGraph.objects.filter(user=user).values('title','id', 'created_at')
     graph  = XMLGraph.objects.filter(user=user).values('XMLGraph')
@@ -126,7 +133,13 @@ def register(request):
         username = request.POST['usrname']
         username = username.lower()
         password = request.POST['psw']
+        email = request.POST['email']
         re_password = request.POST['psw-repeat']
+
+        if Member.objects.get(email=email):
+            messages.add_message(request, messages.INFO, 'This email already exists')
+            return render(request, 'fastcookapp/register.html')
+
             
         # Password validation
         if password and re_password:
@@ -140,7 +153,7 @@ def register(request):
                 
             else:
                 #print("Username: " + str(username) + "Password: " + str(password))
-                user = Member(username = username)
+                user = Member(username = username, email = email)
                 user.set_password(password)
 
                 try:
@@ -351,6 +364,7 @@ def openGraphFromProfile(request, title):
         username= request.session['username']
         xml = XMLGraph.objects.filter(id = title).only('id', 'title', 'XMLGraph')
         return render(request, 'fastcookapp/index.html', {"xmlData": xml})
+
 
 # Open Graph by title
 def deleteGraph(request, title):

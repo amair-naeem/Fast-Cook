@@ -416,8 +416,8 @@ function main()
                 //document.body.appendChild(diagramContainer);
                 //diagramContainer.appendChild(container)
 
-                menuBar = document.getElementById('menuBar')
-                document.body.appendChild(menuBar)
+               //menuBar = document.getElementById('menuBar')
+                //document.body.appendChild(menuBar)
 
 
                 /*mxEdgeStyle.MyStyle = function(state, source, target, points, result)
@@ -496,7 +496,7 @@ function main()
 
 
                 //remove vertex when delete key is pressed
-                /*var keyHandler = new mxKeyHandler(graph);
+                var keyHandler = new mxKeyHandler(graph);
                 keyHandler.bindKey(46, function(evt)
                 {
                   if (graph.isEnabled())
@@ -525,7 +525,7 @@ function main()
                     }
                     
                     return cell;
-                };*/
+                };
 
                 /*var spacer = document.createElement('div');
                 spacer.style.display = 'inline';
@@ -668,7 +668,7 @@ function main()
                 // toolbar buttons.
                 var spacer = document.createElement('div');
                 spacer.style.display = 'inline';
-                spacer.style.paddingRight = '168px';
+                spacer.style.paddingRight = '117px';
                 spacer.style.borderRight = '2px solid #e0e0e0';
                 spacer.style.borderLeft = '2px solid #e0e0e0';
                 spacer.setAttribute('class', 'verticalDivider');

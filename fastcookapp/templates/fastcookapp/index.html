@@ -9,35 +9,6 @@
 <head>
 <meta charset="utf-8"> 
 
-
-<!--<script type="text/javascript">
-  var openXML = {{openXML | safe}}
-</script> -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-<!--<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>-->
-
-
-<script src="{% static 'fastcookapp/mxgraph.js' %}"></script> 
-<script src="{% static 'fastcookapp/newGraph.js' %}"></script> 
-
-
-<script type="text/javascript">
-    mxBasePath = "{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/src' %}";
-</script>
-<script src="{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/mxClient.js' %}"></script>
-<script src="{% static 'fastcookapp/ajax.js' %}"></script> 
-<script type="text/javascript">
-window.onload = function(){
-    main(document.getElementById("graphContainer"));
-}
-
-</script> 
-
-
-
-
 </head>
 
 
@@ -63,7 +34,35 @@ window.onload = function(){
 </nav>
 
 
-<div id = "toolbar" style="overflow:scroll; left: 0px; top: 100px; width: 250px; bottom: 36px;">
+<!--<nav id = "menuBar" class="navbar navbar-expand navbar-light bg-light">
+  <a class="navbar-brand" href="#"></a>
+  <ul class="navbar-nav mx-auto">
+    <li class="nav-item"   style="">
+      <input class = "nav-link" type='button' id = "currentTitle" maxlength = "50" type="text" name="currentTitle" value="{{newGraphTitle}}" data-toggle="modal" data-target="#saveTitleModal" readonly > 
+    </li>
+  </ul>
+</nav>-->
+
+
+
+    <div class = "dropdown" id = "toptoolbar" >
+      <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        File
+      </button>
+
+      <button class = "btn btn-light" id = "shareButton" data-toggle="modal" data-target="#shareModal">Share</button>
+
+      <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+        <button class="dropdown-item" type="button" data-toggle="modal" data-target="#newModal">New</button>
+        <button id = "openXML" class="dropdown-item" type="button" data-toggle="modal" data-target="#openModal">Open</button>
+        <button class="dropdown-item" type="button" id = "saveButton">Save</button>
+        <button class="dropdown-item" type="button" data-toggle="modal" data-target="#saveAsModal">Save as</button>
+      </div>
+    </div>
+
+
+
+<div id = "toolbar" style="overflow:scroll; left: 0px; top: 110px; width: 250px; bottom: 36px;">
 
   <h1 class = "searchForIngredients"> How would you like to search for ingredients? </h1>
 
@@ -173,36 +172,9 @@ window.onload = function(){
 
 </div>
 
-
-
-  <!--<div id = "square">
-    <form method = "get">
-      <input id = "q" name = "q" type="text"> 
-
-    </form>
-
-    {% for item in members %}
-      {{item.username}}
-    {% endfor %}
-  </div>-->
-
-
-<!--<div id="toolbarContainer"
-    style="position:absolute;white-space:nowrap;overflow:hidden;top:65px;left:74px;max-height:24px;height:36px;right:0px;padding:6px;">
-</div>-->
-
-
-<!--<div class = "diagramContainer diagramBackdrop" style="right: 10px; left: 200px; top: 60px; bottom: 0px; touch-action: none; overflow: auto;">-->
-  <div id = "container" style="position:absolute;overflow:hidden;top:100px;left:260px;bottom:36px;right:0px;background-image:url('/images/grid.gif');cursor:default;overflow:scroll;">
-  <!--border-width: 1px;
-  overflow: hidden;
-  left: 0px;
-  width: 70%;
-  background: url(/images/grid.gif);">-->
-
+  <div id = "container" style="position:absolute;overflow:hidden;top:110px;left:260px;bottom:36px;right:0px;background-image:url('/images/grid.gif');cursor:default;overflow:scroll;">
 
   </div> 
-<!--</div>-->
 
 <div id = "changeTitle">
   <form>
@@ -219,29 +191,6 @@ window.onload = function(){
   </form>
 </div>
 
-<div id = menuBar class="topnav" id="myTopnav">
-
-
-    <div class = "dropdown" id = "toptoolbar" style="bottom: 20">
-    <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      File
-    </button>
-
-    <button class = "btn btn-light" id = "shareButton" data-toggle="modal" data-target="#shareModal">Share</button>
-    <!--<form action="{% url 'share' %}">
-        <button id = share type="submit">Share</button>
-
-    </form>-->
-    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-      <button class="dropdown-item" type="button" data-toggle="modal" data-target="#newModal">New</button>
-      <button id = "openXML" class="dropdown-item" type="button" data-toggle="modal" data-target="#openModal">Open</button>
-      <button class="dropdown-item" type="button" id = "saveButton">Save</button>
-      <button class="dropdown-item" type="button" data-toggle="modal" data-target="#saveAsModal">Save as</button>
-    </div>
-    </div>
-
-
-</div>
 
 <!-- The Modal -->
   <div class="modal" id="saveAsModal">
@@ -281,22 +230,13 @@ window.onload = function(){
       
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Open Graph</h4>
+          <h4 class="modal-title">Open Recipe</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         
         <!-- Modal body -->
         <div id = "loadAllTitles" class="modal-body">
-          <!-- this does nothing lol-->
-          <!--{% for titles in title %}
 
-          <table>
-          <tr id = "graphButton"> 
-            <td> <input type = "button" class = "openGraph" value = "{{titles.title}}" id="{% url 'openGraph' title=titles.id %}"> </td> 
-            <td> <input type = "button" class = "deleteGraph" value = "Delete" id="{% url 'deleteGraph' title=titles.id %}"> </td>
-          </tr>
-          </table>
-          {% endfor %}-->
 
           <table id = "graphList" class = "table pure-table">
 
@@ -318,7 +258,7 @@ window.onload = function(){
       
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">New Graph</h4>
+          <h4 class="modal-title">New Recipe</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         
@@ -348,7 +288,7 @@ window.onload = function(){
       
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Save Graph</h4>
+          <h4 class="modal-title">Save Recipe</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         
@@ -379,7 +319,7 @@ window.onload = function(){
       
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Share Graph</h4>
+          <h4 class="modal-title">Share Recipe</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         
@@ -473,7 +413,7 @@ window.onload = function(){
           </br>
           </br>
           <h4> What does each functionality represent? </h4>
-          <img src="/images/group.png"> (Un) Group - Select the ingredients (nodes), by holding ctrl or by selecting all the elements.
+          <img src="/images/group.png"> (Un) Group - Select the ingredients (nodes), by holding ctrl or by highlighting all the elements. To ungroup, you select all and press the ungroup button.
           </br>
           <img src="/images/delete2.png"> Delete - Select the nodes and press the button to delete
           </br>
@@ -529,6 +469,23 @@ window.onload = function(){
     </div>
   </div>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="{% static 'fastcookapp/mxgraph.js' %}"></script> 
+<script src="{% static 'fastcookapp/newGraph.js' %}"></script> 
+
+
+<script type="text/javascript">
+    mxBasePath = "{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/src' %}";
+</script>
+<script src="{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/mxClient.js' %}"></script>
+<script type="text/javascript">
+window.onload = function(){
+    main(document.getElementById("graphContainer"));
+}
+
+</script> 
     
 </html>
 {% endblock %}
