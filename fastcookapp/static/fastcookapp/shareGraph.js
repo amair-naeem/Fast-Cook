@@ -89,15 +89,12 @@ function main()
             groupStyle[mxConstants.STYLE_PERIMETER] = mxPerimeter.RectanglePerimeter;
             groupStyle[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_CENTER;
             groupStyle[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
-            groupStyle[mxConstants.STYLE_FILLCOLOR] = '#FF9103';
-            groupStyle[mxConstants.STYLE_GRADIENTCOLOR] = '#F8C48B';
-            groupStyle[mxConstants.STYLE_STROKECOLOR] = '#E86A00';
+            groupStyle[mxConstants.STYLE_FILLCOLOR] = '#6666ff';
+            groupStyle[mxConstants.STYLE_STROKECOLOR] = '#7f7fff';
             groupStyle[mxConstants.STYLE_FONTCOLOR] = '#000000';
-            groupStyle[mxConstants.STYLE_ROUNDED] = true;
-            groupStyle[mxConstants.STYLE_OPACITY] = '80';
+            groupStyle[mxConstants.STYLE_OPACITY] = '85';
             groupStyle[mxConstants.STYLE_STARTSIZE] = '30';
-            groupStyle[mxConstants.STYLE_FONTSIZE] = '16';
-            groupStyle[mxConstants.STYLE_FONTSTYLE] = 1;
+            groupStyle[mxConstants.STYLE_FONTSIZE] = '20';
             graph.getStylesheet().putCellStyle('group', groupStyle);
 
             var edge = graph.getStylesheet().getDefaultEdgeStyle();
