@@ -1,9 +1,9 @@
-from django.contrib.auth.views import PasswordResetView
+from django.contrib.auth.views import (
+  PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView,
+)
 from django.urls import path, include
 from django.conf.urls import url
 from . import views
-
-
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
@@ -17,7 +17,7 @@ urlpatterns = [
     # register
     path('register/', views.register, name='register'),
     #profile
-    path('profile/', views.profile, name='profile'),
+    path('profile/', views.login, name='profile'),
     # login
     path('', views.login, name='login'),
     # logout
@@ -48,8 +48,15 @@ urlpatterns = [
     #url(r'^(?P<slug>[\w-]+)/$',  views.share, name='share'),
     #path('<slug:slug>', views.share, name='share'),
     # API
-    url('^', include('django.contrib.auth.urls')),
-    url(r'^password_reset/$', PasswordResetView.as_view())
+    #PASSWORD RESET URLS
+    path('password_reset/', PasswordResetView.as_view(template_name='registration/password_reset_form.html',success_url='done/'), name="password_reset"),
+    path('password_reset/done/', PasswordResetDoneView.as_view(), name="password_reset_done"),
+    path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name="password_reset_confirm"),
+    path('reset/done/', PasswordResetCompleteView.as_view(), name="password_reset_complete")
+
+
+    #url('^', include('django.contrib.auth.urls'))
+
 
 
 ]
