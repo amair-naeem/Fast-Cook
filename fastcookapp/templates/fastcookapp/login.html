@@ -111,6 +111,9 @@ body#mainBody{
                   <p id = "errorLogin" style="color: red; text-align: center;"> {{message}} </p>
                 {%endfor%}
               </div>
+              <div class="text-center">
+                  <p>Forgotten your password? Click <a href = "{% url 'password_reset' %}"> here </a> </p>
+              </div>
             </form>
           </div>
         </div>

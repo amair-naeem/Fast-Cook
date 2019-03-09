@@ -1,3 +1,4 @@
+from django.contrib.auth.views import PasswordResetView
 from django.urls import path, include
 from django.conf.urls import url
 from . import views
@@ -47,6 +48,8 @@ urlpatterns = [
     #url(r'^(?P<slug>[\w-]+)/$',  views.share, name='share'),
     #path('<slug:slug>', views.share, name='share'),
     # API
-    path('api/', include(router.urls)),
+    url('^', include('django.contrib.auth.urls')),
+    url(r'^password_reset/$', PasswordResetView.as_view())
+
 
 ]
