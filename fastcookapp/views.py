@@ -83,12 +83,21 @@ def home(request,user):
 	#return render(request, 'fastcookapp/index.html', {'xml': json.dumps(str(graph)), 'title':graphTitle})
 
 
-def logout(request,*args, **kwargs):
-    """request.session.flush()
-    return redirect("/")"""
+"""def logout(request,*args, **kwargs):
+    request.session.flush()
+    return redirect("/")
     print("test")
     logout(request, *args, **kwargs)
+    return redirect("login")"""
+
+# render logout page 
+@loggedin
+def logout(request, user):
+    request.session.flush()
     return redirect("/")
+
+def aboutus(request):
+    return render(request, 'fastcookapp/aboutus.html')
 
 """@loggedin
 def createNewGraph(request,user):
@@ -205,11 +214,6 @@ def login(request):
 
     return render(request, 'fastcookapp/login.html')
 
-# render logout page 
-@loggedin
-def logout(request, user):
-	request.session.flush()
-	return redirect("/")
 
 @loggedin	
 def saveData(request, user):

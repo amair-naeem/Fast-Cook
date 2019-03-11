@@ -12,6 +12,8 @@ router.register(r'members', views.MemberViewSet)
 urlpatterns = [
     
     #path('create/', views.createNewGraph, name='create'),
+    #about us
+
     #homepage
     url(r'^home/', views.home, name="home"),
     # register
@@ -19,7 +21,9 @@ urlpatterns = [
     #profile
     path('profile/', views.profile, name='profile'),
     # login
-    path('', views.login, name='login'),
+    path('login/', views.login, name='login'),
+    # aboutus
+    path('', views.aboutus, name="aboutus"),
     # logout
     path('logout/', views.logout, name='logout'),
     # saveData
@@ -49,6 +53,7 @@ urlpatterns = [
     #path('<slug:slug>', views.share, name='share'),
     # API
     #PASSWORD RESET URLS
+
     path('password_reset/', PasswordResetView.as_view(template_name='fastcookapp/registration/password_reset_form.html',success_url='done/'), name="password_reset"),
     path('password_reset/done/', PasswordResetDoneView.as_view(template_name='fastcookapp/registration/password_reset_done.html'), name="password_reset_done"),
     path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(template_name='fastcookapp/registration/password_reset_confirm.html'), name="password_reset_confirm"),

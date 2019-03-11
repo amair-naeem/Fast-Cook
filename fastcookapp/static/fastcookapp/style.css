@@ -1,3 +1,7 @@
+#currentTitle{
+  cursor: pointer;
+}
+
 .glyphicon {
     font-size: 25px;
 }
