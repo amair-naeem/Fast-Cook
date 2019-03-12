@@ -662,7 +662,7 @@ function main()
                 // Enables new connections
                 graph.setConnectable(true);
 
-                loadStyleSheet(graph);
+                loadStyleSheet(graph, $("#openedGraphxml").val());
 
                 // Creates a new DIV that is used as a toolbar and adds
                 // toolbar buttons.
@@ -1667,7 +1667,7 @@ function main()
             form.submit();
         }
 
-        function loadStyleSheet(graph) {
+        /*function loadStyleSheet(graph) {
             
             var groupStyle = new Object();
             groupStyle[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_SWIMLANE;
@@ -1854,7 +1854,7 @@ function main()
                     /*$(data).find("a:contains(" + fileextension + ")").each(function () {
                         var filename = this.href.replace(window.location.host, "").replace("http://", "");
                         $("body").append("<img src='" + dir + filename + "'>");
-                    });*/
+                    });
                     openGraph(graph);
                 }
             });
@@ -1865,7 +1865,7 @@ function main()
                 style[mxConstants.STYLE_IMAGE] = '/images/icons/flour.png';
                 style[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
                 style[mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
-                style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;*/
+                style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
 
 
 
@@ -1894,7 +1894,7 @@ function main()
                 style4[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
 
                 graph.getStylesheet().putCellStyle('connector', style4);
-        }
+        }*/
 
         function openGraph(graph){
             var xmlDoc1 = mxUtils.parseXml($("#openedGraphxml").val());

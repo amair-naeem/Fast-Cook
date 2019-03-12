@@ -1,88 +1,4 @@
-
-
-function main()
-        {            
-            // Defines an icon for creating new connections in the connection handler.
-            // This will automatically disable the highlighting of the source vertex.
-            //mxConnectionHandler.prototype.connectImage = new mxImage("/images/connector.gif", 16, 16);
-            //var mxPopupMenuShowMenu = mxPopupMenu.prototype.showMenu;
-            //mxDefaultPopupMenu.prototype.addItems = function(editor){editor = editor};
-
-            //mxPopupMenu.prototype.addItem = function(</td><td class=PParameter nowrap>title,</td></tr><tr><td></td><td class=PParameter nowrap>image,</td></tr><tr><td></td><td class=PParameter nowrap>funct,</td></tr><tr><td></td><td class=PParameter nowrap>parent,</td></tr><tr><td></td><td class=PParameter nowrap>iconCls,</td></tr><tr><td></td><td class=PParameter nowrap>enabled</td><td class=PAfterParameters nowrap>)
-            //console.log(mxPopupMenu.prototype.itemCount)
-
-            $(document).ready(function(){
-  
-          
-          /* 2. Action to perform on click */
-          
-            onStar = parseInt($(this).data('value'), 10); // The star currently selected
-            // pass onstar to value of share.
-
-            var stars = $('#stars li').parent().children('li.star');
-            
-            
-            
-            for (i = 0; i < $("#rating").val(); i++) {
-              $(stars[i]).addClass('selected');
-            }
-            
-            
-          });
-
-
-            $('#share').on('click',function(event){
-                var encoder = new mxCodec();
-                var node = encoder.encode(sharedGraph.getModel());
-                xml = mxUtils.getXml(node)
-                post('/share/', {sharedXMLData:xml});
-
-                //alert("hey")
-            });
-
-            // Checks if browser is supported
-            if (!mxClient.isBrowserSupported())
-            {
-                // Displays an error message if the browser is
-                // not supported.
-                mxUtils.error('Browser is not supported!', 200, false);
-            }
-            else
-            {
-                
-                // Creates the model and the sharedGraph inside the container
-                // using the fastest rendering available on the browser
-                var sharedModel = new mxGraphModel();
-                var sharedEditor = new mxEditor();
-
-                sharedContainer = document.getElementById('sharedContainer');
-                var sharedGraph = new mxGraph(sharedContainer, sharedModel);
-                sharedGraph.dropEnabled = true;
-
-                sharedGraph.setEnabled(false);
-
-                loadStyleSheet(sharedGraph, $("#sharedXMLData").val())
-
-
-                /*var sharedDiagramContainerClass = document.getElementsByClassName("diagramContainer")
-                var sharedDiagramContainer = sharedDiagramContainerClass[0]
-
-
-                document.body.appendChild(sharedDiagramContainer);
-                sharedDiagramContainer.appendChild(sharedContainer)*/
-
-                
-
-
-            }
-
-            
-
-        }
-
-
-
-        /*function loadStyleSheet(graph) {
+function loadStyleSheet(graph, sharedXml) {
             
             var groupStyle = new Object();
             groupStyle[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_SWIMLANE;
@@ -108,6 +24,7 @@ function main()
             var measurementStyle = [];
             var dir = "/loadIcons/";
             var fileextension = ".png";
+            
             $.ajax({
                 //This will retrieve the contents of the folder if the folder is configured as 'browsable'
                 type: "GET",
@@ -149,12 +66,7 @@ function main()
                     for (var i = 4; i >= 0; i--) {
                         style[i] = new Object();
                         style[i][mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
-
                         style[i][mxConstants.STYLE_IMAGE] = '/images/ingredients/Bakery/'+ data["bakery"][i] + "/";
-                        //style[i][mxConstants.VERTEX_SELECTION_COLOR] =  '#00FF00'
-
-                        console.log(data["bakery"][i])
-                        //console.log(style[i][mxConstants.STYLE_IMAGE])
                         style[i][mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
                         style[i][mxConstants.STYLE_VERTICAL_LABEL_POSITION] = mxConstants.ALIGN_BOTTOM;
                         style[i][mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_TOP;
@@ -264,33 +176,28 @@ function main()
                         graph.getStylesheet().putCellStyle('other' + i, style[i]);
                     }
 
-                /*var style2 = new Object();
+                    var style3 = new Object();
 
-                style2[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
-                style2[mxConstants.STYLE_IMAGE] = '/images/icons/whisk.png';
-                style2[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;                
+                    style3[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                    style3[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
 
-                //graph.getStylesheet().putCellStyle('rounded2', style);
+                    graph.getStylesheet().putCellStyle('text', style3);
 
-                graph.getStylesheet().putCellStyle('rounded3', style2);
+                    var style4 = new Object();
 
-                var style3 = new Object();
+                    style4[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
+                    style4[mxConstants.STYLE_IMAGE] = '/images/block_end.gif';
 
-                style3[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
-                style3[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+                    style4[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
 
-                graph.getStylesheet().putCellStyle('text', style3);
+                    graph.getStylesheet().putCellStyle('connector', style4);
 
-                var style4 = new Object();
+                    //var sharedXml = $("#sharedXMLData").val()
 
-                style4[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_IMAGE;
-                style4[mxConstants.STYLE_IMAGE] = '/images/block_end.gif';
-
-                style4[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
-
-                graph.getStylesheet().putCellStyle('connector', style4);
-
-                    openGraph(graph)
+                    var sharedXmlDoc = mxUtils.parseXml(sharedXml);
+                    var sharedNode = sharedXmlDoc.documentElement;
+                    var sharedDec = new mxCodec(sharedNode.ownerDocument);
+                    sharedDec.decode(sharedNode, graph.getModel());
 
                 }
             });
@@ -298,37 +205,3 @@ function main()
         
                 
         }
-
-
-        function openGraph(sharedGraph){
-            var sharedXml = $("#sharedXMLData").val()
-                //console.log("hellooo" + sharedXml)
-                var sharedXmlDoc = mxUtils.parseXml(sharedXml);
-                var sharedNode = sharedXmlDoc.documentElement;
-                var sharedDec = new mxCodec(sharedNode.ownerDocument);
-                sharedDec.decode(sharedNode, sharedGraph.getModel());
-        }
-
-        function addToolbarItem(sharedGraph, toolbar, prototype, image)
-        {
-            // Function that is executed when the image is dropped on
-            // the sharedGraph. The cell argument points to the cell under
-            // the mousepointer if there is one.
-            var funct = function(sharedGraph, evt, cell)
-            {
-                sharedGraph.stopEditing(false);
-
-                var pt = sharedGraph.getPointForEvent(evt);
-                var vertex = sharedGraph.getModel().cloneCell(prototype);
-                vertex.geometry.x = pt.x;
-                vertex.geometry.y = pt.y;
-                
-                sharedGraph.setSelectionCells(sharedGraph.importCells([vertex], 0, 0, cell));
-
-            }
-
-            // Creates the image which is used as the drag icon (preview)
-            var img = toolbar.addMode(null, image, funct);
-            mxUtils.makeDraggable(img, sharedGraph, funct);
-
-        }*/

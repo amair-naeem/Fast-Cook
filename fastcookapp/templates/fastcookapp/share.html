@@ -6,29 +6,12 @@
 
 <html>
 
-<head>
-	<script src="{% static 'fastcookapp/shareGraph.js' %}"></script> 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script type="text/javascript">
-	    mxBasePath = "{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/src' %}";
-	</script>
-	<script src="{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/mxClient.js' %}"></script>
-
-	<script type="text/javascript">
-		window.onload = function(){
-		    main(document.getElementById("graphContainer"));
-		}
-	</script> 
-</head>
-
 
 <p id = "sharedTitle" class = "shareInfo"> {{graph.title}} </p>
 
 <div class = "shareInfo" style="font-size: 15px;">
     Created by: {{user}}
 </div>
-
-
 
 
 <section class='rating-widget'>
@@ -54,8 +37,6 @@
                 </ul>
               </div>
             
-              
-            
 </section>
 
 <input type="hidden" id = "rating" value="{{ rating }}">
@@ -64,6 +45,20 @@
 	
 <div id = "sharedContainer" style="position:absolute;overflow:hidden;top:100px;left:260px;bottom:36px;right:0px;cursor:default;overflow:scroll;"> </div>
 
+
+<script src="{% static 'fastcookapp/styleGraph.js' %}"></script> 
+<script src="{% static 'fastcookapp/shareGraph.js' %}"></script> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+  mxBasePath = "{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/src' %}";
+</script>
+<script src="{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/mxClient.js' %}"></script>
+
+<script type="text/javascript">
+window.onload = function(){
+    main(document.getElementById("graphContainer"));
+}
+</script> 
 
 
 </html>
