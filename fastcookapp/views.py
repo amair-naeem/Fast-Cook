@@ -160,11 +160,8 @@ def register(request):
         if password and re_password:
             if password != re_password:
                 #return error if passwords do not match
-                errorPassword=("The two password fields do not match.")
-                context = {
-                    'errorPassword':errorPassword
-                    }
-                return render(request, 'fastcookapp/register.html', context)
+                messages.add_message(request, messages.INFO, "The two password fields do not match.")
+                return render(request, 'fastcookapp/register.html')
                 
             else:
                 #print("Username: " + str(username) + "Password: " + str(password))
