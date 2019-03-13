@@ -12,7 +12,7 @@
 
 <div class="container">
   <div class="text-center">
-    <h2> <b>Add, Edit & Delete Recipes.</b></h2>
+    <h2> <b>Create, Edit or Delete Recipes.</b></h2>
   </div>
         <div class="table-wrapper">
             <div class="table-title">
@@ -81,6 +81,7 @@
            {% for message in messages %}
               <p id = "error" style="color: red; text-align: center;"> {{message}} </p>
            {%endfor%}
+              <input id = "validation" type="hidden" value="{{error}}">
         </div>
      
           <!-- Modal footer -->
