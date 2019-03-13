@@ -59,12 +59,17 @@ def home(request,user):
         xmlData = request.POST['sharedXMLData']
         graphId = request.POST['currentGraphId']
         rating = request.POST['rating']
+        time = request.POST['time']
+        serving = request.POST['serve']
         shareGraph = XMLGraph.objects.get(id=graphId)
 		#request.session['sharedXMLGraph'] = xmlData
 		#messages.add_message(request, messages.INFO, xmlData)
         shareGraph.XMLGraph = xmlData
+        shareGraph.rating = rating
+        shareGraph.time = time
+        shareGraph.serving = serving
         shareGraph.save()
-        return redirect('share', random_url=shareGraph.random_url, id=graphId, rating = rating)
+        return redirect('share', random_url=shareGraph.random_url, id=graphId)
 
     graphTitle = XMLGraph.objects.filter(user=user).values('title','id')
     graph  = XMLGraph.objects.filter(user=user).values('XMLGraph')
@@ -438,19 +443,20 @@ def shareGraph(request, user):
 
 	return render(request, 'fastcookapp/index.html')"""
 
-def share(request, random_url, id, rating):
+def share(request, random_url, id):
 	#xmlData = request.POST['sharedXMLData']
 	#print(str(request.POST['sharedXMLData']))
-	xmlGraph = XMLGraph.objects.get(id=id)
-	user = xmlGraph.user
-	context = {
+    xmlGraph = XMLGraph.objects.get(id=id)
+    rating = xmlGraph.rating
+    user = xmlGraph.user
+
+    context = {
         "article": get_list_or_404(XMLGraph, random_url=random_url),
         "graph": xmlGraph,
         "rating": rating,
         "user": user
     }
-
-	return render(request, 'fastcookapp/share.html', context)
+    return render(request, 'fastcookapp/share.html', context)
 
 def loadIcons(request):
     #print(str("1 " + os.listdir("fastcookapp/images/")))

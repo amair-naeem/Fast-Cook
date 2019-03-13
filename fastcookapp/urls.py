@@ -45,7 +45,10 @@ urlpatterns = [
     # shareGraph
     #path('shareGraph/', views.shareGraph, name='shareGraph'),
     # share
-    url(r'^share/(?P<rating>\d+)/(?P<id>\d+)/(?P<random_url>[-\w]+)/', views.share, name="share"),
+    #url(r'^share/(?P<rating>\d+)/(?P<id>\d+)/(?P<random_url>[-\w]+)/', views.share, name="share"),
+    url(r'^share/(?P<id>\d+)/(?P<random_url>[-\w]+)/', views.share, name="share"),
+
+    
     path('share/', views.share, name='share'),
     path('loadIcons/', views.loadIcons, name='loadIcons'),
     path('search/', views.search, name='search'),

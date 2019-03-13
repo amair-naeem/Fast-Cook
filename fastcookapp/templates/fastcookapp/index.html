@@ -328,6 +328,11 @@
 
             <h2 style="text-align: center;  font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif; font-size: 20px; "> Recipe difficulty level: </h2>
 
+      <form method="POST" action="{% url 'home' %}" target="_blank">
+         {% csrf_token %}
+        <input type="hidden" name="currentGraphId">
+        <input type="hidden" name="rating">
+        <input type="hidden" name="sharedXMLData">
             <section class='rating-widget'>
               
               <!-- Rating Stars Box -->
@@ -351,19 +356,24 @@
                 </ul>
               </div>
             
-              
-            
             </section>
 
+            <input class = "shareElements" type="text" name="serve" required placeholder="Serves">
+            </br>
+            <input class = "shareElements" type="text" name="time" required placeholder="Time in minutes" maxlength="3">
+            </br>
+            <div class="text-center">
+              <p class="error" style="color: red; display: none;"> Please provide the recipe difficulty</p>
+            </div>
         </div>
         
         <!-- Modal footer -->
         <div class="modal-footer">
-        
+        <button id = share class="btn btn-primary" type="submit" >Share</button>
 
-        <button id = share class="btn btn-primary" type="submit">Share</button>         
+      </form> 
+
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-
 
         </div>
         
@@ -472,7 +482,9 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="{% static 'fastcookapp/styleGraph.js' %}"></script> 
-<script src="{% static 'fastcookapp/mxgraph.min.js' %}"></script> 
+
+<script src="{% static 'fastcookapp/mxgraph.js' %}"></script> 
+
 <script src="{% static 'fastcookapp/newGraph.js' %}"></script> 
 <script type="text/javascript">
     mxBasePath = "{% static 'fastcookapp/mxgraph-master/mxgraph-master/javascript/src' %}";

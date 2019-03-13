@@ -37,6 +37,9 @@ class XMLGraph(models.Model):
     user = models.ForeignKey(to = Member, null=True, on_delete=models.SET_NULL)
     random_url = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     created_at = models.DateTimeField(auto_now_add = True)
+    rating = models.TextField(null=True)
+    time = models.TextField(null=True)
+    serving = models.TextField(null=True)
 
     #sharedXMLGraph = models.TextField(null=True)
     #slug = models.SlugField(null = True,unique=True,blank=True) 

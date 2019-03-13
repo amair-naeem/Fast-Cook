@@ -78,6 +78,7 @@ function hideOnClk(id){
           /* 2. Action to perform on click */
           $('#stars li').on('click', function(){
             onStar = parseInt($(this).data('value'), 10); // The star currently selected
+
             // pass onstar to value of share.
             var stars = $(this).parent().children('li.star');
             
@@ -289,12 +290,40 @@ function main()
             //mxPopupMenu.prototype.addItem = function(</td><td class=PParameter nowrap>title,</td></tr><tr><td></td><td class=PParameter nowrap>image,</td></tr><tr><td></td><td class=PParameter nowrap>funct,</td></tr><tr><td></td><td class=PParameter nowrap>parent,</td></tr><tr><td></td><td class=PParameter nowrap>iconCls,</td></tr><tr><td></td><td class=PParameter nowrap>enabled</td><td class=PAfterParameters nowrap>)
             //console.log(mxPopupMenu.prototype.itemCount)
 
+            $('.shareElements').on('input blur paste', function(){
+                $(this).val($(this).val().replace(/\D/g, ''))
+            })
+
+           
+
             $('#share').on('click',function(event){
                 var encoder = new mxCodec();
                 var node = encoder.encode(graph.getModel());
-                xml = mxUtils.getXml(node)
-                var url = "/home/";
-                post(url, {sharedXMLData:xml});
+                sharedXMLData = mxUtils.getXml(node)
+                $('input[name="currentGraphId"]').val($("#idOfGraph").val())
+                $('input[name="rating"]').val(onStar)
+                $('input[name="sharedXMLData"]').val(sharedXMLData)
+                
+                if(onStar == 0)
+                {
+                    event.preventDefault();
+                    $(".error").css("display", "block");
+
+                }
+                /*var hiddenId = document.createElement("input");
+                hiddenId.setAttribute("type", "hidden");
+                hiddenId.setAttribute("name", "currentGraphId");
+                hiddenId.setAttribute("value", $("#idOfGraph").val());
+                form.appendChild(hiddenId)
+
+                var rating = document.createElement("input")
+                rating.setAttribute("type", "hidden")
+                rating.setAttribute("name", "rating")
+                rating.setAttribute("value", onStar)
+                form.appendChild(rating)*/
+
+                //var url = "/home/";
+                //post(url, {sharedXMLData:xml});
 
                 //alert("hey")
             });
