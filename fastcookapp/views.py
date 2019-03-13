@@ -150,8 +150,9 @@ def register(request):
         email = request.POST['email']
         re_password = request.POST['psw-repeat']
 
-        if Member.objects.get(email=email):
+        if Member.objects.filter(email=email).exists():
             messages.add_message(request, messages.INFO, 'This email already exists')
+            print("test1")
             return render(request, 'fastcookapp/register.html')
 
             
@@ -175,13 +176,13 @@ def register(request):
                     
                 except IntegrityError:
                     messages.add_message(request, messages.INFO, 'Username '+ str(user) +' is already taken. Usernames must be unique')
-
+                    print("test2")
                     context = {
                         'errorM':'Username '+ str(user) +' is already taken. Usernames must be unique'
                         }
 
                     return render(request, 'fastcookapp/register.html', context)
-
+                print("test5")
                 return render(request, 'fastcookapp/login.html')
             
         else:
@@ -190,11 +191,13 @@ def register(request):
             context = {
             'errorPassword':'Enter a value in both password fields'
             }
+            print("test3")
 
         return render(request, 'fastcookapp/register.html', context)
 
 
      else:
+        print("test4")
         return render(request, 'fastcookapp/register.html')
 
 
