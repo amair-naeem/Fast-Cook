@@ -122,7 +122,7 @@ def profile(request, user):
         if XMLGraph.objects.filter(title=graphTitle22, user=user).exists():
             graphTitle = XMLGraph.objects.filter(user=user).values('title','id', 'created_at')
             graph  = XMLGraph.objects.filter(user=user).values('XMLGraph')
-            messages.add_message(request, messages.INFO, str(graphTitle22) + ' already exists, please use another title')
+            #messages.add_message(request, messages.INFO, str(graphTitle22) + ' already exists, please use another title')
 
             return JsonResponse({'overwrite' : True})
             """return render(request, 'fastcookapp/profile.html', {'xml': json.dumps(str(graph)), 'title':graphTitle, 

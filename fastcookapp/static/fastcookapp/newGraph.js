@@ -87,8 +87,8 @@ $("#test123").on('click', function(event){
 	                var title = $("#graphTitle22").val();
 	                if(json['overwrite'])
 	                {
-	                	$("#error").empty()
-	                	$("#error").append(title + " already exists, please use another title");
+	                	$("#errorModal").empty()
+	                	$("#errorModal").append(title + " already exists, please use another title");
 	                	$('#createNewGraph').modal('show');
 
 	                }
