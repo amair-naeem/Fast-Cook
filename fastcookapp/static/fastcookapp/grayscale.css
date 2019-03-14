@@ -4,6 +4,12 @@
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-grayscale/blob/master/LICENSE)
  */
 
+ .topCorner{
+   position:absolute;
+   top:0;
+   right:0;
+  }
+
 #mainNav {
   min-height: 56px;
   background-color: #fff;
@@ -50,7 +56,7 @@
     padding: .5rem 0;
     color: rgba(255, 255, 255, 0.5);
   }
-  #mainNav .nav-link {
+  #mainNav  {
     -webkit-transition: none;
     transition: none;
     padding: 2rem 1.5rem;
@@ -139,7 +145,6 @@
     font-size: 1.25rem;
   }
 }
-
 .btn {
   -webkit-box-shadow: 0 0.1875rem 0.1875rem 0 rgba(0, 0, 0, 0.1) !important;
   box-shadow: 0 0.1875rem 0.1875rem 0 rgba(0, 0, 0, 0.1) !important;

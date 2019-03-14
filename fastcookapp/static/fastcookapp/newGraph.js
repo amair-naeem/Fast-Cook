@@ -15,6 +15,9 @@ function getCookie(name) {
     return cookieValue;
 }
 
+                        var csrftoken = getCookie('csrftoken');
+
+
 /*$( document ).ready(function() {
 
     /*$("#formNewGraph").submit(function (evt) {
@@ -63,3 +66,40 @@ function doFunction(id,tr){
     
 }
 
+$("#test123").on('click', function(event){
+
+	event.preventDefault();
+
+
+	$.ajax({
+                    
+	            type: "POST",
+	            url: "/profile/",
+	            dataType: 'text',
+	            headers:{
+	                "X-CSRFToken": csrftoken
+	            },
+	            data:{
+	            	'graphTitle22' : $("#graphTitle22").val()
+	            },
+	            success: function(data){
+	                var json = JSON.parse(data)
+	                var title = $("#graphTitle22").val();
+	                if(json['overwrite'])
+	                {
+	                	$("#error").empty()
+	                	$("#error").append(title + " already exists, please use another title");
+	                	$('#createNewGraph').modal('show');
+
+	                }
+
+	                else
+	                {
+	                	var id = json['id']
+	                	window.location.href = "/openGraphFromProfile/"+id
+	                }
+	            }
+        });
+
+
+});

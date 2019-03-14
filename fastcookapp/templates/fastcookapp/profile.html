@@ -78,11 +78,13 @@
         <!-- Modal body -->
         <div class="modal-body">
         <form id= "formNewGraph" method = "POST" action = "{% url 'profile' %}">
-           <input type="text" placeholder= "Enter Title" name="graphTitle22" id="graphTitle" maxlength = "50">
+           <input type="text" placeholder= "Enter Title" name="graphTitle22" id="graphTitle22" maxlength = "50">
             </br>
-           {% for message in messages %}
+           <!--{% for message in messages %}
               <p id = "error" style="color: red; text-align: center;"> {{message}} </p>
-           {%endfor%}
+           {%endfor%}-->
+                         <p id = "error" style="color: red; text-align: center;"> {{message}} </p>
+
               <input id = "validation" type="hidden" value="{{error}}">
         </div>
      
@@ -92,14 +94,15 @@
 
             {% csrf_token %}
           
-          <button type="submit" class="btn btn-primary" name = "test123" id = "test123">Save</button>
+          <button type="button" class="btn btn-primary" name = "test123" id = "test123">Save</button>
+        
+        </form>
 
           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 
 
 
 
-        </form>
 
 
         </div>
@@ -120,12 +123,12 @@
 
   $(window).on('load',function(){
     //$("#error").empty();
-    $('#createNewGraph').modal('show');
+    //$('#createNewGraph').modal('show');
 
     });
 
   $(".newGraph").click(function (event){
-      document.getElementById('error').innerHTML = "";
+      //document.getElementById('error').innerHTML = "";
 
   })
 
