@@ -222,6 +222,11 @@ def login(request):
     return render(request, 'fastcookapp/login.html')
 
 
+@loggedin
+def loginPage(request, user):
+    return render (request, 'fastcookapp/login.html')
+
+
 @loggedin	
 def saveData(request, user):
     if request.method == "POST":
