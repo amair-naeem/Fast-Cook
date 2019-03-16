@@ -29,7 +29,7 @@ from django.contrib import messages
 
 
 from rest_framework import viewsets
-from fastcookapp.documents import MemberDocument
+#from fastcookapp.documents import MemberDocument
 
 
 #JSON response for M2M table
