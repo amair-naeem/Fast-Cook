@@ -29,9 +29,10 @@ SECRET_KEY = 'h^+x(g+dz1=53$e8wpl=+2it-w1-x*&mxpg%pyjp*yh4qhr0hf'
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = False 
+#config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['fastcook1.herokuapp.com']
 
 
 # Application definition
@@ -139,14 +140,39 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
+#PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/1.9/howto/static-files/
+#STATIC_ROOT = os.path.join(BASE_DIR,"fastcookapp/static")
+#STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-MEDIA_ROOT = os.path.join(PROJECT_ROOT,"fastcookapp/images")
-MEDIA_URL = '/images/'
+# Extra places for collectstatic to find static files.
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT, 'static'),
+)
+
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+#STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+#MEDIA_ROOT = os.path.join(BASE_DIR,"fastcookapp/images")
+#MEDIA_URL = '/images/'
+
+"""MEDIA_ROOT = os.path.join(BASE_DIR,"fastcookapp/images")
+MEDIA_URL = '/media/'"""
+
+
+
+
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
+MEDIA_URL = '/media/'
 
 
 # Heroku: Update database configuration from $DATABASE_URL.
